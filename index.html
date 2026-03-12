@@ -407,13 +407,57 @@
     </style>
 </head>
 <body>
-<div id="splash-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#120A1F,#1C122C);display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:9999;transition:opacity 0.4s ease;">
-    <div style="width:100px;height:100px;border-radius:24px;background:linear-gradient(135deg,#F39C12,#8E2DE2);display:flex;justify-content:center;align-items:center;font-size:2.5em;color:#fff;box-shadow:0 10px 40px rgba(142,45,226,0.5);animation:pulse 2s ease infinite;margin-bottom:20px;">
-        <i class="fas fa-crosshairs"></i>
+<div id="splash-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:9999;transition:opacity 0.5s ease;overflow:hidden;background:#080412;">
+
+    <!-- Animated background particles -->
+    <div style="position:absolute;inset:0;overflow:hidden;">
+        <div style="position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(142,45,226,0.3),transparent);top:-50px;left:-80px;animation:splashOrb1 4s ease-in-out infinite;"></div>
+        <div style="position:absolute;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(10,132,255,0.25),transparent);bottom:-60px;right:-60px;animation:splashOrb2 5s ease-in-out infinite;"></div>
+        <div style="position:absolute;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(243,156,18,0.2),transparent);top:40%;right:10%;animation:splashOrb1 6s ease-in-out infinite reverse;"></div>
+        <!-- Grid lines -->
+        <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(142,45,226,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(142,45,226,0.05) 1px,transparent 1px);background-size:40px 40px;"></div>
     </div>
-    <div style="font-size:2em;font-weight:700;background:linear-gradient(135deg,#0A84FF,#F39C12);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">WarZone India</div>
-    <div style="font-size:0.9em;color:#BBB;margin-top:8px;">India's #1 Esports Platform</div>
-    <div style="font-size:1em;color:#fff;margin-top:40px;" id="splashText"></div>
+
+    <!-- Logo -->
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;">
+        <!-- Outer ring -->
+        <div style="position:relative;margin-bottom:24px;">
+            <div style="width:110px;height:110px;border-radius:50%;border:2px solid rgba(142,45,226,0.4);position:absolute;top:-8px;left:-8px;animation:splashRing 2s linear infinite;"></div>
+            <div style="width:94px;height:94px;border-radius:26px;background:linear-gradient(135deg,#8E2DE2,#0A84FF);display:flex;justify-content:center;align-items:center;font-size:2.4em;color:#fff;box-shadow:0 0 40px rgba(142,45,226,0.6),0 0 80px rgba(10,132,255,0.3);animation:splashPulse 2s ease-in-out infinite;">
+                <i class="fas fa-crosshairs"></i>
+            </div>
+        </div>
+
+        <!-- Title -->
+        <div style="font-size:2.2em;font-weight:800;letter-spacing:2px;background:linear-gradient(135deg,#fff 0%,#0A84FF 50%,#F39C12 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;">
+            WARZONE
+        </div>
+        <div style="font-size:1em;font-weight:700;letter-spacing:8px;color:rgba(255,255,255,0.5);margin-bottom:4px;">
+            INDIA
+        </div>
+
+        <!-- Divider -->
+        <div style="width:60px;height:2px;background:linear-gradient(90deg,transparent,#8E2DE2,#0A84FF,transparent);margin:12px 0;border-radius:2px;"></div>
+
+        <div style="font-size:0.78em;color:rgba(255,255,255,0.4);letter-spacing:3px;text-transform:uppercase;">
+            India's #1 Esports Platform
+        </div>
+
+        <!-- Loading bar -->
+        <div style="margin-top:48px;width:160px;height:3px;background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;">
+            <div style="height:100%;background:linear-gradient(90deg,#8E2DE2,#0A84FF,#F39C12);border-radius:10px;animation:splashLoad 2s ease-in-out infinite;"></div>
+        </div>
+
+        <div style="font-size:0.75em;color:rgba(255,255,255,0.35);margin-top:12px;letter-spacing:1px;" id="splashText">Loading...</div>
+    </div>
+
+    <style>
+        @keyframes splashOrb1   { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(20px,-20px) scale(1.1)} }
+        @keyframes splashOrb2   { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-15px,15px) scale(1.05)} }
+        @keyframes splashRing   { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+        @keyframes splashPulse  { 0%,100%{box-shadow:0 0 40px rgba(142,45,226,0.6),0 0 80px rgba(10,132,255,0.3)} 50%{box-shadow:0 0 60px rgba(142,45,226,0.9),0 0 120px rgba(10,132,255,0.5)} }
+        @keyframes splashLoad   { 0%{width:0%;margin-left:0} 50%{width:100%;margin-left:0} 100%{width:0%;margin-left:100%} }
+    </style>
 </div>
 
 <div class="container">
@@ -748,16 +792,20 @@
     <div id="leaderboard-page" class="page">
         <div class="header">
             <div class="left-section"><button class="icon-btn" id="backFromLeaderboard"><i class="fas fa-arrow-left"></i></button></div>
-            <h2>Leaderboard</h2>
+            <h2>🏆 Leaderboard</h2>
             <div class="right-section"></div>
         </div>
-        <div class="content-wrapper">
-            <div class="leaderboard-tabs">
-                <button class="tab-btn active" data-lb="earnings">Earnings</button>
-                <button class="tab-btn" data-lb="kills">Kills</button>
-                <button class="tab-btn" data-lb="matches">Matches</button>
+        <div class="content-wrapper" style="padding-top:8px;">
+            <!-- Tab filters -->
+            <div style="display:flex;gap:8px;margin-bottom:16px;background:var(--card-bg);border-radius:14px;padding:4px;">
+                <button id="lbTabWins" style="flex:1;padding:10px;border-radius:10px;border:none;background:linear-gradient(135deg,#8E2DE2,#0A84FF);color:#fff;font-weight:700;font-size:0.82em;cursor:pointer;font-family:'Poppins',sans-serif;">🏆 Most Wins</button>
+                <button id="lbTabEarnings" style="flex:1;padding:10px;border-radius:10px;border:none;background:transparent;color:var(--muted);font-weight:600;font-size:0.82em;cursor:pointer;font-family:'Poppins',sans-serif;">💰 Top Earners</button>
+                <button id="lbTabMatches" style="flex:1;padding:10px;border-radius:10px;border:none;background:transparent;color:var(--muted);font-weight:600;font-size:0.82em;cursor:pointer;font-family:'Poppins',sans-serif;">⚔️ Most Played</button>
             </div>
-            <div id="leaderboardList"><div class="loading"><div class="spinner"></div><p>Loading...</p></div></div>
+            <!-- Top 3 podium -->
+            <div id="lbPodium" style="display:flex;align-items:flex-end;justify-content:center;gap:10px;margin-bottom:20px;min-height:130px;"></div>
+            <!-- Rest of list -->
+            <div id="lbList"></div>
         </div>
     </div>
 
@@ -978,6 +1026,14 @@
         </div>
         <div class="content-wrapper">
             <div class="card">
+                <div class="settings-item" id="settingsLeaderboard" style="cursor:pointer;">
+                    <div class="s-info"><h4>🏆 Leaderboard</h4><p>Top players ki ranking dekho</p></div>
+                    <i class="fas fa-chevron-right" style="color:var(--muted);"></i>
+                </div>
+                <div class="settings-item" id="settingsPlayerStats" style="cursor:pointer;">
+                    <div class="s-info"><h4>📊 Player Stats</h4><p>Apni performance dekho</p></div>
+                    <i class="fas fa-chevron-right" style="color:var(--muted);"></i>
+                </div>
                 <div class="settings-item">
                     <div class="s-info"><h4>🌙 Dark / Light Mode</h4><p id="themeLabel">Dark mode is ON</p></div>
                     <label class="switch"><input type="checkbox" id="darkModeToggle" checked><span class="slider"></span></label>
@@ -1004,6 +1060,43 @@
                 </div>
             </div>
             <button class="btn danger" id="settingsLogoutBtn" style="margin-top:10px;"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </div>
+
+    <!-- LEADERBOARD PAGE -->
+    <div id="leaderboard-page" class="page">
+        <div class="header">
+            <div class="left-section"><button class="icon-btn" id="backFromLeaderboard"><i class="fas fa-arrow-left"></i></button></div>
+            <h2>🏆 Leaderboard</h2>
+            <div class="right-section"></div>
+        </div>
+        <div class="content-wrapper" style="padding-top:8px;">
+            <!-- Tab filters -->
+            <div style="display:flex;gap:8px;margin-bottom:16px;background:var(--card-bg);border-radius:14px;padding:4px;">
+                <button id="lbTabWins" style="flex:1;padding:10px;border-radius:10px;border:none;background:linear-gradient(135deg,#8E2DE2,#0A84FF);color:#fff;font-weight:700;font-size:0.82em;cursor:pointer;font-family:'Poppins',sans-serif;">🏆 Most Wins</button>
+                <button id="lbTabEarnings" style="flex:1;padding:10px;border-radius:10px;border:none;background:transparent;color:var(--muted);font-weight:600;font-size:0.82em;cursor:pointer;font-family:'Poppins',sans-serif;">💰 Top Earners</button>
+                <button id="lbTabMatches" style="flex:1;padding:10px;border-radius:10px;border:none;background:transparent;color:var(--muted);font-weight:600;font-size:0.82em;cursor:pointer;font-family:'Poppins',sans-serif;">⚔️ Most Played</button>
+            </div>
+            <!-- Top 3 podium -->
+            <div id="lbPodium" style="display:flex;align-items:flex-end;justify-content:center;gap:10px;margin-bottom:20px;min-height:130px;">
+                <div class="loading"><div class="spinner"></div></div>
+            </div>
+            <!-- Rest of list -->
+            <div id="lbList"></div>
+        </div>
+    </div>
+
+    <!-- PLAYER STATS PAGE -->
+    <div id="player-stats-page" class="page">
+        <div class="header">
+            <div class="left-section"><button class="icon-btn" id="backFromPlayerStats"><i class="fas fa-arrow-left"></i></button></div>
+            <h2>📊 Player Stats</h2>
+            <div class="right-section"></div>
+        </div>
+        <div class="content-wrapper" style="padding-top:8px;">
+            <div id="playerStatsContent">
+                <div class="loading"><div class="spinner"></div><p>Loading stats...</p></div>
+            </div>
         </div>
     </div>
 
@@ -1156,7 +1249,7 @@
     </div>
 
     <!-- CONTEST CHAT -->
-    <div id="contest-chat-page" class="page" style="padding-top:60px;padding-bottom:0;">
+    <div id="contest-chat-page" class="page" style="padding-top:60px;padding-bottom:0;display:flex;flex-direction:column;height:100vh;">
         <div class="header">
             <div class="left-section"><button class="icon-btn" id="backFromContestChat"><i class="fas fa-arrow-left"></i></button></div>
             <div style="flex:1;text-align:center;">
@@ -1167,7 +1260,29 @@
                 <button class="icon-btn" id="contestEndBtn" style="font-size:0.75em;color:var(--danger);font-weight:600;display:none;" title="End Match">⏹ End</button>
             </div>
         </div>
-        <div style="flex:1;overflow-y:auto;padding:10px 12px 75px;display:flex;flex-direction:column;" id="contestChatMsgs"></div>
+
+        <!-- ROOM ID/PASSWORD BANNER -->
+        <div id="roomInfoBanner" style="display:none;background:linear-gradient(135deg,rgba(10,132,255,0.15),rgba(142,45,226,0.15));border-bottom:1px solid rgba(10,132,255,0.2);padding:8px 14px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                <div style="flex:1;">
+                    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                        <div id="roomIdSection" style="display:none;">
+                            <div style="font-size:0.65em;color:var(--muted);font-weight:600;letter-spacing:1px;">ROOM ID</div>
+                            <div style="font-size:0.9em;font-weight:700;color:#fff;letter-spacing:2px;" id="roomIdDisplay">—</div>
+                        </div>
+                        <div id="roomPassSection" style="display:none;">
+                            <div style="font-size:0.65em;color:var(--muted);font-weight:600;letter-spacing:1px;">PASSWORD</div>
+                            <div style="font-size:0.9em;font-weight:700;color:#FFD700;letter-spacing:2px;" id="roomPassDisplay">—</div>
+                        </div>
+                    </div>
+                </div>
+                <button id="copyRoomInfoBtn" style="padding:6px 12px;border-radius:20px;border:1px solid rgba(10,132,255,0.5);background:rgba(10,132,255,0.15);color:#0A84FF;font-size:0.75em;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Poppins',sans-serif;">
+                    📋 Copy
+                </button>
+            </div>
+        </div>
+
+        <div id="contestChatMsgs" style="flex:1;overflow-y:auto;padding:10px 12px 80px;display:flex;flex-direction:column;gap:4px;width:100%;align-self:stretch;"></div>
         <div style="position:fixed;bottom:0;left:0;right:0;max-width:500px;margin:0 auto;background:var(--card-bg);padding:10px 12px;display:flex;gap:8px;align-items:center;border-top:1px solid var(--input-border);z-index:50;">
             <input type="text" id="contestChatInput" placeholder="Type a message..." style="flex:1;padding:10px 14px;border:1px solid var(--input-border);border-radius:25px;background:var(--input-bg);color:var(--white-text);font-size:0.9em;" maxlength="200">
             <button id="contestChatSendBtn" style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--secondary),var(--primary));border:none;color:white;font-size:1.1em;cursor:pointer;flex-shrink:0;"><i class="fas fa-paper-plane"></i></button>
@@ -1175,17 +1290,89 @@
     </div>
 
 </div>
-
+<div id="offlineBanner" style="position:fixed;top:0;left:0;right:0;z-index:99997;background:linear-gradient(135deg,#E74C3C,#C0392B);color:#fff;text-align:center;padding:10px 15px;font-size:0.82em;font-weight:600;display:none;align-items:center;justify-content:center;gap:8px;font-family:'Poppins',sans-serif;"><i class="fas fa-wifi"></i> Internet nahi hai!</div>
+<div id="wz-toast-container" style="position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:99999;display:flex;flex-direction:column;align-items:center;gap:8px;width:90%;max-width:460px;pointer-events:none;"></div>
 <!-- FAB -->
 <button class="fab" id="fabBtn" style="display:none;"><i class="fas fa-bell"></i></button>
 
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav" style="display:none;">
-    <button class="nav-btn" data-page="settings-page"><i class="fas fa-bars"></i><span>More</span></button>
-    <button class="nav-btn" data-page="home-page"><i class="fas fa-gamepad"></i><span>Play</span></button>
-    <button class="nav-btn" data-page="wallet-page"><i class="fas fa-wallet"></i><span>Wallet</span></button>
-    <button class="nav-btn" data-page="profile-page"><i class="fas fa-user"></i><span>Profile</span></button>
+    <button class="nav-btn" data-page="settings-page">
+        <div class="nav-icon-wrap"><i class="fas fa-bars"></i></div>
+        <span>More</span>
+    </button>
+    <button class="nav-btn" data-page="home-page">
+        <div class="nav-icon-wrap"><i class="fas fa-gamepad"></i></div>
+        <span>Play</span>
+    </button>
+    <button class="nav-btn" data-page="wallet-page">
+        <div class="nav-icon-wrap"><i class="fas fa-wallet"></i></div>
+        <span>Wallet</span>
+    </button>
+    <button class="nav-btn" data-page="profile-page">
+        <div class="nav-icon-wrap"><i class="fas fa-user"></i></div>
+        <span>Profile</span>
+    </button>
 </nav>
+
+<style>
+.bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    max-width: 500px;
+    margin: 0 auto;
+    height: 62px;
+    background: rgba(12,6,24,0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(142,45,226,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 6px;
+    z-index: 1000;
+    box-shadow: 0 -4px 30px rgba(0,0,0,0.5);
+}
+.nav-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px 4px;
+    transition: all 0.2s;
+    border-radius: 12px;
+}
+.nav-icon-wrap {
+    width: 38px; height: 38px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15em;
+    color: rgba(255,255,255,0.35);
+    transition: all 0.25s;
+}
+.nav-btn span {
+    font-size: 0.62em;
+    font-weight: 600;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.3px;
+    transition: all 0.25s;
+    font-family: 'Poppins', sans-serif;
+}
+.nav-btn.active .nav-icon-wrap {
+    background: linear-gradient(135deg,rgba(142,45,226,0.25),rgba(10,132,255,0.25));
+    color: #0A84FF;
+    box-shadow: 0 0 12px rgba(10,132,255,0.3);
+}
+.nav-btn.active span { color: #0A84FF; }
+.nav-btn:active .nav-icon-wrap { transform: scale(0.88); }
+</style>
 
 <script>
 // ================================================================
@@ -1202,11 +1389,13 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
-// BUG FIX: persistence errors were silently crashing — wrapped properly
 db.enablePersistence({ synchronizeTabs: false }).catch(err => {
-    console.warn('Persistence unavailable:', err.code);
+    if(err.code==='failed-precondition'){
+        console.warn('Multiple tabs open — persistence disabled.');
+    } else if(err.code==='unimplemented'){
+        console.warn('Browser does not support persistence.');
+    }
 });
-
 // ================================================================
 // GLOBAL STATE
 // ================================================================
@@ -1218,15 +1407,559 @@ let tournamentUnsub = null;
 let tournamentListUnsub = null;
 let userMatchesUnsub = null;
 let countdownTimer = null;
-// BUG FIX: chatUnsub was on window object causing memory leaks — moved to module scope
 let chatUnsub = null;
 
+// ================================================================
+// XSS ESCAPE
+// ================================================================
+function escapeHtml(str) {
+    return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
+// ================================================================
+// FRIENDLY ERROR MESSAGES
+// ================================================================
+function getFriendlyError(error) {
+    const code = (error&&error.code)?error.code:String(error);
+    const map = {
+        'auth/wrong-password':'❌ Password galat hai!',
+        'auth/user-not-found':'🔍 Ye email registered nahi hai.',
+        'auth/email-already-in-use':'📧 Ye email already use ho rahi hai.',
+        'auth/weak-password':'🔐 Password kam se kam 6 characters ka hona chahiye.',
+        'auth/invalid-email':'📧 Valid email address enter karo.',
+        'auth/too-many-requests':'⏳ Bahut attempts! Thodi der baad try karo.',
+        'auth/network-request-failed':'📡 Internet connection check karo.',
+        'auth/popup-closed-by-user':'❌ Google login cancel ho gaya.',
+        'auth/popup-blocked':'🚫 Popup block hua. Allow karo aur retry karo.',
+        'auth/user-disabled':'🚫 Ye account disable kar diya gaya hai.',
+        'auth/invalid-credential':'❌ Email ya password galat hai.',
+        'permission-denied':'🔒 Permission nahi hai.',
+        'unavailable':'📡 Server se connect nahi ho pa raha.',
+    };
+    const msg = (error&&error.message)?error.message.toLowerCase():'';
+    if(msg.includes('insufficient'))return'💰 Wallet mein balance kam hai. Add money karo.';
+    if(msg.includes('network')||msg.includes('fetch'))return map['auth/network-request-failed'];
+    return map[code]||(error&&error.message)||'⚠️ Kuch galat ho gaya. Dobara try karo.';
+}
+
+// ================================================================
+// TOAST NOTIFICATIONS
+// ================================================================
+function wzToast(message,type='success',duration=3000){
+    const container=document.getElementById('wz-toast-container');
+    if(!container)return;
+    const colors={success:{bg:'#2ECC71',icon:'✅'},error:{bg:'#E74C3C',icon:'❌'},warning:{bg:'#F39C12',icon:'⚠️'},info:{bg:'#0A84FF',icon:'ℹ️'}};
+    const c=colors[type]||colors.info;
+    const t=document.createElement('div');
+    t.style.cssText=`background:${c.bg};color:#fff;padding:12px 18px;border-radius:12px;font-size:0.88em;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,0.3);pointer-events:auto;display:flex;align-items:center;gap:8px;max-width:100%;word-break:break-word;font-family:'Poppins',sans-serif;animation:wzToastIn 0.3s ease;`;
+    t.innerHTML=`<span>${c.icon}</span><span>${escapeHtml(message)}</span>`;
+    if(!document.getElementById('wz-anim-style')){
+        const s=document.createElement('style');s.id='wz-anim-style';
+        s.textContent='@keyframes wzToastIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}@keyframes wzToastOut{from{opacity:1}to{opacity:0;transform:translateY(-10px)}}@keyframes wzFadeIn{from{opacity:0}to{opacity:1}}@keyframes wzSlideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}';
+        document.head.appendChild(s);
+    }
+    container.appendChild(t);
+    setTimeout(()=>{t.style.animation='wzToastOut 0.3s ease forwards';setTimeout(()=>t.remove(),300);},duration);
+}
+
+// ================================================================
+// CUSTOM MODAL — wzAlert / wzConfirm
+// ================================================================
+function _wzModal({title,message,type,confirmText,cancelText,onConfirm,onCancel}){
+    document.getElementById('wz-modal-overlay')?.remove();
+    const overlay=document.createElement('div');
+    overlay.id='wz-modal-overlay';
+    overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:99998;display:flex;align-items:center;justify-content:center;padding:20px;animation:wzFadeIn 0.2s ease;';
+    overlay.innerHTML=`<div style="background:#1C122C;border-radius:20px;padding:24px;max-width:360px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,0.5);animation:wzSlideUp 0.25s ease;font-family:'Poppins',sans-serif;">
+        <div style="font-size:1.1em;font-weight:700;color:#fff;margin-bottom:10px;">${escapeHtml(title)}</div>
+        <div style="font-size:0.88em;color:#BBB;line-height:1.6;margin-bottom:20px;white-space:pre-line;">${escapeHtml(message)}</div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;">
+            ${type==='confirm'?`<button id="wzMC" style="padding:10px 20px;border-radius:25px;border:2px solid #4A2E68;background:transparent;color:#BBB;font-size:0.88em;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;">${escapeHtml(cancelText)}</button>`:''}
+            <button id="wzMK" style="padding:10px 22px;border-radius:25px;border:none;background:linear-gradient(135deg,#8E2DE2,#0A84FF);color:#fff;font-size:0.88em;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;">${escapeHtml(confirmText)}</button>
+        </div></div>`;
+    document.body.appendChild(overlay);
+    document.getElementById('wzMK').onclick=()=>{overlay.remove();onConfirm();};
+    document.getElementById('wzMC')?.addEventListener('click',()=>{overlay.remove();if(onCancel)onCancel();});
+    overlay.onclick=e=>{if(e.target===overlay){overlay.remove();if(onCancel)onCancel();}};
+}
+function wzAlert(title,message,onOk){_wzModal({title,message,type:'alert',confirmText:'OK',onConfirm:onOk||(()=>{})});}
+function wzConfirm(title,message,onConfirm,onCancel){_wzModal({title,message,type:'confirm',confirmText:'Haan ✅',cancelText:'Nahi ❌',onConfirm:onConfirm||(()=>{}),onCancel:onCancel||(()=>{})});}
+
+// ================================================================
+// WINNER SELECTION MODAL
+// ================================================================
+function showWinnerModal(participants,totalPool,contestName,onWinnerSelected){
+    document.getElementById('wz-winner-modal')?.remove();
+    const prize=Math.floor(totalPool*0.80),cut=totalPool-prize;
+    const overlay=document.createElement('div');
+    overlay.id='wz-winner-modal';
+    overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99998;display:flex;align-items:flex-end;justify-content:center;animation:wzFadeIn 0.2s ease;';
+    const cards=participants.map((p,i)=>`<div class="wc" data-idx="${i}" style="background:#1C122C;border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;border:2px solid transparent;transition:all 0.2s;margin-bottom:8px;"><div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#8E2DE2,#0A84FF);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;">${escapeHtml((p.name||'?').charAt(0).toUpperCase())}</div><div style="flex:1;"><div style="font-weight:600;font-size:0.92em;color:#fff;">${escapeHtml(p.name||'Player')}</div><div style="font-size:0.72em;color:#BBB;">Entry: ₹${p.paid||0}</div></div><div class="wt" style="font-size:0.8em;color:#2ECC71;font-weight:600;display:none;">✅ Selected</div></div>`).join('');
+    overlay.innerHTML=`<div style="background:#120A1F;border-radius:24px 24px 0 0;padding:20px;width:100%;max-width:500px;max-height:85vh;overflow-y:auto;animation:wzSlideUp 0.3s ease;"><div style="text-align:center;margin-bottom:16px;"><div style="font-size:1.5em;">🏆</div><div style="font-weight:700;font-size:1.05em;color:#fff;">Winner Select Karo</div><div style="font-size:0.78em;color:#BBB;margin-top:4px;">${escapeHtml(contestName)}</div></div><div style="background:#1C122C;border-radius:12px;padding:12px;margin-bottom:14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;"><div><div style="font-size:1em;font-weight:700;color:#FFD700;">₹${totalPool}</div><div style="font-size:0.65em;color:#BBB;">Total Pool</div></div><div><div style="font-size:1em;font-weight:700;color:#2ECC71;">₹${prize}</div><div style="font-size:0.65em;color:#BBB;">Winner (80%)</div></div><div><div style="font-size:1em;font-weight:700;color:#F39C12;">₹${cut}</div><div style="font-size:0.65em;color:#BBB;">Platform (20%)</div></div></div><div id="wc-list">${cards}</div><div style="display:flex;gap:10px;margin-top:14px;"><button id="wzWC" style="flex:1;padding:12px;border-radius:50px;border:2px solid #4A2E68;background:transparent;color:#BBB;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;">Baad Mein</button><button id="wzWD" disabled style="flex:2;padding:12px;border-radius:50px;border:none;background:linear-gradient(135deg,#FFD700,#F39C12);color:#1C122C;font-weight:700;cursor:pointer;opacity:0.5;font-family:'Poppins',sans-serif;">🏆 Winner Declare Karo</button></div></div>`;
+    document.body.appendChild(overlay);
+    let sel=null;
+    overlay.querySelectorAll('.wc').forEach(card=>{
+        card.onclick=()=>{
+            overlay.querySelectorAll('.wc').forEach(c=>{c.style.borderColor='transparent';c.style.background='#1C122C';c.querySelector('.wt').style.display='none';});
+            card.style.borderColor='#FFD700';card.style.background='rgba(255,215,0,0.08)';card.querySelector('.wt').style.display='block';
+            sel=parseInt(card.dataset.idx);
+            const btn=document.getElementById('wzWD');btn.disabled=false;btn.style.opacity='1';
+            btn.textContent=`🏆 ${escapeHtml(participants[sel].name||'Player')} Ko Declare Karo`;
+        };
+    });
+    document.getElementById('wzWC').onclick=()=>overlay.remove();
+    document.getElementById('wzWD').onclick=()=>{if(sel===null)return;overlay.remove();onWinnerSelected(participants[sel]);};
+}
+
+// ================================================================
+// OFFLINE DETECTION
+// ================================================================
+function initOfflineDetection(){
+    const banner=document.getElementById('offlineBanner');
+    if(!banner)return;
+    const update=()=>{
+        if(!navigator.onLine){banner.style.display='flex';}
+        else{if(banner.style.display==='flex')wzToast('Internet wapas aa gaya! 🎉','success');banner.style.display='none';}
+    };
+    window.addEventListener('online',update);
+    window.addEventListener('offline',update);
+    update();
+}
+
+// ================================================================
+// GOOGLE SIGN-IN — Popup + Redirect Fallback
+// ================================================================
+async function signInWithGoogle(){
+    // Network check
+    if(!navigator.onLine){
+        wzAlert('Internet Nahi Hai! 📡','Wi-Fi ya Mobile Data on karo aur dobara try karo.');
+        return null;
+    }
+    const provider=new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({prompt:'select_account'});
+
+    // Timeout — 15 sec mein response nahi aaya toh error
+    const timeout = new Promise((_,reject)=>
+        setTimeout(()=>reject({code:'auth/timeout',message:'Connection timeout'}),15000)
+    );
+
+    try{
+        const result=await Promise.race([
+            auth.signInWithPopup(provider),
+            timeout
+        ]);
+        return result.user;
+    }catch(e){
+        if(e.code==='auth/timeout'){
+            wzAlert('Connection Slow Hai ⏱️','Internet slow hai ya Firebase server se connect nahi ho pa raha.\n\nDobara try karo ya thodi der baad try karo.');
+            return null;
+        }
+        if(e.code==='auth/popup-closed-by-user'||e.code==='auth/cancelled-popup-request'){
+            // User ne popup band kiya — koi error nahi dikhana
+            return null;
+        }
+        if(e.code==='auth/popup-blocked'){
+            wzAlert('Popup Block Hua 🚫','Browser ne popup block kar diya.\n\nAddress bar mein lock icon tap karo → Popups Allow karo → Dobara try karo.');
+            return null;
+        }
+        if(e.code==='auth/network-request-failed'){
+            wzAlert('Network Error 📡','Internet connection check karo aur dobara try karo.');
+            return null;
+        }
+        wzAlert('Login Failed ❌', getFriendlyError(e));
+        return null;
+    }
+}
+
+async function handleGoogleRedirect(){
+    try{
+        const result=await auth.getRedirectResult();
+        if(result&&result.user){
+            await saveGoogleUser(result.user);
+            wzToast(`Welcome, ${result.user.displayName||'Player'}! 🎮`,'success');
+            showPage('home-page');
+        }
+    }catch(e){
+        if(e.code&&e.code!=='auth/no-current-user')
+            wzAlert('Login Error ❌', getFriendlyError(e));
+    }
+}
+
+// ================================================================
+// QR AUTO-GENERATION
+// ================================================================
+async function loadAdminQR(amount){
+    try{
+        const doc=await db.collection('settings').doc('payment').get();
+        const qrImg=document.getElementById('qrImage');
+        if(doc.exists&&doc.data().qrUrl){if(qrImg)qrImg.src=doc.data().qrUrl;return;}
+        const upiId=(doc.exists&&doc.data().upiId)?doc.data().upiId:'warzoneindia@upi';
+        const upiName=(doc.exists&&doc.data().upiName)?doc.data().upiName:'WarZone India';
+        const upiDisplay=document.getElementById('adminUpiDisplay');
+        if(upiDisplay)upiDisplay.textContent=upiId;
+        const amtParam=amount?`&am=${amount}`:'';
+        const qrData=`upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(upiName)}${amtParam}&cu=INR`;
+        if(qrImg)qrImg.src=`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(qrData)}&bgcolor=ffffff&color=120A1F&margin=10`;
+    }catch(e){console.error('QR error:',e);}
+}
+
+// ================================================================
+// IN-APP NOTIFICATION
+// ================================================================
+async function sendInAppNotification(userId,title,message){
+    try{await db.collection('notifications').add({userId,title,message,read:false,createdAt:firebase.firestore.FieldValue.serverTimestamp()});}
+    catch(e){console.error('Notif error:',e);}
+}
+
+// ================================================================
+// FCM SETUP — VAPID KEY yahan daalo
+// ================================================================
+const FCM_VAPID_KEY='BAQizMJcVcufVHc0u7YafDSu0_SQakn9CRIrLm2IQ02sNWyKX9rpFkxE2QNEtD4IWyeyO_iPR95xfP8GDPS1QD0';
+async function initFCM(){
+    try{
+        if(!('serviceWorker'in navigator)||!('Notification'in window))return;
+        if(Notification.permission==='denied')return;
+        const reg=await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+        const messaging=firebase.messaging();
+        messaging.useServiceWorker(reg);
+        if(Notification.permission!=='granted'){const p=await Notification.requestPermission();if(p!=='granted')return;}
+        const token=await messaging.getToken({vapidKey:FCM_VAPID_KEY});
+        if(token&&currentUser){await db.collection('users').doc(currentUser.uid).update({fcmToken:token,notificationsEnabled:true,notifPlatform:'fcm-web',tokenUpdatedAt:firebase.firestore.FieldValue.serverTimestamp()});}
+        messaging.onMessage(payload=>{wzToast(`🔔 ${payload.notification?.title||''}: ${payload.notification?.body||''}`,'info',5000);});
+    }catch(e){console.log('FCM:',e.message);}
+}
+
+// ================================================================
+// MATCH REMINDER
+// ================================================================
+function scheduleMatchReminder(tournament){
+    try{
+        if(!tournament.time||Notification.permission!=='granted')return;
+        const matchTime=new Date(tournament.time.replace(' at ',' '));
+        if(isNaN(matchTime.getTime()))return;
+        const delay=matchTime.getTime()-30*60*1000-Date.now();
+        if(delay<0||delay>24*60*60*1000)return;
+        setTimeout(()=>{
+            try{new Notification('⚔️ Match Starting Soon!',{body:`"${tournament.name}" 30 minute mein start hoga!`,tag:`reminder-${tournament.id}`,requireInteraction:true});}catch(e){}
+            wzToast(`⚔️ "${tournament.name}" 30 min mein start hoga!`,'warning',8000);
+        },Math.max(delay,0));
+    }catch(e){}
+}
+
+// ================================================================
+// REFERRAL LEADERBOARD
+// ================================================================
+async function loadReferralLeaderboard(){
+    if(!currentUser){showPage('login-page');return;}
+    const container=document.getElementById('referralLeaderboardContent');
+    if(!container)return;
+    container.innerHTML='<div class="loading"><div class="spinner"></div><p>Loading...</p></div>';
+    try{
+        const snap=await db.collection('users').orderBy('referralCount','desc').limit(20).get();
+        if(snap.empty){container.innerHTML='<div class="empty-state"><i class="fas fa-trophy"></i><p>Koi data nahi abhi</p></div>';return;}
+        const medals=['🥇','🥈','🥉'];let myRank=null;
+        const rows=snap.docs.map((doc,i)=>{
+            const d=doc.data(),isMe=doc.id===currentUser.uid;
+            if(isMe)myRank=i+1;
+            return `<div style="background:${isMe?'linear-gradient(135deg,rgba(10,132,255,0.2),rgba(142,45,226,0.2))':'var(--card-bg)'};border-radius:12px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px;border:${isMe?'1px solid rgba(10,132,255,0.5)':'1px solid transparent'};"><div style="font-size:1.3em;width:32px;text-align:center;">${medals[i]||'#'+(i+1)}</div><div style="flex:1;"><div style="font-weight:600;font-size:0.9em;color:var(--white-text);">${escapeHtml(d.username||d.firstName||'Player')}${isMe?' <span style="font-size:0.7em;color:var(--primary);">(You)</span>':''}</div><div style="font-size:0.72em;color:var(--muted);">${d.referralCount||0} referrals</div></div><div style="text-align:right;"><div style="font-size:1em;font-weight:700;color:var(--gold);">₹${d.referralEarnings||0}</div><div style="font-size:0.68em;color:var(--muted);">earned</div></div></div>`;
+        }).join('');
+        container.innerHTML=(myRank?`<div style="background:linear-gradient(135deg,rgba(10,132,255,0.15),rgba(142,45,226,0.15));border:1px solid rgba(10,132,255,0.3);border-radius:12px;padding:12px;margin-bottom:14px;text-align:center;font-size:0.85em;color:var(--white-text);">🏅 Tera rank: <strong style="color:var(--primary);">#${myRank}</strong> out of ${snap.size} players</div>`:'')+rows;
+    }catch(e){container.innerHTML=`<div class="empty-state"><p>${getFriendlyError(e)}</p></div>`;}
+}
+
+// ================================================================
+// NOTIFICATIONS
+// ================================================================
+let notifUnsub = null;
+const notifSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+notifSound.volume = 0.6;
+
+function startNotifListener() {
+    if (!currentUser) return;
+    if (notifUnsub) notifUnsub();
+    notifUnsub = db.collection('notifications')
+        .where('userId','==', currentUser.uid)
+        .where('read','==', false)
+        .onSnapshot(snap => {
+            const count = snap.size;
+            const badge = document.getElementById('notifBadge');
+            if (badge) {
+                if (count > 0) {
+                    badge.style.display = 'flex';
+                    badge.textContent = count > 9 ? '9+' : count;
+                } else {
+                    badge.style.display = 'none';
+                }
+            }
+            // Play sound for new notifications
+            snap.docChanges().forEach(change => {
+                if (change.type === 'added') {
+                    notifSound.currentTime = 0;
+                    notifSound.play().catch(() => {});
+                }
+            });
+        });
+}
+
+async function loadNotifications() {
+    const list = document.getElementById('notifList');
+    if (!list || !currentUser) return;
+    list.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+    try {
+        const snap = await db.collection('notifications')
+            .where('userId','==', currentUser.uid)
+            .orderBy('createdAt','desc')
+            .limit(30)
+            .get();
+        if (snap.empty) {
+            list.innerHTML = '<div class="empty-state"><i class="fas fa-bell-slash"></i><p>No notifications yet</p></div>';
+            return;
+        }
+        list.innerHTML = snap.docs.map(d => {
+            const n = d.data();
+            const time = n.createdAt ? new Date(n.createdAt.toDate()).toLocaleString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : '';
+            return `<div onclick="markNotifRead('${d.id}')" style="background:${n.read?'var(--card-bg)':'linear-gradient(135deg,rgba(10,132,255,0.1),rgba(142,45,226,0.1))'};border-radius:14px;padding:14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start;border:1px solid ${n.read?'transparent':'rgba(10,132,255,0.25)'};cursor:pointer;">
+                <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#8E2DE2,#0A84FF);display:flex;align-items:center;justify-content:center;font-size:1.2em;flex-shrink:0;">${n.type==='contest_join'?'🎮':n.type==='winner'?'🏆':n.type==='wallet'?'💰':'🔔'}</div>
+                <div style="flex:1;">
+                    <div style="font-weight:700;font-size:0.88em;color:var(--white-text);">${escapeHtml(n.title||'Notification')}</div>
+                    <div style="font-size:0.78em;color:var(--muted);margin-top:3px;line-height:1.4;">${escapeHtml(n.message||'')}</div>
+                    <div style="font-size:0.65em;color:var(--muted);margin-top:5px;">${time}</div>
+                </div>
+                ${!n.read?'<div style="width:8px;height:8px;border-radius:50%;background:#0A84FF;flex-shrink:0;margin-top:4px;"></div>':''}
+            </div>`;
+        }).join('');
+    } catch(e) {
+        list.innerHTML = `<div class="empty-state"><p>${getFriendlyError(e)}</p></div>`;
+    }
+}
+
+async function markNotifRead(notifId) {
+    try {
+        await db.collection('notifications').doc(notifId).update({ read: true });
+        loadNotifications();
+    } catch(e) {}
+}
+
+async function markAllNotifsRead() {
+    if (!currentUser) return;
+    try {
+        const snap = await db.collection('notifications').where('userId','==',currentUser.uid).where('read','==',false).get();
+        const batch = db.batch();
+        snap.docs.forEach(d => batch.update(d.ref, { read: true }));
+        await batch.commit();
+        wzToast('All notifications marked as read ✅','success');
+        loadNotifications();
+    } catch(e) {}
+}
+// ================================================================
+// LEADERBOARD
+// ================================================================
+let currentLbTab = 'wins';
+function switchLbTab(tab) {
+    currentLbTab = tab;
+    const tabs = { wins:'lbTabWins', earnings:'lbTabEarnings', matches:'lbTabMatches' };
+    Object.entries(tabs).forEach(([k,id]) => {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        if (k === tab) {
+            btn.style.background = 'linear-gradient(135deg,#8E2DE2,#0A84FF)';
+            btn.style.color = '#fff';
+        } else {
+            btn.style.background = 'transparent';
+            btn.style.color = 'var(--muted)';
+        }
+    });
+    loadLeaderboard(tab);
+}
+async function loadLeaderboard(tab = 'wins') {
+    const podium  = document.getElementById('lbPodium');
+    const list    = document.getElementById('lbList');
+    if (!podium || !list) return;
+    podium.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+    list.innerHTML   = '';
+
+    const fieldMap = { wins:'matchesWon', earnings:'amountWon', matches:'totalMatches' };
+    const labelMap = { wins:'Wins', earnings:'Earned', matches:'Matches' };
+    const unitMap  = { wins:'', earnings:'₹', matches:'' };
+    const field    = fieldMap[tab];
+    const label    = labelMap[tab];
+    const unit     = unitMap[tab];
+
+    try {
+        const snap = await db.collection('users').limit(50).get();
+        const allUsers = snap.docs.map(d => ({id:d.id,...d.data()}));
+        allUsers.sort((a,b) => (b[field]||0) - (a[field]||0));
+        const users = allUsers.slice(0,20);
+        if (users.length === 0) {
+            podium.innerHTML = '<div class="empty-state"><i class="fas fa-trophy"></i><p>Koi data nahi abhi</p></div>';
+            return;
+        }
+        const medals = ['🥇','🥈','🥉'];
+        const podiumColors = [
+            'linear-gradient(135deg,#FFD700,#F39C12)',
+            'linear-gradient(135deg,#C0C0C0,#A0A0A0)',
+            'linear-gradient(135deg,#CD7F32,#A0522D)'
+        ];
+        const podiumHeights = ['90px','110px','75px'];
+        const podiumOrder   = [1, 0, 2]; // Silver, Gold, Bronze order
+
+        // Podium top 3
+        const top3 = users.slice(0, 3);
+        const orderedTop3 = [top3[1], top3[0], top3[2]].filter(Boolean);
+        const orderedIdxs  = [1, 0, 2];
+
+        podium.innerHTML = orderedTop3.map((p, i) => {
+            const realIdx  = orderedIdxs[i];
+            const isMe     = p.id === (currentUser && currentUser.uid);
+            const val      = p[field] || 0;
+            return `
+            <div style="display:flex;flex-direction:column;align-items:center;flex:1;">
+                <div style="font-size:1.4em;margin-bottom:4px;">${medals[realIdx]}</div>
+                <div style="width:48px;height:48px;border-radius:50%;overflow:hidden;border:2px solid ${realIdx===0?'#FFD700':realIdx===1?'#C0C0C0':'#CD7F32'};margin-bottom:6px;flex-shrink:0;">
+                    <img src="${escapeHtml(p.profilePictureUrl||`https://ui-avatars.com/api/?name=${encodeURIComponent(p.firstName||'W')}&background=8E2DE2&color=fff`)}"
+                         style="width:100%;height:100%;object-fit:cover;"
+                         onerror="this.src='https://ui-avatars.com/api/?name=W&background=8E2DE2&color=fff'">
+                </div>
+                <div style="font-size:0.72em;font-weight:700;color:${isMe?'#0A84FF':'#fff'};text-align:center;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                    ${escapeHtml(p.username||p.firstName||'Player')}${isMe?' (You)':''}
+                </div>
+                <div style="height:${podiumHeights[i]};width:100%;background:${podiumColors[realIdx]};border-radius:10px 10px 0 0;margin-top:6px;display:flex;align-items:center;justify-content:center;flex-direction:column;box-shadow:0 4px 15px rgba(0,0,0,0.3);">
+                    <div style="font-size:1em;font-weight:800;color:#fff;">${unit}${val}</div>
+                    <div style="font-size:0.6em;color:rgba(255,255,255,0.8);">${label}</div>
+                </div>
+            </div>`;
+        }).join('');
+
+        // Rest list (4 onwards)
+        list.innerHTML = users.slice(3).map((p, i) => {
+            const isMe = p.id === (currentUser && currentUser.uid);
+            const val  = p[field] || 0;
+            return `
+            <div style="background:${isMe?'linear-gradient(135deg,rgba(10,132,255,0.15),rgba(142,45,226,0.15))':'var(--card-bg)'};border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;border:${isMe?'1px solid rgba(10,132,255,0.4)':'1px solid transparent'};">
+                <div style="font-size:0.9em;font-weight:700;color:var(--muted);width:24px;text-align:center;">#${i+4}</div>
+                <div style="width:38px;height:38px;border-radius:50%;overflow:hidden;flex-shrink:0;">
+                    <img src="${escapeHtml(p.profilePictureUrl||`https://ui-avatars.com/api/?name=${encodeURIComponent(p.firstName||'W')}&background=8E2DE2&color=fff`)}"
+                         style="width:100%;height:100%;object-fit:cover;"
+                         onerror="this.src='https://ui-avatars.com/api/?name=W&background=8E2DE2&color=fff'">
+                </div>
+                <div style="flex:1;">
+                    <div style="font-weight:600;font-size:0.88em;color:var(--white-text);">
+                        ${escapeHtml(p.username||p.firstName||'Player')}
+                        ${isMe?'<span style="font-size:0.7em;color:var(--primary);"> (You)</span>':''}
+                    </div>
+                    <div style="font-size:0.7em;color:var(--muted);">${p.totalMatches||0} matches played</div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-size:1em;font-weight:700;color:var(--gold);">${unit}${val}</div>
+                    <div style="font-size:0.65em;color:var(--muted);">${label}</div>
+                </div>
+            </div>`;
+        }).join('');
+
+    } catch(e) {
+        podium.innerHTML = `<div class="empty-state"><p>${getFriendlyError(e)}</p></div>`;
+    }
+}
+
+// ================================================================
+// PLAYER STATS
+// ================================================================
+async function loadPlayerStats() {
+    if (!currentUser) return;
+    const container = document.getElementById('playerStatsContent');
+    if (!container) return;
+    container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading...</p></div>';
+    try {
+        const uDoc = await db.collection('users').doc(currentUser.uid).get();
+        if (!uDoc.exists) return;
+        const d = uDoc.data();
+
+        const totalMatches = d.totalMatches || 0;
+        const matchesWon   = d.matchesWon   || 0;
+        const matchesLost  = totalMatches - matchesWon;
+        const winRate      = totalMatches > 0 ? Math.round((matchesWon/totalMatches)*100) : 0;
+        const amountWon    = d.amountWon    || 0;
+        const amountSpent  = d.amountSpent  || 0;
+
+        // Win rate ring color
+        const ringColor = winRate >= 60 ? '#2ECC71' : winRate >= 40 ? '#F39C12' : '#E74C3C';
+
+        container.innerHTML = `
+        <!-- Profile card -->
+        <div style="background:linear-gradient(135deg,rgba(142,45,226,0.2),rgba(10,132,255,0.2));border-radius:20px;padding:20px;margin-bottom:16px;display:flex;align-items:center;gap:14px;border:1px solid rgba(142,45,226,0.3);">
+            <div style="width:64px;height:64px;border-radius:50%;overflow:hidden;border:2px solid #8E2DE2;flex-shrink:0;">
+                <img src="${escapeHtml(d.profilePictureUrl||`https://ui-avatars.com/api/?name=${encodeURIComponent(d.firstName||'W')}&background=8E2DE2&color=fff&size=128`)}"
+                     style="width:100%;height:100%;object-fit:cover;"
+                     onerror="this.src='https://ui-avatars.com/api/?name=W&background=8E2DE2&color=fff'">
+            </div>
+            <div>
+                <div style="font-weight:700;font-size:1.05em;color:#fff;">${escapeHtml(d.username||d.firstName||'Player')}</div>
+                <div style="font-size:0.75em;color:var(--muted);margin-top:2px;">${escapeHtml(d.email||'')}</div>
+                <div style="margin-top:6px;display:inline-block;background:linear-gradient(135deg,#8E2DE2,#0A84FF);padding:3px 10px;border-radius:20px;font-size:0.7em;font-weight:700;color:#fff;">
+                    ${winRate >= 60 ? '🔥 Pro Player' : winRate >= 40 ? '⚔️ Warrior' : '🎮 Rookie'}
+                </div>
+            </div>
+        </div>
+
+        <!-- Win rate circle -->
+        <div style="background:var(--card-bg);border-radius:20px;padding:20px;margin-bottom:12px;text-align:center;">
+            <div style="font-size:0.8em;font-weight:700;color:var(--muted);margin-bottom:16px;letter-spacing:1px;">WIN RATE</div>
+            <div style="position:relative;width:110px;height:110px;margin:0 auto 16px;">
+                <svg width="110" height="110" style="transform:rotate(-90deg);">
+                    <circle cx="55" cy="55" r="48" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="10"/>
+                    <circle cx="55" cy="55" r="48" fill="none" stroke="${ringColor}" stroke-width="10"
+                        stroke-dasharray="${2*Math.PI*48}" stroke-dashoffset="${2*Math.PI*48*(1-winRate/100)}"
+                        stroke-linecap="round"/>
+                </svg>
+                <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                    <div style="font-size:1.6em;font-weight:800;color:#fff;">${winRate}%</div>
+                </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+                <div style="text-align:center;">
+                    <div style="font-size:1.3em;font-weight:800;color:#2ECC71;">${matchesWon}</div>
+                    <div style="font-size:0.65em;color:var(--muted);">Wins</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="font-size:1.3em;font-weight:800;color:#fff;">${totalMatches}</div>
+                    <div style="font-size:0.65em;color:var(--muted);">Total</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="font-size:1.3em;font-weight:800;color:#E74C3C;">${matchesLost}</div>
+                    <div style="font-size:0.65em;color:var(--muted);">Losses</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings stats -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+            <div style="background:var(--card-bg);border-radius:16px;padding:16px;text-align:center;">
+                <div style="font-size:0.65em;color:var(--muted);margin-bottom:6px;font-weight:600;letter-spacing:1px;">TOTAL EARNED</div>
+                <div style="font-size:1.5em;font-weight:800;color:#FFD700;">₹${amountWon}</div>
+            </div>
+            <div style="background:var(--card-bg);border-radius:16px;padding:16px;text-align:center;">
+                <div style="font-size:0.65em;color:var(--muted);margin-bottom:6px;font-weight:600;letter-spacing:1px;">TOTAL SPENT</div>
+                <div style="font-size:1.5em;font-weight:800;color:#0A84FF;">₹${amountSpent}</div>
+            </div>
+        </div>
+
+        <!-- Net profit -->
+        <div style="background:${(amountWon-amountSpent)>=0?'linear-gradient(135deg,rgba(46,204,113,0.15),rgba(46,204,113,0.05))':'linear-gradient(135deg,rgba(231,76,60,0.15),rgba(231,76,60,0.05))'};border-radius:16px;padding:16px;text-align:center;border:1px solid ${(amountWon-amountSpent)>=0?'rgba(46,204,113,0.3)':'rgba(231,76,60,0.3)'};">
+            <div style="font-size:0.65em;color:var(--muted);margin-bottom:4px;font-weight:600;letter-spacing:1px;">NET PROFIT/LOSS</div>
+            <div style="font-size:1.8em;font-weight:800;color:${(amountWon-amountSpent)>=0?'#2ECC71':'#E74C3C'};">
+                ${(amountWon-amountSpent)>=0?'+':''}₹${amountWon-amountSpent}
+            </div>
+        </div>`;
+
+    } catch(e) {
+        container.innerHTML = `<div class="empty-state"><p>${getFriendlyError(e)}</p></div>`;
+    }
+}
 // ================================================================
 // ZOOM FIX
 // ================================================================
 document.addEventListener('gesturestart', e => e.preventDefault());
 document.addEventListener('touchmove', e => { if (e.scale && e.scale !== 1) e.preventDefault(); }, { passive: false });
-
 // ================================================================
 // OPEN FREE FIRE
 // ================================================================
@@ -1631,32 +2364,30 @@ async function openContestChat(contestId) {
     if (!currentUser) { showPage('login-page'); return; }
     try {
         const cDoc = await db.collection('userContests').doc(contestId).get();
-        if (!cDoc.exists) { alert('Contest not found'); return; }
+        if (!cDoc.exists) { wzToast('Contest not found!', 'error'); return; }
         const cData = cDoc.data();
-        if (cData.status !== 'active') { alert('This contest has ended'); return; }
-
+        if (cData.status !== 'active') { wzToast('This contest has ended!', 'error'); return; }
         const participants = cData.participants || [];
         const isParticipant = participants.some(p => p.uid === currentUser.uid);
-
         if (!isParticipant) {
             const fee = cData.entryFee || 0;
             const spots = cData.totalSpots || 2;
-            if (participants.length >= spots) { alert('Contest is full!'); return; }
-
+            if (participants.length >= spots) { wzToast('🚫 Contest is full!', 'error'); return; }
             const newTotal = fee * (participants.length + 1);
             const winnerPrize = Math.floor(newTotal * 0.80);
-
-            if (!confirm(`Join "${cData.name}"?\n\nEntry Fee: ₹${fee}\nPlayers after join: ${participants.length + 1}/${spots}\nPrize Pool (80%): ₹${winnerPrize}\n\n₹${fee} will be deducted.`)) return;
-
+            const confirmed = await wzConfirm(
+                `🎮 Join "${cData.name}"?`,
+                `💰 Entry Fee: ₹${fee}\n👥 Players: ${participants.length + 1}/${spots}\n🏆 Prize Pool: ₹${winnerPrize}\n\n₹${fee} will be deducted from your wallet.`
+            );
+            if (!confirmed) return;
             const uDoc = await db.collection('users').doc(currentUser.uid).get();
             const uName = uDoc.exists ? (uDoc.data().username || uDoc.data().firstName || 'Player') : 'Player';
-
             await db.runTransaction(async t => {
                 const userRef = db.collection('users').doc(currentUser.uid);
                 const freshUser = await t.get(userRef);
-                if (!freshUser.exists) throw new Error('User not found');
+                if (!freshUser.exists) throw new Error('User not found!');
                 const bal = freshUser.data().walletBalance || 0;
-                if (bal < fee) throw new Error(`Insufficient balance. Need ₹${fee}.`);
+                if (bal < fee) throw new Error(`Insufficient balance! Need ₹${fee}, you have ₹${bal}.`);
                 t.update(userRef, { walletBalance: bal - fee });
                 const newP = [...participants, { uid: currentUser.uid, name: uName, paid: fee, joinedAt: new Date().toISOString() }];
                 const updTotal = fee * newP.length;
@@ -1671,10 +2402,83 @@ async function openContestChat(contestId) {
                     status: 'completed', timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
             });
+            // 🔔 Notify contest creator
+            if (cData.creatorId && cData.creatorId !== currentUser.uid) {
+                try {
+                    await db.collection('notifications').add({
+                        userId: cData.creatorId,
+                        type: 'contest_join',
+                        title: '🎮 New Player Joined!',
+                        message: `${uName} has joined your contest "${cData.name}"! (${participants.length + 1}/${spots} players)`,
+                        contestId,
+                        read: false,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                } catch(e) {}
+            }
+            wzToast(`🎉 Joined "${cData.name}" successfully!`, 'success');
         }
         prevPage = 'create-contest-page';
         showPage('contest-chat-page', { contestId });
-    } catch(e) { alert('Error: ' + e.message); }
+    } catch(e) {
+        if (e.message !== 'cancelled') wzAlert('❌ Something went wrong!', getFriendlyError(e));
+    }
+}
+
+// ================================================================
+// DISPUTE SYSTEM
+// ================================================================
+async function raiseDispute(contestId, cData) {
+    const confirmed = await wzConfirm('🚨 Raise Dispute?',
+        `Contest: ${cData.name}\n\nDispute raise karne ke baad admin review karega aur final decision lega.\n\nKya aap confirm karte hain?`);
+    if (!confirmed) return;
+
+    try {
+        // Check already raised
+        const existing = await db.collection('disputes')
+            .where('contestId','==',contestId)
+            .where('raisedBy','==',currentUser.uid)
+            .get();
+        if (!existing.empty) {
+            wzToast('⚠️ Aapne already dispute raise kar diya hai!','error');
+            return;
+        }
+
+        const uDoc = await db.collection('users').doc(currentUser.uid).get();
+        const uName = uDoc.exists ? (uDoc.data().username||uDoc.data().firstName||'Player') : 'Player';
+
+        await db.collection('disputes').add({
+            contestId,
+            contestName: cData.name,
+            raisedBy: currentUser.uid,
+            raisedByName: uName,
+            creatorId: cData.creatorId,
+            creatorName: cData.creatorName||'Creator',
+            prizePool: cData.prizePool||0,
+            participants: cData.participants||[],
+            status: 'pending',
+            adminNote: '',
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        // Notify admin
+        await db.collection('notifications').add({
+            userId: 'admin',
+            type: 'dispute',
+            title: '🚨 New Dispute Raised!',
+            message: `${uName} ne "${cData.name}" contest mein dispute raise kiya hai.`,
+            contestId,
+            read: false,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        wzToast('✅ Dispute raise ho gaya! Admin 24 hours mein review karega.','success');
+        document.getElementById('raiseDisputeBtn').disabled = true;
+        document.getElementById('raiseDisputeBtn').textContent = '✅ Disputed';
+
+    } catch(e) {
+        wzAlert('❌ Error', getFriendlyError(e));
+    }
 }
 
 // ================================================================
@@ -1683,93 +2487,217 @@ async function openContestChat(contestId) {
 async function endContest(contestId) {
     try {
         const cDoc = await db.collection('userContests').doc(contestId).get();
-        if (!cDoc.exists) { alert('Contest not found'); return; }
+        if (!cDoc.exists) { wzAlert('Error ❌', 'Contest nahi mila!'); return; }
         const cData = cDoc.data();
         const participants = cData.participants || [];
 
         if (participants.length < 2) {
-            if (!confirm('Less than 2 players. Refund your entry fee and end?')) return;
-            if (cData.entryFee > 0 && cData.creatorId) {
-                await db.runTransaction(async t => {
-                    const uRef = db.collection('users').doc(cData.creatorId);
-                    const uD = await t.get(uRef);
-                    t.update(uRef, { walletBalance: (uD.data().walletBalance||0) + cData.entryFee });
-                    t.set(db.collection('transactions').doc(), { userId: cData.creatorId, type: 'Contest Refund', amount: cData.entryFee, status: 'completed', timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-                });
-            }
-            await db.collection('userContests').doc(contestId).update({ status: 'ended', endedAt: firebase.firestore.FieldValue.serverTimestamp() });
-            if (chatUnsub) { chatUnsub(); chatUnsub = null; }
-            alert('Contest ended. Fee refunded.');
-            showPage('create-contest-page');
+            wzConfirm('Contest End Karo?',
+                `Sirf ${participants.length} player hai.\nEntry fee ₹${cData.entryFee} refund karein aur end karein?`,
+                async () => {
+                    try {
+                        if (cData.entryFee > 0 && cData.creatorId) {
+                            await db.runTransaction(async t => {
+                                const uRef = db.collection('users').doc(cData.creatorId);
+                                const uD = await t.get(uRef);
+                                t.update(uRef, { walletBalance: (uD.data().walletBalance||0) + cData.entryFee });
+                                t.set(db.collection('transactions').doc(), {
+                                    userId: cData.creatorId, type: 'Contest Refund',
+                                    amount: cData.entryFee, status: 'completed',
+                                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                                });
+                            });
+                        }
+                        await db.collection('userContests').doc(contestId).update({
+                            status: 'ended', endedAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                        if (chatUnsub) { chatUnsub(); chatUnsub = null; }
+                        wzToast('Contest end! Fee refund ho gayi. ✅', 'success');
+                        showPage('create-contest-page');
+                    } catch(e) { wzToast(getFriendlyError(e), 'error'); }
+                }
+            );
             return;
         }
 
-        const playerList = participants.map((p,i) => `${i+1}. ${p.name}`).join('\n');
+        // ── WIN/LOSS MODAL ──
         const totalPool = cData.totalPool || (cData.entryFee * participants.length);
         const winnerPrize = Math.floor(totalPool * 0.80);
         const platformCut = totalPool - winnerPrize;
 
-        const winnerNumStr = prompt(`Select Winner!\n\nPlayers:\n${playerList}\n\nTotal Pool: ₹${totalPool}\nWinner gets: ₹${winnerPrize} (80%)\nPlatform fee: ₹${platformCut} (20%)\n\nEnter player number (1-${participants.length}):`);
-        if (!winnerNumStr) return;
-        const winnerNum = parseInt(winnerNumStr);
-        if (isNaN(winnerNum) || winnerNum < 1 || winnerNum > participants.length) { alert('Invalid number'); return; }
-        const winner = participants[winnerNum - 1];
+        document.getElementById('wz-result-modal')?.remove();
+        const overlay = document.createElement('div');
+        overlay.id = 'wz-result-modal';
+        overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99998;display:flex;align-items:flex-end;justify-content:center;animation:wzFadeIn 0.2s ease;font-family:Poppins,sans-serif;';
 
-        if (!confirm(`Declare ${winner.name} as WINNER?\n\n₹${winnerPrize} will be credited to their wallet.`)) return;
+        const playerCards = participants.map((p, i) => `
+            <div style="background:#1C122C;border-radius:16px;padding:16px;margin-bottom:10px;border:2px solid transparent;" id="rcard-${i}">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+                    <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#8E2DE2,#0A84FF);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:1.1em;flex-shrink:0;">
+                        ${escapeHtml((p.name||'?').charAt(0).toUpperCase())}
+                    </div>
+                    <div style="flex:1;">
+                        <div style="font-weight:700;font-size:0.95em;color:#fff;">${escapeHtml(p.name||'Player')}</div>
+                        <div style="font-size:0.72em;color:#BBB;">Entry: ₹${p.paid||0}</div>
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                    <button onclick="selectResult(${i},'win')" id="win-${i}"
+                        style="padding:10px;border-radius:12px;border:2px solid #2ECC71;background:transparent;color:#2ECC71;font-weight:700;font-size:0.88em;cursor:pointer;font-family:Poppins,sans-serif;transition:all 0.2s;">
+                        🏆 WIN
+                    </button>
+                    <button onclick="selectResult(${i},'loss')" id="loss-${i}"
+                        style="padding:10px;border-radius:12px;border:2px solid #E74C3C;background:transparent;color:#E74C3C;font-weight:700;font-size:0.88em;cursor:pointer;font-family:Poppins,sans-serif;transition:all 0.2s;">
+                        💀 LOSS
+                    </button>
+                </div>
+            </div>`).join('');
 
-        await db.runTransaction(async t => {
-            const winnerRef = db.collection('users').doc(winner.uid);
-            const wDoc = await t.get(winnerRef);
-            if (!wDoc.exists) throw new Error('Winner not found');
-            t.update(winnerRef, {
-                walletBalance: (wDoc.data().walletBalance || 0) + winnerPrize,
-                amountWon: firebase.firestore.FieldValue.increment(winnerPrize),
-                matchesWon: firebase.firestore.FieldValue.increment(1),
-                totalMatches: firebase.firestore.FieldValue.increment(1)
+        overlay.innerHTML = `
+            <div style="background:#120A1F;border-radius:24px 24px 0 0;padding:20px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;animation:wzSlideUp 0.3s ease;">
+                <div style="text-align:center;margin-bottom:16px;">
+                    <div style="font-size:1.6em;">⚔️</div>
+                    <div style="font-weight:700;font-size:1.1em;color:#fff;margin-top:4px;">Match Result Declare Karo</div>
+                    <div style="font-size:0.78em;color:#BBB;margin-top:4px;">${escapeHtml(cData.name)}</div>
+                </div>
+                <div style="background:#1C122C;border-radius:12px;padding:12px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;">
+                    <div>
+                        <div style="font-size:1em;font-weight:700;color:#fff;">₹${totalPool}</div>
+                        <div style="font-size:0.65em;color:#BBB;">Total Pool</div>
+                    </div>
+                    <div>
+                        <div style="font-size:1em;font-weight:700;color:#FFD700;">₹${winnerPrize}</div>
+                        <div style="font-size:0.65em;color:#BBB;">Winner (80%)</div>
+                    </div>
+                    <div>
+                        <div style="font-size:1em;font-weight:700;color:#F39C12;">₹${platformCut}</div>
+                        <div style="font-size:0.65em;color:#BBB;">Platform (20%)</div>
+                    </div>
+                </div>
+                <div style="font-size:0.8em;color:#BBB;margin-bottom:12px;font-weight:600;">
+                    Har player ke liye WIN ya LOSS select karo:
+                </div>
+                ${playerCards}
+                <div style="display:flex;gap:10px;margin-top:14px;">
+                    <button id="wzRC" style="flex:1;padding:12px;border-radius:50px;border:2px solid #4A2E68;background:transparent;color:#BBB;font-weight:600;cursor:pointer;font-family:Poppins,sans-serif;">Baad Mein</button>
+                    <button id="wzRD" disabled style="flex:2;padding:12px;border-radius:50px;border:none;background:linear-gradient(135deg,#FFD700,#F39C12);color:#1C122C;font-weight:700;cursor:pointer;opacity:0.5;font-family:Poppins,sans-serif;">🏆 Declare Result</button>
+                </div>
+            </div>`;
+        document.body.appendChild(overlay);
+
+        let selectedWinner = null;
+
+        // selectResult global function
+        window.selectResult = (idx, result) => {
+            // Reset all cards
+            participants.forEach((_, i) => {
+                const card = document.getElementById(`rcard-${i}`);
+                const winBtn  = document.getElementById(`win-${i}`);
+                const lossBtn = document.getElementById(`loss-${i}`);
+                if (card)    card.style.borderColor = 'transparent';
+                if (winBtn)  { winBtn.style.background  = 'transparent'; winBtn.style.color  = '#2ECC71'; }
+                if (lossBtn) { lossBtn.style.background = 'transparent'; lossBtn.style.color = '#E74C3C'; }
             });
-            t.set(db.collection('transactions').doc(), {
-                userId: winner.uid, type: 'Contest Prize (Winner 80%)',
-                amount: winnerPrize, contestId, contestName: cData.name,
-                status: 'completed', timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            t.set(db.collection('platformEarnings').doc(), {
-                contestId, totalPool, winnerPrize, platformFee: platformCut,
-                participants: participants.length,
-                earnedAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-        });
 
-        // Notify winner
-        await db.collection('notifications').add({
-            userId: winner.uid,
-            title: '🏆 You Won the Contest!',
-            message: `Congratulations! You won "${cData.name}"! ₹${winnerPrize} has been credited to your wallet.`,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
+            // Highlight selected
+            const card    = document.getElementById(`rcard-${idx}`);
+            const winBtn  = document.getElementById(`win-${idx}`);
+            const lossBtn = document.getElementById(`loss-${idx}`);
 
-        // ── Save to contestHistory (NEW: used by history section) ──
-        const msgsSnap = await db.collection('userContests').doc(contestId).collection('messages').get();
-        await db.collection('contestHistory').add({
-            contestId, contestName: cData.name, gameMode: cData.gameMode,
-            creatorId: cData.creatorId, creatorName: cData.creatorName,
-            winnerId: winner.uid, winnerName: winner.name, winnerPrize,
-            platformFee: platformCut, totalPool, participants,
-            totalMessages: msgsSnap.size,
-            endedAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
+            if (result === 'win') {
+                selectedWinner = participants[idx];
+                if (card)    card.style.borderColor    = '#FFD700';
+                if (winBtn)  { winBtn.style.background  = '#2ECC71'; winBtn.style.color  = '#fff'; }
+                // Auto mark others as loss
+                participants.forEach((_, i) => {
+                    if (i !== idx) {
+                        const lb = document.getElementById(`loss-${i}`);
+                        const rc = document.getElementById(`rcard-${i}`);
+                        if (lb) { lb.style.background = '#E74C3C'; lb.style.color = '#fff'; }
+                        if (rc) rc.style.borderColor = 'rgba(231,76,60,0.3)';
+                    }
+                });
+            } else {
+                if (lossBtn) { lossBtn.style.background = '#E74C3C'; lossBtn.style.color = '#fff'; }
+                if (card)    card.style.borderColor = 'rgba(231,76,60,0.3)';
+            }
 
-        // ── End the contest: remove from active, keep in history ──
-        await db.collection('userContests').doc(contestId).update({
-            status: 'ended', chatEnabled: false,
-            winnerId: winner.uid, winnerName: winner.name,
-            winnerPrize, winnerPaid: true,
-            endedAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
+            // Enable declare button
+            if (selectedWinner) {
+                const declareBtn = document.getElementById('wzRD');
+                if (declareBtn) {
+                    declareBtn.disabled = false;
+                    declareBtn.style.opacity = '1';
+                    declareBtn.textContent = `🏆 ${selectedWinner.name} Ko Winner Declare Karo`;
+                }
+            }
+        };
 
-        if (chatUnsub) { chatUnsub(); chatUnsub = null; }
-        alert(`🎉 Match ended!\nWinner: ${winner.name}\n₹${winnerPrize} credited!\nPlatform earned: ₹${platformCut}`);
-        showPage('create-contest-page');
-    } catch(e) { alert('Error: ' + e.message); }
+        document.getElementById('wzRC').onclick = () => { overlay.remove(); delete window.selectResult; };
+
+        document.getElementById('wzRD').onclick = () => {
+            if (!selectedWinner) return;
+            overlay.remove();
+            delete window.selectResult;
+
+            wzConfirm('Result Confirm Karo ✅',
+                `🏆 Winner: ${selectedWinner.name}\n💰 ₹${winnerPrize} unke wallet mein jayega\n📊 Platform: ₹${platformCut}\n\nConfirm karein?`,
+                async () => {
+                    try {
+                        await db.runTransaction(async t => {
+                            const wRef = db.collection('users').doc(selectedWinner.uid);
+                            const wDoc = await t.get(wRef);
+                            if (!wDoc.exists) throw new Error('Winner ka account nahi mila');
+                            t.update(wRef, {
+                                walletBalance: (wDoc.data().walletBalance||0) + winnerPrize,
+                                amountWon:    firebase.firestore.FieldValue.increment(winnerPrize),
+                                matchesWon:   firebase.firestore.FieldValue.increment(1),
+                                totalMatches: firebase.firestore.FieldValue.increment(1)
+                            });
+                            t.set(db.collection('transactions').doc(), {
+                                userId: selectedWinner.uid, type: 'Contest Prize (Winner 80%)',
+                                amount: winnerPrize, contestId, contestName: cData.name,
+                                status: 'completed', timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                            });
+                            t.set(db.collection('platformEarnings').doc(), {
+                                contestId, totalPool, winnerPrize, platformFee: platformCut,
+                                participants: participants.length,
+                                earnedAt: firebase.firestore.FieldValue.serverTimestamp()
+                            });
+                        });
+
+                        await sendInAppNotification(
+                            selectedWinner.uid,
+                            '🏆 Tu Jeet Gaya!',
+                            `"${cData.name}" mein tune jeet liya! ₹${winnerPrize} tera wallet mein add ho gaya.`
+                        );
+
+                        const msgsSnap = await db.collection('userContests').doc(contestId).collection('messages').get();
+                        await db.collection('contestHistory').add({
+                            contestId, contestName: cData.name, gameMode: cData.gameMode,
+                            creatorId: cData.creatorId, creatorName: cData.creatorName,
+                            winnerId: selectedWinner.uid, winnerName: selectedWinner.name,
+                            winnerPrize, platformFee: platformCut, totalPool, participants,
+                            totalMessages: msgsSnap.size,
+                            endedAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+
+                        await db.collection('userContests').doc(contestId).update({
+                            status: 'ended', chatEnabled: false,
+                            winnerId: selectedWinner.uid, winnerName: selectedWinner.name,
+                            winnerPrize, winnerPaid: true,
+                            endedAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+
+                        if (chatUnsub) { chatUnsub(); chatUnsub = null; }
+                        wzToast(`🎉 ${selectedWinner.name} winner! ₹${winnerPrize} credited!`, 'success', 4000);
+                        showPage('create-contest-page');
+                    } catch(e) { wzToast(getFriendlyError(e), 'error'); }
+                }
+            );
+        };
+
+    } catch(e) { wzToast(getFriendlyError(e), 'error'); }
 }
 
 // ================================================================
@@ -1782,14 +2710,14 @@ const pageInits = {
         const loginBtn = document.getElementById('loginBtn');
         loginBtn.onclick = async () => {
             const email = document.getElementById('loginEmail').value.trim();
-            const pwd = document.getElementById('loginPassword').value.trim();
-            if (!email || !pwd) { alert('Please fill all fields'); return; }
-            if (!email.includes('@')) { alert('Enter a valid email'); return; }
+            const pwd = document.getElementById('loginPassword').value;
+            if (!email || !pwd) { wzToast('Sabhi fields bharo!', 'warning'); return; }
+            if (!email.includes('@')) { wzToast('Valid email address enter karo.', 'warning'); return; }
             loginBtn.disabled = true; loginBtn.textContent = 'Logging in...';
             try {
                 await auth.signInWithEmailAndPassword(email, pwd);
                 showPage('home-page');
-            } catch(e) { alert(e.message); }
+            } catch(e) { wzToast(getFriendlyError(e), 'error'); }
             finally { loginBtn.disabled = false; loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> LOGIN'; }
         };
         document.getElementById('googleLoginBtn').onclick = async () => {
@@ -1818,11 +2746,11 @@ const pageInits = {
             const un = document.getElementById('signupUsername').value.trim();
             const mob = document.getElementById('signupMobile').value.trim();
             const email = document.getElementById('signupEmail').value.trim();
-            const pwd = document.getElementById('signupPassword').value.trim();
+            const pwd = document.getElementById('signupPassword').value;
             const ref = document.getElementById('signupReferral').value.trim().toUpperCase();
-            if (!fn||!ln||!un||!mob||!email||!pwd) { alert('Please fill all required fields'); return; }
-            if (mob.length !== 10 || !/^\d+$/.test(mob)) { alert('Enter valid 10-digit mobile number'); return; }
-            if (pwd.length < 6) { alert('Password must be at least 6 characters'); return; }
+            if (!fn||!ln||!un||!mob||!email||!pwd) { wzToast('Sabhi fields bharo!', 'warning'); return; }
+            if (mob.length !== 10 || !/^\d+$/.test(mob)) { wzToast('Valid 10-digit mobile number enter karo.', 'warning'); return; }
+            if (pwd.length < 6) { wzToast('Password kam se kam 6 characters ka hona chahiye.', 'warning'); return; }
             signupBtn.disabled = true; signupBtn.textContent = 'Creating account...';
             try {
                 const cred = await auth.createUserWithEmailAndPassword(email, pwd);
@@ -1981,7 +2909,7 @@ const pageInits = {
             if (isNaN(amt) || amt < 10) { alert('Minimum deposit is ₹10'); return; }
             const qrAmtEl = document.getElementById('qrAmount');
             if (qrAmtEl) qrAmtEl.textContent = amt.toLocaleString('en-IN',{minimumFractionDigits:2});
-            await loadAdminQR();
+            await loadAdminQR(amt);
             const qrImg = document.getElementById('qrImage');
             if (qrImg && qrImg.src.includes('placeholder')) {
                 qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=warzoneindia@upi%26pn=WarZoneIndia%26am=${amt}%26cu=INR`;
@@ -2174,38 +3102,19 @@ const pageInits = {
         loadMatches(savedFilter);
     },
 
-    'leaderboard-page': async () => {
+    'leaderboard-page': () => {
         if (!currentUser) { showPage('login-page'); return; }
-        document.getElementById('backFromLeaderboard').onclick = () => showPage('profile-page');
-        const tabs = document.querySelectorAll('#leaderboard-page .tab-btn');
-        async function loadLB(type) {
-            const container = document.getElementById('leaderboardList');
-            if (container) container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading...</p></div>';
-            try {
-                const fieldMap = { earnings:'amountWon', kills:'totalKills', matches:'totalMatches' };
-                const field = fieldMap[type] || 'amountWon';
-                const snap = await db.collection('users').orderBy(field,'desc').limit(20).get();
-                if (snap.empty) { if(container) container.innerHTML = '<div class="empty-state"><i class="fas fa-trophy"></i><p>No data yet</p></div>'; return; }
-                const rankClass = i => i===0?'gold':i===1?'silver':i===2?'bronze':'normal';
-                const valLabel = (u,type) => type==='earnings'?`₹${(u.amountWon||0).toLocaleString('en-IN')}`:type==='kills'?`${u.totalKills||0} kills`:`${u.totalMatches||0} matches`;
-                if (container) container.innerHTML = snap.docs.map((d,i) => {
-                    const u = d.data();
-                    const isMe = d.id === currentUser.uid;
-                    return `<div class="leaderboard-item" style="${isMe?'border:2px solid var(--primary);':''}">
-                        <div class="rank-badge ${rankClass(i)}">${i+1}</div>
-                        <div class="lb-info"><div class="name">${u.username||u.firstName||'Player'}${isMe?' (You)':''}</div><div class="sub">${u.gameId||''}</div></div>
-                        <div class="lb-score">${valLabel(u,type)}</div>
-                    </div>`;
-                }).join('');
-            } catch(e) {
-                const c = document.getElementById('leaderboardList');
-                if(c) c.innerHTML='<div class="empty-state"><p>Error loading leaderboard</p></div>';
-            }
-        }
-        tabs.forEach(tab => {
-            tab.onclick = () => { tabs.forEach(t=>t.classList.remove('active')); tab.classList.add('active'); loadLB(tab.dataset.lb); };
-        });
-        loadLB('earnings');
+        document.getElementById('backFromLeaderboard').onclick = () => showPage('settings-page');
+        // Buttons ko setTimeout se attach karo — DOM ready hone ke baad
+        setTimeout(() => {
+            const w = document.getElementById('lbTabWins');
+            const e = document.getElementById('lbTabEarnings');
+            const m = document.getElementById('lbTabMatches');
+            if (w) w.onclick = () => switchLbTab('wins');
+            if (e) e.onclick = () => switchLbTab('earnings');
+            if (m) m.onclick = () => switchLbTab('matches');
+        }, 100);
+        loadLeaderboard('wins');
     },
 
     'results-page': async () => {
@@ -2390,16 +3299,32 @@ const pageInits = {
             if (uDoc.exists) {
                 const u = uDoc.data();
                 const code = u.referralCode || (u.username||'').toUpperCase() || currentUser.uid.substring(0,8).toUpperCase();
-                // BUG FIX: use renamed 'refCodeMain'
                 const el = document.getElementById('refCodeMain'); if(el) el.textContent = code;
                 const shareMsg = `🎮 Join WarZone India - India's #1 Esports Platform!\nUse my referral code: ${code}\nDownload: https://warzoneindia.com`;
-                document.getElementById('copyRefBtn').onclick = () => { navigator.clipboard.writeText(code).then(()=>alert('Code copied! ✅')).catch(()=>alert('Code: '+code)); };
+                document.getElementById('copyRefBtn').onclick = () => { navigator.clipboard.writeText(code).then(()=>wzToast('Code copy ho gaya! ✅','success')).catch(()=>wzAlert('Tera Code',code)); };
                 document.getElementById('shareWhatsapp').onclick = () => window.open(`https://wa.me/?text=${encodeURIComponent(shareMsg)}`,'_blank');
                 document.getElementById('shareFacebook').onclick = () => window.open(`https://www.facebook.com/sharer/sharer.php?u=https://warzoneindia.com`,'_blank');
                 document.getElementById('shareTwitter').onclick = () => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareMsg)}`,'_blank');
-                document.getElementById('shareOther').onclick = () => { if(navigator.share) navigator.share({title:'WarZone India',text:shareMsg}).catch(()=>{}); else alert(shareMsg); };
+                document.getElementById('shareOther').onclick = () => { if(navigator.share) navigator.share({title:'WarZone India',text:shareMsg}).catch(()=>{}); else wzAlert('Share Karo',shareMsg); };
             }
         } catch(e) {}
+    },
+    'leaderboard-page': () => {
+        if (!currentUser) { showPage('login-page'); return; }
+        document.getElementById('backFromLeaderboard').onclick = () => showPage('settings-page');
+        setTimeout(() => {
+            const w = document.getElementById('lbTabWins');
+            const e = document.getElementById('lbTabEarnings');
+            const m = document.getElementById('lbTabMatches');
+            if (w) w.onclick = () => switchLbTab('wins');
+            if (e) e.onclick = () => switchLbTab('earnings');
+            if (m) m.onclick = () => switchLbTab('matches');
+        }, 100);
+        loadLeaderboard('wins');
+    },
+    'player-stats-page': () => {
+        document.getElementById('backFromPlayerStats').onclick = () => showPage('settings-page');
+        loadPlayerStats();
     },
 
     'support-page': async () => {
@@ -2446,10 +3371,12 @@ const pageInits = {
         document.getElementById('backFromSettings').onclick = () => showPage('profile-page');
         document.getElementById('settingsLogoutBtn').onclick = doLogout;
         document.getElementById('settingsSupport').onclick = () => showPage('support-page');
-        document.getElementById('settingsAbout').onclick = () => alert('WarZone India v3.0.0\nIndia\'s #1 Esports Platform\n\nContact: support@warzoneindia.com');
+        document.getElementById('settingsAbout').onclick = () => wzAlert('WarZone India v3.0.0','India\'s #1 Esports Platform\n\nContact: support@warzoneindia.com');
         document.getElementById('settingsTerms').onclick = () => showPage('terms-page');
         document.getElementById('settingsFaq').onclick = () => showPage('faq-page');
         document.getElementById('settingsLiveScore').onclick = () => showPage('live-score-page');
+        document.getElementById('settingsLeaderboard').onclick = () => showPage('leaderboard-page');
+        document.getElementById('settingsPlayerStats').onclick = () => showPage('player-stats-page');
         const toggle = document.getElementById('darkModeToggle');
         const themeLabel = document.getElementById('themeLabel');
         const isDark = localStorage.getItem('wz_theme') !== 'light';
@@ -2671,7 +3598,7 @@ const pageInits = {
             }
         } catch(e) { myList.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>Error loading</p></div>'; }
 
-        // ── Load contest history (NEW) ──
+        // Load contest history
         const historyList = document.getElementById('contestHistoryList');
         try {
             const hSnap = await db.collection('contestHistory').where('creatorId','==',currentUser.uid).get();
@@ -2699,29 +3626,27 @@ const pageInits = {
             const spots = parseInt(document.getElementById('contestSpots').value)||2;
             const time = document.getElementById('contestTime').value.trim();
             const map = document.getElementById('contestMap').value.trim();
-            if (!name) { alert('Contest name required'); return; }
-            if (spots < 2 || spots > 100) { alert('Spots must be 2-100'); return; }
-            if (fee < 10) { alert('Minimum entry fee is ₹10'); return; }
-
+            if (!name) { wzToast('⚠️ Please enter a contest name!','error'); return; }
+            if (spots < 2 || spots > 100) { wzToast('⚠️ Spots must be between 2 and 100!','error'); return; }
+            if (fee < 10) { wzToast('⚠️ Minimum entry fee is ₹10!','error'); return; }
             const totalPool = fee * spots;
             const winnerPrize = Math.floor(totalPool * 0.80);
             const platformFee = totalPool - winnerPrize;
-
-            if (!confirm(`Contest Summary:\nEntry Fee: ₹${fee}/player\nTotal Spots: ${spots}\nTotal Pool: ₹${totalPool}\n🏆 Winner Gets: ₹${winnerPrize} (80%)\n📊 Platform Fee: ₹${platformFee} (20%)\n\nYour ₹${fee} deducted now. Create?`)) return;
-
+            const confirmed = await wzConfirm('🎮 Create Contest?',
+                `📛 Name: ${name}\n🎯 Mode: ${mode}\n💰 Entry Fee: ₹${fee} per player\n👥 Total Spots: ${spots}\n💵 Total Pool: ₹${totalPool}\n🏆 Winner Prize: ₹${winnerPrize} (80%)\n\n₹${fee} will be deducted from your wallet now.`);
+            if (!confirmed) return;
             const btn = document.getElementById('createContestBtn');
-            btn.disabled = true; btn.textContent = 'Creating...';
+            btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
             try {
                 const userRef = db.collection('users').doc(currentUser.uid);
                 await db.runTransaction(async t => {
                     const uDoc = await t.get(userRef);
-                    if (!uDoc.exists) throw new Error('User not found');
+                    if (!uDoc.exists) throw new Error('User not found!');
                     const bal = uDoc.data().walletBalance || 0;
-                    if (bal < fee) throw new Error(`Insufficient balance. Need ₹${fee}.`);
+                    if (bal < fee) throw new Error(`Insufficient balance! Need ₹${fee}, you have ₹${bal}.`);
                     t.update(userRef, { walletBalance: bal - fee });
                     t.set(db.collection('transactions').doc(), { userId: currentUser.uid, type: 'Contest Entry Fee (Creator)', amount: -fee, status: 'completed', timestamp: firebase.firestore.FieldValue.serverTimestamp() });
                 });
-
                 const uDoc2 = await db.collection('users').doc(currentUser.uid).get();
                 const uData = uDoc2.data();
                 await db.collection('userContests').add({
@@ -2737,11 +3662,10 @@ const pageInits = {
                     winnerId: null, winnerPaid: false,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
-
-                alert(`🎉 Contest created!\n\nPlayers can join from Tournament List.\nWinner gets ₹${winnerPrize} when you declare them!`);
+                wzToast('🎉 Contest created successfully!','success');
                 document.getElementById('contestName').value=''; document.getElementById('contestFee').value='10'; document.getElementById('contestSpots').value='2'; document.getElementById('contestTime').value=''; document.getElementById('contestMap').value='';
                 pageInits['create-contest-page']();
-            } catch(e) { alert('Error: ' + e.message); }
+            } catch(e) { wzAlert('❌ Something went wrong!', e.message); }
             finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-gamepad"></i> Create Contest'; }
         };
     },
@@ -2752,44 +3676,102 @@ const pageInits = {
     'contest-chat-page': async (contestId) => {
         if (!currentUser) { showPage('login-page'); return; }
         if (!contestId) { showPage('home-page'); return; }
-
         const cDoc = await db.collection('userContests').doc(contestId).get();
-        if (!cDoc.exists) { alert('Contest not found'); showPage('home-page'); return; }
+        if (!cDoc.exists) { wzAlert('Error','Contest not found!'); showPage('home-page'); return; }
         const cData = cDoc.data();
-
+        const isCreator = cData.creatorId === currentUser.uid;
+        const isParticipant = (cData.participants||[]).some(p => p.uid === currentUser.uid);
+        // Header update
         document.getElementById('contestChatTitle').textContent = cData.name;
-        document.getElementById('contestChatSubtitle').textContent = `${(cData.participants||[]).length}/${cData.totalSpots} players`;
-
+        document.getElementById('contestChatSubtitle').textContent = `${(cData.participants||[]).length}/${cData.totalSpots} players • ₹${cData.prizePool||0} prize`;
+        // End button
         const endBtn = document.getElementById('contestEndBtn');
-        if (cData.creatorId === currentUser.uid && cData.status === 'active') {
+        if (isCreator && cData.status === 'active') {
             endBtn.style.display = 'inline-block';
             endBtn.onclick = () => endContest(contestId);
         } else { endBtn.style.display = 'none'; }
-
         document.getElementById('backFromContestChat').onclick = () => showPage('create-contest-page');
 
+        // Dispute button — sirf non-creator participants ko dikhega
+        const existingDisputeBar = document.getElementById('disputeBar');
+        if (existingDisputeBar) existingDisputeBar.remove();
+        if (!isCreator && isParticipant && cData.status === 'active') {
+            const disputeBar = document.createElement('div');
+            disputeBar.id = 'disputeBar';
+            disputeBar.style.cssText = 'background:rgba(231,76,60,0.1);border-bottom:1px solid rgba(231,76,60,0.2);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;';
+            disputeBar.innerHTML = `
+                <div style="font-size:0.75em;color:var(--muted);">⚠️ Result se disagree karte ho?</div>
+                <button id="raiseDisputeBtn" style="padding:6px 14px;border-radius:20px;border:1px solid rgba(231,76,60,0.5);background:rgba(231,76,60,0.15);color:#E74C3C;font-size:0.75em;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;">🚨 Raise Dispute</button>`;
+            const chatPage = document.getElementById('contest-chat-page');
+            const msgsElRef = document.getElementById('contestChatMsgs');
+            chatPage.insertBefore(disputeBar, msgsElRef);
+            document.getElementById('raiseDisputeBtn').onclick = () => raiseDispute(contestId, cData);
+        }
+
+        // Chat background style
         const msgsEl = document.getElementById('contestChatMsgs');
+        msgsEl.style.cssText = 'flex:1;overflow-y:auto;padding:10px 12px 80px;display:flex;flex-direction:column;gap:4px;background:var(--dark-bg);width:100%;align-self:stretch;';
         if (chatUnsub) { chatUnsub(); chatUnsub = null; }
-        msgsEl.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading chat...</p></div>';
+        msgsEl.innerHTML = '<div style="text-align:center;color:var(--muted);font-size:0.75em;padding:20px;">Loading...</div>';
 
         chatUnsub = db.collection('userContests').doc(contestId).collection('messages')
             .orderBy('createdAt','asc').limit(100)
             .onSnapshot(snap => {
-                if (snap.empty) { msgsEl.innerHTML = '<div style="text-align:center;color:var(--muted);padding:30px;font-size:0.85em;">No messages yet. Say hi! 👋</div>'; return; }
+                if (snap.empty) {
+                    msgsEl.innerHTML = '<div style="text-align:center;color:var(--muted);padding:40px 20px;font-size:0.85em;">📭 No messages yet. Say hi! 👋</div>';
+                    return;
+                }
+
+                let lastDate = '';
                 msgsEl.innerHTML = snap.docs.map(d => {
-                    const m=d.data(); const isMine=m.uid===currentUser.uid;
-                    const time=m.createdAt?new Date(m.createdAt.toDate()).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}):'';
-                    return `<div class="chat-msg-wrapper">
-                        <div class="chat-bubble ${isMine?'mine':'other'}">
-                            ${!isMine?`<div class="c-name">${m.name||'Player'}</div>`:''}
-                            ${m.text}
-                            <div class="c-time">${time}</div>
-                        </div>
+                    const m = d.data();
+                    const isMine = m.uid === currentUser.uid;
+
+                    const time = m.createdAt
+                        ? new Date(m.createdAt.toDate()).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})
+                        : '';
+
+                    const msgDate = m.createdAt
+                        ? new Date(m.createdAt.toDate()).toLocaleDateString('en-IN',{day:'numeric',month:'short'})
+                        : '';
+                    let dateSep = '';
+                    if (msgDate && msgDate !== lastDate) {
+                        lastDate = msgDate;
+                        dateSep = `<div style="text-align:center;margin:10px 0;">
+                            <span style="background:rgba(255,255,255,0.1);color:var(--muted);font-size:0.7em;padding:4px 12px;border-radius:10px;">${msgDate}</span>
+                        </div>`;
+                    }
+
+                    const avatarLetter = (m.name||'P').charAt(0).toUpperCase();
+
+                    return `${dateSep}
+                    <div style="display:flex;flex-direction:column;align-items:${isMine?'flex-end':'flex-start'};margin-bottom:2px;">
+                        ${!isMine ? `
+                        <div style="display:flex;align-items:flex-end;gap:6px;max-width:80%;">
+                            <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#8E2DE2,#0A84FF);display:flex;align-items:center;justify-content:center;font-size:0.7em;font-weight:700;color:#fff;flex-shrink:0;margin-bottom:2px;">
+                                ${avatarLetter}
+                            </div>
+                            <div>
+                                <div style="font-size:0.7em;color:#8E2DE2;font-weight:600;margin-bottom:2px;margin-left:2px;">${escapeHtml(m.name||'Player')}</div>
+                                <div style="background:#1C122C;color:#fff;padding:8px 12px;border-radius:18px 18px 18px 4px;font-size:0.88em;line-height:1.4;max-width:100%;word-break:break-word;box-shadow:0 1px 2px rgba(0,0,0,0.3);">
+                                    ${escapeHtml(m.text)}
+                                    <div style="font-size:0.65em;color:rgba(255,255,255,0.4);text-align:right;margin-top:3px;">${time}</div>
+                                </div>
+                            </div>
+                        </div>` : `
+                        <div style="max-width:80%;">
+                            <div style="background:linear-gradient(135deg,#8E2DE2,#0A84FF);color:#fff;padding:8px 12px;border-radius:18px 18px 4px 18px;font-size:0.88em;line-height:1.4;word-break:break-word;box-shadow:0 1px 2px rgba(0,0,0,0.3);">
+                                ${escapeHtml(m.text)}
+                                <div style="font-size:0.65em;color:rgba(255,255,255,0.7);text-align:right;margin-top:3px;">${time} ✓✓</div>
+                            </div>
+                        </div>`}
                     </div>`;
                 }).join('');
-                msgsEl.scrollTop = msgsEl.scrollHeight;
+
+                setTimeout(() => { msgsEl.scrollTop = msgsEl.scrollHeight; }, 50);
             });
 
+        // Send message
         const sendMsg = async () => {
             const input = document.getElementById('contestChatInput');
             const text = (input.value || '').trim();
@@ -2802,8 +3784,9 @@ const pageInits = {
                     uid: currentUser.uid, name, text,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
-            } catch(e) { alert('Error sending message'); }
+            } catch(e) { wzToast('Message send nahi hua. Dobara try karo.', 'error'); }
         };
+
         document.getElementById('contestChatSendBtn').onclick = sendMsg;
         document.getElementById('contestChatInput').onkeypress = e => { if(e.key==='Enter') sendMsg(); };
     },
@@ -2847,7 +3830,7 @@ let splashTimeout = null;
 
 auth.onAuthStateChanged(async user => {
     currentUser = user;
-    if (user) setTimeout(registerPushNotifications, 3000);
+    if (user) { setTimeout(registerPushNotifications, 3000); startWalletListener(); setTimeout(() => initFCM(), 3000); }
 
     if (!authHandled) {
         authHandled = true;
@@ -2906,7 +3889,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 else showPage('home-page');
             }, 300);
         }
-    }, 6000); // 6 seconds max splash
+       initOfflineDetection();
+    handleGoogleRedirect();
+ }, 6000); // 6 seconds max splash
 });
 </script>
 </body>
