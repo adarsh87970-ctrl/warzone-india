@@ -660,28 +660,86 @@
             <div class="right-section"></div>
         </div>
         <div class="content-wrapper">
-            <div class="card" id="amountSection">
-                <h3>Select Amount</h3>
-                <div class="form-group"><label>Enter Amount (Min ₹10)</label><input type="number" id="addAmountInput" placeholder="Enter amount" min="10" value="100"></div>
-                <div class="amount-chips">
-                    <div class="chip" data-amount="50">₹50</div>
-                    <div class="chip" data-amount="100">₹100</div>
-                    <div class="chip" data-amount="200">₹200</div>
-                    <div class="chip" data-amount="500">₹500</div>
-                    <div class="chip" data-amount="1000">₹1000</div>
+            <!-- AMOUNT SECTION -->
+            <div id="amountSection">
+                <div class="card" style="background:linear-gradient(135deg,rgba(142,45,226,0.15),rgba(10,132,255,0.1));border:1px solid rgba(142,45,226,0.3);">
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+                        <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#8E2DE2,#0A84FF);display:flex;align-items:center;justify-content:center;font-size:1.2em;">💰</div>
+                        <div>
+                            <div style="font-weight:700;font-size:0.95em;">Add Money to Wallet</div>
+                            <div style="font-size:0.75em;color:var(--muted);">Instant credit after verification</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:0.78em;color:var(--muted);font-weight:600;letter-spacing:0.5px;">ENTER AMOUNT (MIN ₹10)</label>
+                        <div style="position:relative;">
+                            <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1.1em;font-weight:700;color:var(--primary);">₹</span>
+                            <input type="number" id="addAmountInput" placeholder="0" min="10" value="100" style="padding-left:32px;font-size:1.3em;font-weight:700;background:rgba(0,0,0,0.3);border:1px solid rgba(142,45,226,0.3);border-radius:12px;color:var(--white-text);width:100%;padding-top:12px;padding-bottom:12px;">
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+                        <div class="chip" data-amount="50" style="flex:1;min-width:55px;text-align:center;padding:8px 4px;border-radius:10px;background:rgba(142,45,226,0.15);border:1px solid rgba(142,45,226,0.3);font-size:0.82em;font-weight:700;cursor:pointer;">₹50</div>
+                        <div class="chip" data-amount="100" style="flex:1;min-width:55px;text-align:center;padding:8px 4px;border-radius:10px;background:rgba(142,45,226,0.15);border:1px solid rgba(142,45,226,0.3);font-size:0.82em;font-weight:700;cursor:pointer;">₹100</div>
+                        <div class="chip" data-amount="200" style="flex:1;min-width:55px;text-align:center;padding:8px 4px;border-radius:10px;background:rgba(142,45,226,0.15);border:1px solid rgba(142,45,226,0.3);font-size:0.82em;font-weight:700;cursor:pointer;">₹200</div>
+                        <div class="chip" data-amount="500" style="flex:1;min-width:55px;text-align:center;padding:8px 4px;border-radius:10px;background:rgba(142,45,226,0.15);border:1px solid rgba(142,45,226,0.3);font-size:0.82em;font-weight:700;cursor:pointer;">₹500</div>
+                        <div class="chip" data-amount="1000" style="flex:1;min-width:55px;text-align:center;padding:8px 4px;border-radius:10px;background:rgba(142,45,226,0.15);border:1px solid rgba(142,45,226,0.3);font-size:0.82em;font-weight:700;cursor:pointer;">₹1K</div>
+                    </div>
+                    <button class="btn" id="proceedPayBtn" style="background:linear-gradient(135deg,#8E2DE2,#0A84FF);color:#fff;border-radius:14px;padding:14px;font-size:0.95em;font-weight:700;letter-spacing:0.5px;">
+                        <i class="fas fa-lock" style="margin-right:8px;"></i> Proceed to Pay Securely
+                    </button>
+                    <div style="display:flex;justify-content:center;gap:16px;margin-top:12px;">
+                        <div style="font-size:0.7em;color:var(--muted);display:flex;align-items:center;gap:4px;"><i class="fas fa-shield-alt" style="color:#2ECC71;"></i> 100% Secure</div>
+                        <div style="font-size:0.7em;color:var(--muted);display:flex;align-items:center;gap:4px;"><i class="fas fa-bolt" style="color:#FFD700;"></i> Instant Process</div>
+                        <div style="font-size:0.7em;color:var(--muted);display:flex;align-items:center;gap:4px;"><i class="fas fa-headset" style="color:#0A84FF;"></i> 24/7 Support</div>
+                    </div>
                 </div>
-                <button class="btn" id="proceedPayBtn"><i class="fas fa-arrow-right"></i> Proceed to Pay</button>
             </div>
-            <div class="card" id="qrSection" style="display:none;">
-                <h3>Scan & Pay</h3>
-                <p style="text-align:center;color:var(--muted);margin-bottom:15px;font-size:0.9em;">Send <strong style="color:var(--white-text);">₹<span id="qrAmount">0</span></strong> to the QR below</p>
-                <div class="qr-container"><img id="qrImage" src="https://via.placeholder.com/200x200/2ECC71/FFFFFF?text=QR+CODE" alt="QR Code"></div>
-                <div class="form-group" style="margin-top:15px;">
-                    <label>UTR / Transaction ID (exactly 12 digits)</label>
-                    <input type="text" id="utrInput" placeholder="Enter 12-digit UTR" maxlength="12" inputmode="numeric">
+
+            <!-- QR SECTION -->
+            <div id="qrSection" style="display:none;">
+                <!-- Timer -->
+                <div style="background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.3);border-radius:14px;padding:10px 16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;">
+                    <div style="font-size:0.78em;color:var(--muted);">⏰ Complete payment in</div>
+                    <div id="payTimer" style="font-size:1em;font-weight:800;color:#E74C3C;">10:00</div>
                 </div>
-                <button class="btn success" id="confirmPayBtn"><i class="fas fa-check-circle"></i> I Have Paid</button>
-                <p style="font-size:0.75em;color:var(--muted);margin-top:12px;text-align:center;">Funds credited after admin verification (usually within 1 hour)</p>
+
+                <div class="card" style="background:linear-gradient(135deg,rgba(46,204,113,0.08),rgba(10,132,255,0.05));border:1px solid rgba(46,204,113,0.25);">
+                    <div style="text-align:center;margin-bottom:16px;">
+                        <div style="font-size:0.78em;color:var(--muted);margin-bottom:4px;letter-spacing:0.5px;">SCAN & PAY VIA UPI</div>
+                        <div style="font-size:1.1em;font-weight:800;">Send <span style="color:#2ECC71;">₹<span id="qrAmount">0</span></span> to complete</div>
+                    </div>
+
+                    <!-- QR CODE BOX -->
+                    <div style="background:#fff;border-radius:20px;padding:16px;margin:0 auto 16px;width:200px;height:200px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 30px rgba(0,0,0,0.4);">
+                        <img id="qrImage" src="" alt="QR Code" style="width:168px;height:168px;border-radius:10px;display:block;">
+                    </div>
+
+                    <!-- UPI ID -->
+                    <div style="background:rgba(0,0,0,0.3);border-radius:12px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;">
+                        <div>
+                            <div style="font-size:0.7em;color:var(--muted);">UPI ID</div>
+                            <div style="font-size:0.88em;font-weight:700;" id="adminUpiDisplay">Loading...</div>
+                        </div>
+                        <button onclick="navigator.clipboard.writeText(document.getElementById('adminUpiDisplay').textContent).then(()=>wzToast('UPI ID copied!','success'))" style="background:rgba(142,45,226,0.2);border:1px solid rgba(142,45,226,0.3);border-radius:8px;color:#fff;padding:6px 12px;font-size:0.75em;cursor:pointer;">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+
+                    <!-- UTR INPUT -->
+                    <div class="form-group" style="margin-bottom:12px;">
+                        <label style="font-size:0.75em;color:var(--muted);font-weight:600;letter-spacing:0.5px;">UTR / TRANSACTION ID (EXACTLY 12 DIGITS)</label>
+                        <input type="text" id="utrInput" placeholder="Enter 12-digit UTR" maxlength="12" inputmode="numeric" style="background:rgba(0,0,0,0.3);border:1px solid rgba(142,45,226,0.3);border-radius:12px;padding:12px 14px;font-size:1em;letter-spacing:2px;font-weight:600;">
+                    </div>
+
+                    <button class="btn success" id="confirmPayBtn" style="background:linear-gradient(135deg,#2ECC71,#27AE60);border-radius:14px;padding:14px;font-size:0.95em;font-weight:700;">
+                        <i class="fas fa-check-circle"></i> I Have Paid
+                    </button>
+
+                    <div style="margin-top:14px;background:rgba(255,193,7,0.08);border:1px solid rgba(255,193,7,0.2);border-radius:10px;padding:10px 12px;">
+                        <div style="font-size:0.72em;color:#FFD700;font-weight:600;margin-bottom:4px;">⚠️ Important</div>
+                        <div style="font-size:0.7em;color:var(--muted);line-height:1.5;">Enter correct 12-digit UTR after payment. Funds credited within 1 hour after admin verification.</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
