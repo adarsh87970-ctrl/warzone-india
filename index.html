@@ -13,8 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <!-- AdSense — load async so it never blocks JS -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7706776373918768"
-     crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADMOB_ID" crossorigin="anonymous"></script>
     <style>
         :root {
             --primary: #0A84FF;
@@ -551,10 +550,14 @@
                 <i class="fas fa-bullhorn"></i>
                 <p id="announceText">Loading announcements...</p>
             </div>
-            <div class="banner-carousel">
-                <img src="https://via.placeholder.com/500x160/0A84FF/FFFFFF?text=FREE+FIRE+MAX+TOURNAMENT" alt="Banner" loading="lazy">
-                <div class="overlay"><span>HOW TO JOIN FREE FIRE MAX MATCHES ON WARZONE INDIA</span></div>
+            <div class="announce-banner" id="announceBanner">
+                <i class="fas fa-bullhorn"></i>
+                <p id="announceText">Loading announcements...</p>
             </div>
+            <div class="banner-carousel" id="bannerCarousel" style="position:relative;border-radius:16px;overflow:hidden;margin-bottom:12px;background:#1C122C;">
+    <div id="bannerSlides" style="display:flex;transition:transform 0.4s ease;will-change:transform;"></div>
+    <div id="bannerDots" style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:10;"></div>
+</div>
 
             <!-- MY MATCHES -->
             <div class="section-title">My Matches</div>
@@ -1651,14 +1654,17 @@ async function loadAdminQR(amount){
     try{
         const doc=await db.collection('settings').doc('payment').get();
         const qrImg=document.getElementById('qrImage');
-        if(doc.exists&&doc.data().qrUrl){if(qrImg)qrImg.src=doc.data().qrUrl;return;}
+        const upiDisplay=document.getElementById('adminUpiDisplay');
         const upiId=(doc.exists&&doc.data().upiId)?doc.data().upiId:'warzoneindia@upi';
         const upiName=(doc.exists&&doc.data().upiName)?doc.data().upiName:'WarZone India';
-        const upiDisplay=document.getElementById('adminUpiDisplay');
-        if(upiDisplay)upiDisplay.textContent=upiId;
+        if(upiDisplay) upiDisplay.textContent=upiId;
+        if(doc.exists&&doc.data().qrUrl&&doc.data().qrUrl.trim().length>10){
+            if(qrImg) qrImg.src=doc.data().qrUrl;
+            return;
+        }
         const amtParam=amount?`&am=${amount}`:'';
         const qrData=`upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(upiName)}${amtParam}&cu=INR`;
-        if(qrImg)qrImg.src=`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(qrData)}&bgcolor=ffffff&color=120A1F&margin=10`;
+        if(qrImg) qrImg.src=`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrData)}&bgcolor=ffffff&color=120A1F&margin=10`;
     }catch(e){console.error('QR error:',e);}
 }
 
@@ -1727,6 +1733,82 @@ async function loadReferralLeaderboard(){
 }
 
 // ================================================================
+// BANNER CAROUSEL
+// ================================================================
+const DEFAULT_BANNERS = [];
+    
+
+let bannerIndex = 0;
+let bannerTimer = null;
+let bannerData = [];
+
+async function loadBannerCarousel() {
+    const slidesEl = document.getElementById('bannerSlides');
+    const dotsEl = document.getElementById('bannerDots');
+    const carousel = document.getElementById('bannerCarousel');
+    if (!slidesEl) return;
+
+    try {
+        const snap = await db.collection('settings').doc('banners').get();
+        bannerData = (snap.exists && snap.data().list && snap.data().list.length)
+            ? snap.data().list : [];
+    } catch(e) { bannerData = []; }
+
+    if(!bannerData.length){ if(carousel) carousel.style.display='none'; return; }
+    if(carousel) carousel.style.display='block';
+
+    slidesEl.innerHTML = bannerData.map((b,i) => `
+        <div style="min-width:100%;position:relative;cursor:${b.link?'pointer':'default'};" ${b.link?`onclick="window.open('${b.link}','_blank')"`:''}>
+            <img src="${b.image}" alt="Banner ${i+1}" style="width:100%;height:160px;object-fit:cover;display:block;" onerror="this.src='https://placehold.co/500x160/1C122C/FFFFFF?text=WarZone+India'">
+            <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.7));padding:10px 12px;">
+                <span style="color:#fff;font-size:0.8em;font-weight:700;">${b.title||''}</span>
+                ${b.link?'<span style="color:#FFD700;font-size:0.7em;margin-left:6px;">↗ Open</span>':''}
+            </div>
+        </div>`).join('');
+
+    dotsEl.innerHTML = bannerData.map((_,i) =>
+        `<div class="banner-dot" data-i="${i}" style="width:${i===0?'18px':'6px'};height:6px;border-radius:4px;background:${i===0?'#fff':'rgba(255,255,255,0.4)'};cursor:pointer;transition:all 0.3s;"></div>`
+    ).join('');
+
+    document.querySelectorAll('.banner-dot').forEach(d => {
+        d.onclick = () => goToBanner(parseInt(d.dataset.i));
+    });
+
+    bannerIndex = 0;
+    startBannerTimer();
+
+    let touchStartX = 0;
+    carousel.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, {passive:true});
+    carousel.addEventListener('touchend', e => {
+        const diff = touchStartX - e.changedTouches[0].clientX;
+        if(Math.abs(diff) > 40) {
+            if(diff > 0) goToBanner((bannerIndex+1) % bannerData.length);
+            else goToBanner((bannerIndex-1+bannerData.length) % bannerData.length);
+        }
+    }, {passive:true});
+}
+
+function goToBanner(i) {
+    bannerIndex = i;
+    const slides = document.getElementById('bannerSlides');
+    if(slides) slides.style.transform = `translateX(-${i * 100}%)`;
+    document.querySelectorAll('.banner-dot').forEach((d,idx) => {
+        d.style.background = idx === i ? '#fff' : 'rgba(255,255,255,0.4)';
+        d.style.width = idx === i ? '18px' : '6px';
+        d.style.borderRadius = '4px';
+    });
+    clearInterval(bannerTimer);
+    startBannerTimer();
+}
+
+function startBannerTimer() {
+    if(bannerData.length <= 1) return;
+    bannerTimer = setInterval(() => {
+        goToBanner((bannerIndex + 1) % bannerData.length);
+    }, 3000);
+}
+
+// ================================================================
 // NOTIFICATIONS
 // ================================================================
 let notifUnsub = null;
@@ -1750,13 +1832,13 @@ function startNotifListener() {
                     badge.style.display = 'none';
                 }
             }
-            // Play sound for new notifications
             snap.docChanges().forEach(change => {
-                if (change.type === 'added') {
-                    notifSound.currentTime = 0;
-                    notifSound.play().catch(() => {});
+                if (change.type === 'added' && !change.doc.metadata.hasPendingWrites) {
+                    try { notifSound.currentTime = 0; notifSound.play().catch(()=>{}); } catch(e){}
                 }
             });
+        }, err => {
+            console.error('Notif listener error:', err);
         });
 }
 
@@ -1906,7 +1988,7 @@ async function loadLeaderboard(tab = 'wins') {
                         ${escapeHtml(p.username||p.firstName||'Player')}
                         ${isMe?'<span style="font-size:0.7em;color:var(--primary);"> (You)</span>':''}
                     </div>
-                    <div style="font-size:0.7em;color:var(--muted);">${p.totalMatches||0} matches played</div>
+                    ${(p.paid||0) > 0 ? `<div style="font-size:0.7em;color:#2ECC71;font-weight:600;">₹${p.paid} paid</div>` : ''}${p.totalMatches||0} matches played</div>
                 </div>
                 <div style="text-align:right;">
                     <div style="font-size:1em;font-weight:700;color:var(--gold);">${unit}${val}</div>
@@ -2220,14 +2302,70 @@ async function saveGoogleUser(user) {
 // ================================================================
 // JOIN TOURNAMENT
 // ================================================================
+async function checkAndGetGameProfile() {
+    const uDoc = await db.collection('users').doc(currentUser.uid).get();
+    const ud = uDoc.data();
+    if (ud.gameUid && ud.inGameName) return { gameUid: ud.gameUid, inGameName: ud.inGameName };
+
+    return new Promise((resolve, reject) => {
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);';
+        overlay.innerHTML = `
+            <div style="background:var(--card-bg);border-radius:20px;padding:24px;width:100%;max-width:340px;border:1px solid rgba(142,45,226,0.3);">
+                <div style="text-align:center;margin-bottom:20px;">
+                    <div style="font-size:2em;margin-bottom:8px;">🎮</div>
+                    <div style="font-weight:700;font-size:1.1em;color:#fff;">Game Profile Setup</div>
+                    <div style="font-size:0.78em;color:var(--muted);margin-top:4px;">Tournament join karne ke liye apna Free Fire profile fill karo</div>
+                </div>
+                <div style="margin-bottom:14px;">
+                    <label style="font-size:0.75em;color:var(--muted);font-weight:600;letter-spacing:0.5px;display:block;margin-bottom:6px;">FREE FIRE UID *</label>
+                    <input id="gameUidInput" type="number" placeholder="e.g. 1234567890" style="width:100%;padding:12px;background:var(--input-bg);border:1px solid rgba(142,45,226,0.3);border-radius:10px;color:#fff;font-size:0.95em;font-family:'Poppins',sans-serif;">
+                </div>
+                <div style="margin-bottom:20px;">
+                    <label style="font-size:0.75em;color:var(--muted);font-weight:600;letter-spacing:0.5px;display:block;margin-bottom:6px;">IN-GAME NAME *</label>
+                    <input id="inGameNameInput" type="text" placeholder="e.g. ProSniper99" style="width:100%;padding:12px;background:var(--input-bg);border:1px solid rgba(142,45,226,0.3);border-radius:10px;color:#fff;font-size:0.95em;font-family:'Poppins',sans-serif;">
+                </div>
+                <button id="saveGameProfileBtn" style="width:100%;padding:14px;background:linear-gradient(135deg,#8E2DE2,#0A84FF);border:none;border-radius:12px;color:#fff;font-weight:700;font-size:0.95em;cursor:pointer;font-family:'Poppins',sans-serif;">
+                    Save & Continue
+                </button>
+                <div style="font-size:0.7em;color:var(--muted);text-align:center;margin-top:10px;">Ye sirf ek baar fill karna hoga</div>
+            </div>`;
+        document.body.appendChild(overlay);
+
+        document.getElementById('saveGameProfileBtn').onclick = async () => {
+            const gameUid = document.getElementById('gameUidInput').value.trim();
+            const inGameName = document.getElementById('inGameNameInput').value.trim();
+            if (!gameUid || !inGameName) { wzToast('⚠️ Dono fields fill karo!','error'); return; }
+            if (!/^\d{6,12}$/.test(gameUid)) { wzToast('⚠️ Valid Free Fire UID daalo (6-12 digits)!','error'); return; }
+            try {
+                await db.collection('users').doc(currentUser.uid).update({ gameUid, inGameName });
+                document.body.removeChild(overlay);
+                resolve({ gameUid, inGameName });
+            } catch(e) {
+                wzToast('Error saving: ' + e.message,'error');
+            }
+        };
+    });
+}
+
 async function joinTournament(tournamentId) {
     if (!currentUser) throw new Error('Please login first');
+
+    // Check game profile
+    let gameProfile;
+    try {
+        gameProfile = await checkAndGetGameProfile();
+    } catch(e) {
+        throw new Error('Game profile required');
+    }
+
     const userRef = db.collection('users').doc(currentUser.uid);
     const tRef = db.collection('tournaments').doc(tournamentId);
     const existing = await db.collection('userMatches')
         .where('userId','==',currentUser.uid)
         .where('tournamentId','==',tournamentId).get();
     if (!existing.empty) throw new Error('You have already joined this tournament');
+
     await db.runTransaction(async t => {
         const uDoc = await t.get(userRef);
         const tDoc = await t.get(tRef);
@@ -2248,7 +2386,8 @@ async function joinTournament(tournamentId) {
             participants: firebase.firestore.FieldValue.arrayUnion({
                 uid: currentUser.uid,
                 name: ud.username || ud.firstName || 'Player',
-                gameId: ud.gameId || ud.username || 'Player'
+                inGameName: gameProfile.inGameName,
+                gameUid: gameProfile.gameUid
             })
         });
         t.set(db.collection('userMatches').doc(), {
@@ -2860,7 +2999,7 @@ const pageInits = {
 
     'home-page': async () => {
         if (!currentUser) { showPage('login-page'); return; }
-        startWalletListener();
+        startWalletListener();loadBannerCarousel();
         const savedTheme = localStorage.getItem('wz_theme');
         if (savedTheme === 'light') document.body.classList.add('light-mode');
         else document.body.classList.remove('light-mode');
@@ -2948,55 +3087,71 @@ const pageInits = {
     },
 
     'add-money-page': () => {
-        if (!currentUser) { showPage('login-page'); return; }
-        document.getElementById('backFromAddMoney').onclick = () => showPage('wallet-page');
-        const amountSection = document.getElementById('amountSection');
-        const qrSection = document.getElementById('qrSection');
-        const amountInput = document.getElementById('addAmountInput');
-        const utrInput = document.getElementById('utrInput');
-        amountSection.style.display = 'block'; qrSection.style.display = 'none';
-        amountInput.value = '100'; if(utrInput) utrInput.value = '';
-        document.querySelectorAll('.chip').forEach(chip => {
-            chip.onclick = () => {
-                amountInput.value = chip.dataset.amount;
-                document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-                chip.classList.add('active');
-            };
-        });
-        document.getElementById('proceedPayBtn').onclick = async () => {
-            const amt = parseFloat(amountInput.value);
-            if (isNaN(amt) || amt < 10) { alert('Minimum deposit is ₹10'); return; }
-            const qrAmtEl = document.getElementById('qrAmount');
-            if (qrAmtEl) qrAmtEl.textContent = amt.toLocaleString('en-IN',{minimumFractionDigits:2});
-            await loadAdminQR(amt);
+    if (!currentUser) { showPage('login-page'); return; }
+    document.getElementById('backFromAddMoney').onclick = () => showPage('wallet-page');
+    const amountSection = document.getElementById('amountSection');
+    const qrSection = document.getElementById('qrSection');
+    const amountInput = document.getElementById('addAmountInput');
+    const utrInput = document.getElementById('utrInput');
+    amountSection.style.display = 'block'; qrSection.style.display = 'none';
+    amountInput.value = '100'; if(utrInput) utrInput.value = '';
+    document.querySelectorAll('.chip').forEach(chip => {
+        chip.onclick = () => {
+            amountInput.value = chip.dataset.amount;
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+        };
+    });
+    document.getElementById('proceedPayBtn').onclick = async () => {
+        const amt = parseFloat(amountInput.value);
+        if (isNaN(amt) || amt < 10) { wzToast('Minimum deposit is ₹10','error'); return; }
+        const qrAmtEl = document.getElementById('qrAmount');
+        if (qrAmtEl) qrAmtEl.textContent = amt.toLocaleString('en-IN',{minimumFractionDigits:2});
+        amountSection.style.display = 'none'; qrSection.style.display = 'block';
+        try {
+            const doc = await db.collection('settings').doc('payment').get();
+            const data = doc.exists ? doc.data() : {};
+            const upiId = data.upiId && data.upiId.trim() ? data.upiId.trim() : 'warzoneindia@upi';
+            const upiName = data.upiName && data.upiName.trim() ? data.upiName.trim() : 'WarZone India';
+            const upiDisplay = document.getElementById('adminUpiDisplay');
+            if(upiDisplay) upiDisplay.textContent = upiId;
             const qrImg = document.getElementById('qrImage');
-            if (qrImg && qrImg.src.includes('placeholder')) {
-                qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=warzoneindia@upi%26pn=WarZoneIndia%26am=${amt}%26cu=INR`;
+            if(qrImg){
+                if(data.qrUrl && data.qrUrl.startsWith('http')){
+                    qrImg.src = data.qrUrl;
+                } else {
+                    const qrData = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(upiName)}&am=${amt}&cu=INR`;
+                    qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrData)}&bgcolor=ffffff&color=000000&margin=10`;
+                }
             }
-            amountSection.style.display = 'none'; qrSection.style.display = 'block';
-        };
-        document.getElementById('confirmPayBtn').onclick = async () => {
-            const amt = parseFloat(amountInput.value);
-            const utr = utrInput ? utrInput.value.trim() : '';
-            if (isNaN(amt) || amt < 10) { alert('Minimum deposit is ₹10'); return; }
-            if (!validateUTR(utr)) { alert('UTR must be exactly 12 digits (numbers only)'); return; }
-            const btn = document.getElementById('confirmPayBtn');
-            btn.disabled = true; btn.textContent = 'Submitting...';
-            try {
-                if (await isUTRDuplicate(utr)) { alert('This UTR already exists! Duplicate deposit not allowed.'); return; }
-                let uname = currentUser.displayName;
-                if (!uname) { const d = await db.collection('users').doc(currentUser.uid).get(); if(d.exists) uname = d.data().username || 'Unknown'; }
-                await db.collection('depositRequests').add({
-                    userId: currentUser.uid, userName: uname, amount: amt,
-                    upiTransactionId: utr, status: 'Pending',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                alert('Deposit request submitted! Funds credited after admin verification.');
-                showPage('wallet-page');
-            } catch(e) { alert('Error: ' + e.message); }
-            finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check-circle"></i> I Have Paid'; }
-        };
-    },
+        } catch(e) {
+            console.error('QR error:',e);
+            const upiDisplay = document.getElementById('adminUpiDisplay');
+            if(upiDisplay) upiDisplay.textContent = '8797578747@ybl';
+        }
+    };
+    document.getElementById('confirmPayBtn').onclick = async () => {
+        const amt = parseFloat(amountInput.value);
+        const utr = utrInput ? utrInput.value.trim() : '';
+        if (isNaN(amt) || amt < 10) { wzToast('Minimum deposit is ₹10','error'); return; }
+        if (!validateUTR(utr)) { wzToast('UTR must be exactly 12 digits!','error'); return; }
+        const btn = document.getElementById('confirmPayBtn');
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+        try {
+            if (await isUTRDuplicate(utr)) { wzToast('This UTR already exists!','error'); return; }
+            let uname = currentUser.displayName;
+            if (!uname) { const d = await db.collection('users').doc(currentUser.uid).get(); if(d.exists) uname = d.data().username || 'Unknown'; }
+            await db.collection('depositRequests').add({
+                userId: currentUser.uid, userName: uname, amount: amt,
+                upiTransactionId: utr, status: 'Pending',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            wzToast('✅ Deposit request submitted!','success');
+            setTimeout(() => showPage('wallet-page'), 1500);
+        } catch(e) { wzToast('Error: ' + e.message,'error'); }
+        finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check-circle"></i> I Have Paid'; }
+    };
+},
 
     'withdraw-page': () => {
         if (!currentUser) { showPage('login-page'); return; }
@@ -3083,7 +3238,15 @@ const pageInits = {
             const pList = document.getElementById('participantList');
             if (pList) {
                 const ps = t.participants || [];
-                pList.innerHTML = ps.length ? ps.map(p=>`<div class="participant-item"><div class="p-avatar">${(p.name||'?').charAt(0).toUpperCase()}</div><span>${p.name}</span></div>`).join('') : '<p style="color:var(--muted);font-size:0.85em;padding:10px 0;">No participants yet. Be the first!</p>';
+                pList.innerHTML = ps.length ? ps.map(p=>`
+    <div class="participant-item" style="display:flex;align-items:center;gap:10px;padding:8px;background:var(--input-bg);border-radius:10px;margin-bottom:6px;">
+        <div class="p-avatar" style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#8E2DE2,#0A84FF);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;">${(p.inGameName||p.name||'?').charAt(0).toUpperCase()}</div>
+        <div style="flex:1;">
+            <div style="font-weight:600;font-size:0.85em;color:#fff;">${escapeHtml(p.inGameName||p.name||'Player')}</div>
+            <div style="font-size:0.7em;color:var(--muted);">UID: ${escapeHtml(p.gameUid||'N/A')}</div>
+        </div>
+        <div style="font-size:0.7em;color:var(--muted);">₹${p.paid||0} paid</div>
+    </div>`).join('') : '<p style="color:var(--muted);font-size:0.85em;padding:10px 0;">No participants yet. Be the first!</p>';
                 document.getElementById('participantCount').textContent = ps.length;
             }
             handleRoomVisibility(t, currentUser.uid);
@@ -3091,8 +3254,10 @@ const pageInits = {
             const joinBtn = document.getElementById('joinTournamentBtn');
             const alreadyJoined = (t.participants || []).some(p => p.uid === currentUser.uid);
             if (alreadyJoined) {
-                joinBtn.textContent = '✅ Already Joined';
-                joinBtn.disabled = true;
+                joinBtn.innerHTML = '✅ Joined!';
+joinBtn.disabled = true;
+joinBtn.style.background = 'linear-gradient(135deg,#2ECC71,#27AE60)';
+joinBtn.style.color = '#fff';
             } else if (isTournamentExpired(t)) {
                 joinBtn.textContent = '⏹ Match Ended';
                 joinBtn.disabled = true;
