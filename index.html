@@ -85,7 +85,7 @@
 
         .header { position: fixed; top: 0; left: 0; right: 0; height: 60px; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; background-color: var(--card-bg); box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
         .header h2 { margin: 0; flex-grow: 1; text-align: center; font-size: 1.3em; font-weight: 700; }
-        .header .left-section, .header .right-section { display: flex; align-items: center; gap: 8px; min-width: 60px; }
+        .header .left-section, .header .right-section { display: flex; align-items: center; gap: 8px; min-width: 80px; }
         .header .right-section { justify-content: flex-end; }
         .app-logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--white); font-size: 1em; font-weight: 700; }
         .wallet-info { display: flex; align-items: center; gap: 5px; background-color: var(--input-bg); padding: 5px 10px; border-radius: 20px; font-size: 0.85em; font-weight: 600; }
@@ -530,8 +530,12 @@
         <div class="header">
             <div class="left-section"><div class="app-logo-icon">W</div></div>
             <div style="flex:1;text-align:center;font-size:0.85em;color:var(--muted);">Welcome, <strong id="homeUserName" style="color:var(--white-text);">Player</strong></div>
-            <div class="right-section">
-                <div class="wallet-info"><i class="fas fa-coins"></i><span id="homeBalance">0</span></div>
+            <div class="right-section" style="display:flex;align-items:center;gap:6px;">
+                <button id="notifBellBtn" onclick="showPage('notifications-page')" style="position:relative;width:34px;height:34px;background:transparent;border:none;cursor:pointer;">
+                    <i class="fas fa-bell" style="font-size:1.1em;color:var(--muted);"></i>
+                    <span id="notifBadge" style="display:none;position:absolute;top:2px;right:2px;background:#E74C3C;color:#fff;font-size:0.55em;font-weight:700;border-radius:50%;width:16px;height:16px;align-items:center;justify-content:center;line-height:1;">0</span>
+                </button>
+                <div class="wallet-info">🪙<span id="homeBalance">0</span></div>
             </div>
         </div>
         <div class="content-wrapper">
@@ -545,10 +549,6 @@
                     <div class="u-msg" id="updateBannerMsg">Tap to see what's new</div>
                 </div>
                 <span class="u-close" id="updateBannerClose">✕</span>
-            </div>
-            <div class="announce-banner" id="announceBanner">
-                <i class="fas fa-bullhorn"></i>
-                <p id="announceText">Loading announcements...</p>
             </div>
             <div class="announce-banner" id="announceBanner">
                 <i class="fas fa-bullhorn"></i>
@@ -597,8 +597,8 @@
                 </div>
                 <div class="contest-how-it-works">
                     💰 <strong style="color:var(--white-text);">How it works:</strong><br>
-                    You create ₹50 contest → Friend joins (₹50) → Total ₹100<br>
-                    🏆 Winner gets <strong style="color:var(--gold);">80% = ₹80</strong> | Platform fee <strong style="color:var(--accent);">20% = ₹20</strong>
+                    You create 🪙50 contest → Friend joins (🪙50) → Total 🪙100<br>
+                    🏆 Winner gets <strong style="color:var(--gold);">80% = 🪙80</strong> | Platform fee <strong style="color:var(--accent);">20% = 🪙20</strong>
                 </div>
                 <div class="contest-stats-row">
                     <div class="contest-stat-box">
@@ -610,7 +610,7 @@
                         <div class="csl">Winner Gets</div>
                     </div>
                     <div class="contest-stat-box">
-                        <div class="csv green">₹20</div>
+                        <div class="csv green">🪙20</div>
                         <div class="csl">Min Referral</div>
                     </div>
                 </div>
@@ -628,28 +628,35 @@
     <div id="wallet-page" class="page">
         <div class="header">
             <div class="left-section"><button class="icon-btn" id="backFromWallet"><i class="fas fa-arrow-left"></i></button></div>
-            <h2>My Wallet</h2>
+            <h2>🪙 My Coins</h2>
             <div class="right-section"></div>
         </div>
         <div class="content-wrapper">
             <div class="balance-card">
-                <div class="label">Total Balance</div>
-                <div class="amount">₹ <span id="walletBalance">0.00</span></div>
-                <div class="sub">Available for tournaments</div>
+                <div class="label">Total Coins</div>
+                <div class="amount">🪙 <span id="walletBalance">0.00</span></div>
+                <div class="sub">1 Coin = 🪙1 • Available for tournaments</div>
             </div>
             <div class="wallet-actions">
-                <button class="btn success" id="addMoneyBtn"><i class="fas fa-plus-circle"></i> Add Money</button>
-                <button class="btn outline" id="withdrawBtn"><i class="fas fa-minus-circle"></i> Withdraw</button>
+                <button class="btn success" id="addMoneyBtn"><i class="fas fa-plus-circle"></i> Add Coins</button>
+                <button class="btn outline" id="withdrawBtn"><i class="fas fa-minus-circle"></i> Redeem Coins</button>
+            </div>
+            <div style="background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);border-radius:12px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;">
+                <div style="font-size:1.5em;">ℹ️</div>
+                <div style="font-size:0.75em;color:var(--muted);line-height:1.5;">
+                    <strong style="color:#FFD700;">Coins = Real Money!</strong><br>
+                    🪙 100 Coins = 🪙100 • Redeem anytime via UPI
+                </div>
             </div>
             <div class="card">
                 <div class="card-header"><h3>Transaction History</h3></div>
                 <div id="txList"><div class="loading"><div class="spinner"></div><p>Loading...</p></div></div>
             </div>
             <div class="card">
-                <div class="card-header"><h3>Bonus Balance</h3></div>
+                <div class="card-header"><h3>Bonus Coins</h3></div>
                 <div style="display:flex;justify-content:space-between;align-items:center;">
                     <span style="color:var(--muted);font-size:0.9em;">Total Bonus Earned</span>
-                    <span style="color:var(--accent);font-weight:700;font-size:1.1em;">₹ <span id="bonusBalance">0.00</span></span>
+                    <span style="color:var(--accent);font-weight:700;font-size:1.1em;">🪙 <span id="bonusBalance">0.00</span></span>
                 </div>
             </div>
         </div>
@@ -659,7 +666,7 @@
     <div id="add-money-page" class="page">
         <div class="header">
             <div class="left-section"><button class="icon-btn" id="backFromAddMoney"><i class="fas fa-arrow-left"></i></button></div>
-            <h2>Add Money</h2>
+            <h2>🪙 Add Coins</h2>
             <div class="right-section"></div>
         </div>
         <div class="content-wrapper">
@@ -667,25 +674,25 @@
             <div id="amountSection">
                 <div class="card" style="background:linear-gradient(135deg,rgba(142,45,226,0.15),rgba(10,132,255,0.1));border:1px solid rgba(142,45,226,0.3);">
                     <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-                        <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#8E2DE2,#0A84FF);display:flex;align-items:center;justify-content:center;font-size:1.2em;">💰</div>
+                        <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#8E2DE2,#0A84FF);display:flex;align-items:center;justify-content:center;font-size:1.2em;">🪙</div>
                         <div>
-                            <div style="font-weight:700;font-size:0.95em;">Add Money to Wallet</div>
-                            <div style="font-size:0.75em;color:var(--muted);">Instant credit after verification</div>
+                            <div style="font-weight:700;font-size:0.95em;">Add Coins to Wallet</div>
+                            <div style="font-size:0.75em;color:var(--muted);">🪙1 = 🪙1 Coin • Instant credit after verification</div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label style="font-size:0.78em;color:var(--muted);font-weight:600;letter-spacing:0.5px;">ENTER AMOUNT (MIN ₹10)</label>
+                        <label style="font-size:0.78em;color:var(--muted);font-weight:600;letter-spacing:0.5px;">ENTER AMOUNT (MIN 🪙10 COINS)</label>
                         <div style="position:relative;">
-                            <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1.1em;font-weight:700;color:var(--primary);">₹</span>
-                            <input type="number" id="addAmountInput" placeholder="0" min="10" value="100" style="padding-left:32px;font-size:1.3em;font-weight:700;background:rgba(0,0,0,0.3);border:1px solid rgba(142,45,226,0.3);border-radius:12px;color:var(--white-text);width:100%;padding-top:12px;padding-bottom:12px;">
+                            <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1.1em;font-weight:700;color:var(--primary);">🪙</span>
+                            <input type="number" id="addAmountInput" placeholder="0" min="10" value="100" style="padding-left:36px;font-size:1.3em;font-weight:700;background:rgba(0,0,0,0.3);border:1px solid rgba(142,45,226,0.3);border-radius:12px;color:var(--white-text);width:100%;padding-top:12px;padding-bottom:12px;">
                         </div>
                     </div>
                     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
-                        <div class="chip" data-amount="50" style="flex:1;min-width:55px;text-align:center;padding:8px 4px;border-radius:10px;background:rgba(142,45,226,0.15);border:1px solid rgba(142,45,226,0.3);font-size:0.82em;font-weight:700;cursor:pointer;">₹50</div>
-                        <div class="chip" data-amount="100" style="flex:1;min-width:55px;text-align:center;padding:8px 4px;border-radius:10px;background:rgba(142,45,226,0.15);border:1px solid rgba(142,45,226,0.3);font-size:0.82em;font-weight:700;cursor:pointer;">₹100</div>
-                        <div class="chip" data-amount="200" style="flex:1;min-width:55px;text-align:center;padding:8px 4px;border-radius:10px;background:rgba(142,45,226,0.15);border:1px solid rgba(142,45,226,0.3);font-size:0.82em;font-weight:700;cursor:pointer;">₹200</div>
-                        <div class="chip" data-amount="500" style="flex:1;min-width:55px;text-align:center;padding:8px 4px;border-radius:10px;background:rgba(142,45,226,0.15);border:1px solid rgba(142,45,226,0.3);font-size:0.82em;font-weight:700;cursor:pointer;">₹500</div>
-                        <div class="chip" data-amount="1000" style="flex:1;min-width:55px;text-align:center;padding:8px 4px;border-radius:10px;background:rgba(142,45,226,0.15);border:1px solid rgba(142,45,226,0.3);font-size:0.82em;font-weight:700;cursor:pointer;">₹1K</div>
+                        <div class="chip" data-amount="50" style="flex:1;min-width:55px;text-align:center;padding:8px 4px;border-radius:10px;background:rgba(142,45,226,0.15);border:1px solid rgba(142,45,226,0.3);font-size:0.82em;font-weight:700;cursor:pointer;">🪙50</div>
+                        <div class="chip" data-amount="100" style="flex:1;min-width:55px;text-align:center;padding:8px 4px;border-radius:10px;background:rgba(142,45,226,0.15);border:1px solid rgba(142,45,226,0.3);font-size:0.82em;font-weight:700;cursor:pointer;">🪙100</div>
+                        <div class="chip" data-amount="200" style="flex:1;min-width:55px;text-align:center;padding:8px 4px;border-radius:10px;background:rgba(142,45,226,0.15);border:1px solid rgba(142,45,226,0.3);font-size:0.82em;font-weight:700;cursor:pointer;">🪙200</div>
+                        <div class="chip" data-amount="500" style="flex:1;min-width:55px;text-align:center;padding:8px 4px;border-radius:10px;background:rgba(142,45,226,0.15);border:1px solid rgba(142,45,226,0.3);font-size:0.82em;font-weight:700;cursor:pointer;">🪙500</div>
+                        <div class="chip" data-amount="1000" style="flex:1;min-width:55px;text-align:center;padding:8px 4px;border-radius:10px;background:rgba(142,45,226,0.15);border:1px solid rgba(142,45,226,0.3);font-size:0.82em;font-weight:700;cursor:pointer;">🪙1K</div>
                     </div>
                     <button class="btn" id="proceedPayBtn" style="background:linear-gradient(135deg,#8E2DE2,#0A84FF);color:#fff;border-radius:14px;padding:14px;font-size:0.95em;font-weight:700;letter-spacing:0.5px;">
                         <i class="fas fa-lock" style="margin-right:8px;"></i> Proceed to Pay Securely
@@ -709,7 +716,7 @@
                 <div class="card" style="background:linear-gradient(135deg,rgba(46,204,113,0.08),rgba(10,132,255,0.05));border:1px solid rgba(46,204,113,0.25);">
                     <div style="text-align:center;margin-bottom:16px;">
                         <div style="font-size:0.78em;color:var(--muted);margin-bottom:4px;letter-spacing:0.5px;">SCAN & PAY VIA UPI</div>
-                        <div style="font-size:1.1em;font-weight:800;">Send <span style="color:#2ECC71;">₹<span id="qrAmount">0</span></span> to complete</div>
+                        <div style="font-size:1.1em;font-weight:800;">Send <span style="color:#2ECC71;">🪙<span id="qrAmount">0</span></span> to complete</div>
                     </div>
 
                     <!-- QR CODE BOX -->
@@ -751,15 +758,31 @@
     <div id="withdraw-page" class="page">
         <div class="header">
             <div class="left-section"><button class="icon-btn" id="backFromWithdraw"><i class="fas fa-arrow-left"></i></button></div>
-            <h2>Withdraw Money</h2>
+            <h2>🪙 Redeem Coins</h2>
             <div class="right-section"></div>
         </div>
         <div class="content-wrapper">
+            <div style="background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);border-radius:14px;padding:14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;">
+                <div style="font-size:1.8em;">🪙</div>
+                <div>
+                    <div style="font-weight:700;font-size:0.88em;color:#FFD700;">Coins = Real Money!</div>
+                    <div style="font-size:0.72em;color:var(--muted);margin-top:2px;">🪙 100 Coins = 🪙100 UPI transfer</div>
+                </div>
+            </div>
             <div class="card">
-                <h3>Withdrawal Details</h3>
-                <div class="form-group"><label>Amount (Min ₹30)</label><input type="number" id="withdrawAmount" placeholder="Enter amount" min="30" value="500"></div>
-                <div class="form-group"><label>UPI ID</label><input type="text" id="withdrawUpiId" placeholder="yourname@upi"></div>
-                <button class="btn" id="processWithdrawBtn"><i class="fas fa-paper-plane"></i> Request Withdrawal</button>
+                <h3>Redeem Details</h3>
+                <div class="form-group">
+                    <label>Coins to Redeem (Min 🪙30)</label>
+                    <input type="number" id="withdrawAmount" placeholder="Enter coins" min="30" value="500">
+                </div>
+                <div style="background:rgba(10,132,255,0.08);border:1px solid rgba(10,132,255,0.2);border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:0.78em;color:var(--muted);">
+                    💰 You will receive: <strong id="redeemRupees" style="color:#2ECC71;">🪙500</strong> in your UPI
+                </div>
+                <div class="form-group">
+                    <label>UPI ID</label>
+                    <input type="text" id="withdrawUpiId" placeholder="yourname@upi">
+                </div>
+                <button class="btn" id="processWithdrawBtn" style="background:linear-gradient(135deg,#2ECC71,#27AE60);color:#fff;"><i class="fas fa-paper-plane"></i> Redeem Coins → UPI</button>
                 <p style="font-size:0.75em;color:var(--muted);margin-top:12px;text-align:center;">Withdrawals processed within 24 hours by admin</p>
             </div>
         </div>
@@ -797,8 +820,8 @@
                 <p id="detailTime">Date & Time</p>
             </div>
             <div class="info-grid">
-                <div class="info-box"><div class="i-label">Entry Fee</div><div class="i-val" id="detailEntry">₹0</div></div>
-                <div class="info-box"><div class="i-label">Prize Pool</div><div class="i-val" id="detailPrize">₹0</div></div>
+                <div class="info-box"><div class="i-label">Entry Fee</div><div class="i-val" id="detailEntry">🪙0</div></div>
+                <div class="info-box"><div class="i-label">Prize Pool</div><div class="i-val" id="detailPrize">🪙0</div></div>
                 <div class="info-box"><div class="i-label">Match Type</div><div class="i-val" id="detailType">-</div></div>
                 <div class="info-box"><div class="i-label">Map</div><div class="i-val" id="detailMap">-</div></div>
             </div>
@@ -913,7 +936,7 @@
             <div class="card stats-card">
                 <div class="stat"><div class="val" id="statMatches">0</div><div class="lbl">Matches</div></div>
                 <div class="stat"><div class="val" id="statKills">0</div><div class="lbl">Kills</div></div>
-                <div class="stat"><div class="val">₹<span id="statWon">0</span></div><div class="lbl">Won</div></div>
+                <div class="stat"><div class="val">🪙<span id="statWon">0</span></div><div class="lbl">Won</div></div>
             </div>
             <div class="menu-list">
                 <div class="menu-item" id="menuEditProfile"><div class="m-icon" style="background:rgba(10,132,255,0.2);color:var(--primary);"><i class="fas fa-user-edit"></i></div><div class="m-text">Edit Profile</div><i class="fas fa-chevron-right m-arrow"></i></div>
@@ -977,7 +1000,7 @@
                 <div class="stat-box"><div class="s-icon">🎮</div><div class="s-val" id="sMatchesPlayed">0</div><div class="s-lbl">Matches Played</div></div>
                 <div class="stat-box"><div class="s-icon">🏆</div><div class="s-val" id="sMatchesWon">0</div><div class="s-lbl">Matches Won</div></div>
                 <div class="stat-box"><div class="s-icon">☠️</div><div class="s-val" id="sTotalKills">0</div><div class="s-lbl">Total Kills</div></div>
-                <div class="stat-box"><div class="s-icon">💰</div><div class="s-val">₹<span id="sAmountWon">0</span></div><div class="s-lbl">Amount Won</div></div>
+                <div class="stat-box"><div class="s-icon">💰</div><div class="s-val">🪙<span id="sAmountWon">0</span></div><div class="s-lbl">Amount Won</div></div>
                 <div class="stat-box"><div class="s-icon">📊</div><div class="s-val" id="sWinRate">0%</div><div class="s-lbl">Win Rate</div></div>
                 <div class="stat-box"><div class="s-icon">⚡</div><div class="s-val" id="sAvgKills">0</div><div class="s-lbl">Avg Kills/Match</div></div>
             </div>
@@ -998,7 +1021,7 @@
         <div class="content-wrapper">
             <div class="balance-card" style="background:linear-gradient(135deg,#F39C12,#E67E22);">
                 <div class="label">Total Rewards Earned</div>
-                <div class="amount">₹ <span id="totalRewards">0.00</span></div>
+                <div class="amount">🪙 <span id="totalRewards">0.00</span></div>
                 <div class="sub">From referrals, kills & tournaments</div>
             </div>
             <div id="rewardsList"><div class="loading"><div class="spinner"></div><p>Loading rewards...</p></div></div>
@@ -1029,16 +1052,28 @@
                 <p style="color:var(--muted);font-size:0.85em;">Your Referral Code</p>
                 <!-- BUG FIX: was duplicate ID 'refCode' — renamed to 'refCodeMain' -->
                 <div class="ref-code" id="refCodeMain">---</div>
-                <p style="color:var(--muted);font-size:0.8em;">Share & earn ₹20 for every friend who joins!</p>
+                <p style="color:var(--muted);font-size:0.8em;">Share & earn 🪙20 for every friend who joins!</p>
             </div>
             <button class="btn" id="copyRefBtn" style="margin-bottom:15px;"><i class="fas fa-copy"></i> Copy Code</button>
             <div class="card">
                 <h3>Share Via</h3>
                 <div class="share-grid">
-                    <button class="share-btn whatsapp" id="shareWhatsapp"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></button>
-                    <button class="share-btn facebook" id="shareFacebook"><i class="fab fa-facebook-f"></i><span>Facebook</span></button>
-                    <button class="share-btn twitter" id="shareTwitter"><i class="fab fa-twitter"></i><span>Twitter</span></button>
-                    <button class="share-btn" id="shareOther"><i class="fas fa-share-alt"></i><span>More</span></button>
+                    <button class="share-btn whatsapp" id="shareWhatsapp">
+    <div style="width:40px;height:40px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3em;">📱</div>
+    <span>WhatsApp</span>
+</button>
+<button class="share-btn facebook" id="shareFacebook">
+    <div style="width:40px;height:40px;background:#1877F2;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3em;">📘</div>
+    <span>Facebook</span>
+</button>
+<button class="share-btn twitter" id="shareTwitter">
+    <div style="width:40px;height:40px;background:#1DA1F2;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3em;">🐦</div>
+    <span>Twitter</span>
+</button>
+<button class="share-btn" id="shareOther">
+    <div style="width:40px;height:40px;background:linear-gradient(135deg,#8E2DE2,#0A84FF);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3em;">🔗</div>
+    <span>More</span>
+</button>
                 </div>
             </div>
             <div class="card">
@@ -1175,6 +1210,26 @@
             </div>
         </div>
     </div>
+    
+    <!-- LUCKY DRAW PAGE -->
+<div id="lucky-draw-page" class="page">
+    <div class="header">
+        <div class="left-section"><button class="icon-btn" id="backFromLuckyDraw"><i class="fas fa-arrow-left"></i></button></div>
+        <h2>🎲 Lucky Draw</h2>
+        <div class="right-section"></div>
+    </div>
+    <div class="content-wrapper" style="padding-top:12px;">
+        <!-- Banner -->
+        <div style="background:linear-gradient(135deg,#8E2DE2,#0A84FF);border-radius:20px;padding:20px;margin-bottom:16px;text-align:center;position:relative;overflow:hidden;">
+            <div style="position:absolute;top:-20px;right:-20px;font-size:6em;opacity:0.1;">🎲</div>
+            <div style="font-size:2em;margin-bottom:8px;">🎲</div>
+            <div style="font-weight:800;font-size:1.2em;color:#fff;margin-bottom:4px;">Lucky Draw</div>
+            <div style="font-size:0.8em;color:rgba(255,255,255,0.8);">Join karo • Lucky winner bano • Prize jeetao!</div>
+        </div>
+        <!-- Active Draws -->
+        <div id="luckyDrawList"><div class="loading"><div class="spinner"></div></div></div>
+    </div>
+</div>
 
     <!-- LIVE SCORE -->
     <div id="live-score-page" class="page">
@@ -1198,8 +1253,8 @@
         <div class="content-wrapper">
             <div class="balance-card" style="background:linear-gradient(135deg,#2ECC71,#27AE60);margin-bottom:15px;">
                 <div class="label">Total Referral Earnings</div>
-                <div class="amount">₹ <span id="refTotalEarned">0.00</span></div>
-                <div class="sub">₹20 per successful referral • Share & Earn!</div>
+                <div class="amount">🪙 <span id="refTotalEarned">0.00</span></div>
+                <div class="sub">🪙20 per successful referral • Share & Earn!</div>
             </div>
             <div class="card">
                 <h3 style="font-size:0.95em;margin-bottom:12px;"><i class="fas fa-share-alt"></i> Your Referral Code</h3>
@@ -1236,7 +1291,7 @@
                 <div style="font-size:0.83em;line-height:1.75;color:var(--muted);">
                     <p style="margin-bottom:10px;"><strong style="color:var(--white-text);">1. Eligibility</strong><br>Users must be 18+ to play paid tournaments.</p>
                     <p style="margin-bottom:10px;"><strong style="color:var(--white-text);">2. Fair Play</strong><br>Cheating or hacking is strictly banned. Violations result in permanent ban.</p>
-                    <p style="margin-bottom:10px;"><strong style="color:var(--white-text);">3. Deposits & Withdrawals</strong><br>Min deposit ₹10, min withdrawal ₹30. Processed within 24 hours.</p>
+                    <p style="margin-bottom:10px;"><strong style="color:var(--white-text);">3. Deposits & Withdrawals</strong><br>Min deposit 🪙10, min withdrawal 🪙30. Processed within 24 hours.</p>
                     <p style="margin-bottom:10px;"><strong style="color:var(--white-text);">4. Tournament Rules</strong><br>Join room at least 5 minutes before match. Late joiners are not refunded.</p>
                     <p style="margin-bottom:10px;"><strong style="color:var(--white-text);">5. Prize Distribution</strong><br>Prizes distributed within 24 hours of match completion.</p>
                     <p style="margin-bottom:10px;"><strong style="color:var(--white-text);">6. Refund Policy</strong><br>Entry fees non-refundable once tournament starts.</p>
@@ -1285,7 +1340,7 @@
                     </select>
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-                    <div class="form-group"><label>Entry Fee (₹)</label><input type="number" id="contestFee" placeholder="Min ₹10" value="10" min="10"></div>
+                    <div class="form-group"><label>Entry Fee (🪙)</label><input type="number" id="contestFee" placeholder="Min 🪙10" value="10" min="10"></div>
                     <div class="form-group"><label>Total Spots</label><input type="number" id="contestSpots" placeholder="2-100" value="2" min="2" max="100"></div>
                 </div>
                 <div style="background:rgba(243,156,18,0.1);border:1px solid rgba(243,156,18,0.3);border-radius:10px;padding:12px;margin-bottom:8px;font-size:0.82em;">
@@ -1370,6 +1425,10 @@
     <button class="nav-btn" data-page="wallet-page">
         <div class="nav-icon-wrap"><i class="fas fa-wallet"></i></div>
         <span>Wallet</span>
+    </button>
+    <button class="nav-btn" data-page="lucky-draw-page">
+        <div class="nav-icon-wrap">🎲</div>
+        <span>Lucky</span>
     </button>
     <button class="nav-btn" data-page="profile-page">
         <div class="nav-icon-wrap"><i class="fas fa-user"></i></div>
@@ -1556,8 +1615,8 @@ function showWinnerModal(participants,totalPool,contestName,onWinnerSelected){
     const overlay=document.createElement('div');
     overlay.id='wz-winner-modal';
     overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99998;display:flex;align-items:flex-end;justify-content:center;animation:wzFadeIn 0.2s ease;';
-    const cards=participants.map((p,i)=>`<div class="wc" data-idx="${i}" style="background:#1C122C;border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;border:2px solid transparent;transition:all 0.2s;margin-bottom:8px;"><div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#8E2DE2,#0A84FF);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;">${escapeHtml((p.name||'?').charAt(0).toUpperCase())}</div><div style="flex:1;"><div style="font-weight:600;font-size:0.92em;color:#fff;">${escapeHtml(p.name||'Player')}</div><div style="font-size:0.72em;color:#BBB;">Entry: ₹${p.paid||0}</div></div><div class="wt" style="font-size:0.8em;color:#2ECC71;font-weight:600;display:none;">✅ Selected</div></div>`).join('');
-    overlay.innerHTML=`<div style="background:#120A1F;border-radius:24px 24px 0 0;padding:20px;width:100%;max-width:500px;max-height:85vh;overflow-y:auto;animation:wzSlideUp 0.3s ease;"><div style="text-align:center;margin-bottom:16px;"><div style="font-size:1.5em;">🏆</div><div style="font-weight:700;font-size:1.05em;color:#fff;">Winner Select Karo</div><div style="font-size:0.78em;color:#BBB;margin-top:4px;">${escapeHtml(contestName)}</div></div><div style="background:#1C122C;border-radius:12px;padding:12px;margin-bottom:14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;"><div><div style="font-size:1em;font-weight:700;color:#FFD700;">₹${totalPool}</div><div style="font-size:0.65em;color:#BBB;">Total Pool</div></div><div><div style="font-size:1em;font-weight:700;color:#2ECC71;">₹${prize}</div><div style="font-size:0.65em;color:#BBB;">Winner (80%)</div></div><div><div style="font-size:1em;font-weight:700;color:#F39C12;">₹${cut}</div><div style="font-size:0.65em;color:#BBB;">Platform (20%)</div></div></div><div id="wc-list">${cards}</div><div style="display:flex;gap:10px;margin-top:14px;"><button id="wzWC" style="flex:1;padding:12px;border-radius:50px;border:2px solid #4A2E68;background:transparent;color:#BBB;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;">Baad Mein</button><button id="wzWD" disabled style="flex:2;padding:12px;border-radius:50px;border:none;background:linear-gradient(135deg,#FFD700,#F39C12);color:#1C122C;font-weight:700;cursor:pointer;opacity:0.5;font-family:'Poppins',sans-serif;">🏆 Winner Declare Karo</button></div></div>`;
+    const cards=participants.map((p,i)=>`<div class="wc" data-idx="${i}" style="background:#1C122C;border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;border:2px solid transparent;transition:all 0.2s;margin-bottom:8px;"><div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#8E2DE2,#0A84FF);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;">${escapeHtml((p.name||'?').charAt(0).toUpperCase())}</div><div style="flex:1;"><div style="font-weight:600;font-size:0.92em;color:#fff;">${escapeHtml(p.name||'Player')}</div><div style="font-size:0.72em;color:#BBB;">Entry: 🪙${p.paid||0}</div></div><div class="wt" style="font-size:0.8em;color:#2ECC71;font-weight:600;display:none;">✅ Selected</div></div>`).join('');
+    overlay.innerHTML=`<div style="background:#120A1F;border-radius:24px 24px 0 0;padding:20px;width:100%;max-width:500px;max-height:85vh;overflow-y:auto;animation:wzSlideUp 0.3s ease;"><div style="text-align:center;margin-bottom:16px;"><div style="font-size:1.5em;">🏆</div><div style="font-weight:700;font-size:1.05em;color:#fff;">Winner Select Karo</div><div style="font-size:0.78em;color:#BBB;margin-top:4px;">${escapeHtml(contestName)}</div></div><div style="background:#1C122C;border-radius:12px;padding:12px;margin-bottom:14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;"><div><div style="font-size:1em;font-weight:700;color:#FFD700;">🪙${totalPool}</div><div style="font-size:0.65em;color:#BBB;">Total Pool</div></div><div><div style="font-size:1em;font-weight:700;color:#2ECC71;">🪙${prize}</div><div style="font-size:0.65em;color:#BBB;">Winner (80%)</div></div><div><div style="font-size:1em;font-weight:700;color:#F39C12;">🪙${cut}</div><div style="font-size:0.65em;color:#BBB;">Platform (20%)</div></div></div><div id="wc-list">${cards}</div><div style="display:flex;gap:10px;margin-top:14px;"><button id="wzWC" style="flex:1;padding:12px;border-radius:50px;border:2px solid #4A2E68;background:transparent;color:#BBB;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;">Baad Mein</button><button id="wzWD" disabled style="flex:2;padding:12px;border-radius:50px;border:none;background:linear-gradient(135deg,#FFD700,#F39C12);color:#1C122C;font-weight:700;cursor:pointer;opacity:0.5;font-family:'Poppins',sans-serif;">🏆 Winner Declare Karo</button></div></div>`;
     document.body.appendChild(overlay);
     let sel=null;
     overlay.querySelectorAll('.wc').forEach(card=>{
@@ -1640,6 +1699,7 @@ async function handleGoogleRedirect(){
             await saveGoogleUser(result.user);
             wzToast(`Welcome, ${result.user.displayName||'Player'}! 🎮`,'success');
             showPage('home-page');
+if(!localStorage.getItem('ageConfirmed')) initAgeGate();
         }
     }catch(e){
         if(e.code&&e.code!=='auth/no-current-user')
@@ -1726,7 +1786,7 @@ async function loadReferralLeaderboard(){
         const rows=snap.docs.map((doc,i)=>{
             const d=doc.data(),isMe=doc.id===currentUser.uid;
             if(isMe)myRank=i+1;
-            return `<div style="background:${isMe?'linear-gradient(135deg,rgba(10,132,255,0.2),rgba(142,45,226,0.2))':'var(--card-bg)'};border-radius:12px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px;border:${isMe?'1px solid rgba(10,132,255,0.5)':'1px solid transparent'};"><div style="font-size:1.3em;width:32px;text-align:center;">${medals[i]||'#'+(i+1)}</div><div style="flex:1;"><div style="font-weight:600;font-size:0.9em;color:var(--white-text);">${escapeHtml(d.username||d.firstName||'Player')}${isMe?' <span style="font-size:0.7em;color:var(--primary);">(You)</span>':''}</div><div style="font-size:0.72em;color:var(--muted);">${d.referralCount||0} referrals</div></div><div style="text-align:right;"><div style="font-size:1em;font-weight:700;color:var(--gold);">₹${d.referralEarnings||0}</div><div style="font-size:0.68em;color:var(--muted);">earned</div></div></div>`;
+            return `<div style="background:${isMe?'linear-gradient(135deg,rgba(10,132,255,0.2),rgba(142,45,226,0.2))':'var(--card-bg)'};border-radius:12px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px;border:${isMe?'1px solid rgba(10,132,255,0.5)':'1px solid transparent'};"><div style="font-size:1.3em;width:32px;text-align:center;">${medals[i]||'#'+(i+1)}</div><div style="flex:1;"><div style="font-weight:600;font-size:0.9em;color:var(--white-text);">${escapeHtml(d.username||d.firstName||'Player')}${isMe?' <span style="font-size:0.7em;color:var(--primary);">(You)</span>':''}</div><div style="font-size:0.72em;color:var(--muted);">${d.referralCount||0} referrals</div></div><div style="text-align:right;"><div style="font-size:1em;font-weight:700;color:var(--gold);">🪙${d.referralEarnings||0}</div><div style="font-size:0.68em;color:var(--muted);">earned</div></div></div>`;
         }).join('');
         container.innerHTML=(myRank?`<div style="background:linear-gradient(135deg,rgba(10,132,255,0.15),rgba(142,45,226,0.15));border:1px solid rgba(10,132,255,0.3);border-radius:12px;padding:12px;margin-bottom:14px;text-align:center;font-size:0.85em;color:var(--white-text);">🏅 Tera rank: <strong style="color:var(--primary);">#${myRank}</strong> out of ${snap.size} players</div>`:'')+rows;
     }catch(e){container.innerHTML=`<div class="empty-state"><p>${getFriendlyError(e)}</p></div>`;}
@@ -1806,6 +1866,126 @@ function startBannerTimer() {
     bannerTimer = setInterval(() => {
         goToBanner((bannerIndex + 1) % bannerData.length);
     }, 3000);
+}
+
+// ================================================================
+// LUCKY DRAW USER SIDE
+// ================================================================
+async function loadLuckyDraws() {
+    const container = document.getElementById('luckyDrawList');
+    if (!container) return;
+    container.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+    try {
+        const snap = await db.collection('luckyDraws').where('status','==','active').get();
+        if (snap.empty) {
+            container.innerHTML = '<div style="text-align:center;padding:40px;"><div style="font-size:3em;">🎲</div><p style="color:var(--muted);">No active lucky draws</p></div>';
+            return;
+        }
+        container.innerHTML = snap.docs.map(d => {
+            const r = d.data();
+            const pool = Math.floor(r.entryFee * (r.participants||[]).length);
+            const endTime = r.endTime ? new Date(r.endTime.toDate()).toLocaleString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : 'N/A';
+            const spotsLeft = r.maxParticipants - (r.participants||[]).length;
+            return `<div style="background:linear-gradient(135deg,rgba(142,45,226,0.15),rgba(10,132,255,0.1));border:1px solid rgba(142,45,226,0.3);border-radius:20px;padding:18px;margin-bottom:14px;position:relative;overflow:hidden;">
+                <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#8E2DE2,#0A84FF);"></div>
+                ${r.image ? `<img src="${r.image}" style="width:100%;height:120px;object-fit:cover;border-radius:12px;margin-bottom:12px;display:block;" onerror="this.style.display='none'">` : ''}
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+                    <div>
+                        <div style="font-weight:700;font-size:1em;color:#fff;">${escapeHtml(r.title)}</div>
+                        <div style="font-size:0.72em;color:var(--muted);margin-top:2px;">🏷️ ${r.type} draw • ${r.numWinners} winners</div>
+                    </div>
+                    <div style="background:rgba(255,215,0,0.15);border:1px solid rgba(255,215,0,0.3);border-radius:20px;padding:4px 12px;font-size:0.75em;font-weight:700;color:#FFD700;">${(r.type||'').toUpperCase()}</div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
+                    <div style="text-align:center;background:rgba(0,0,0,0.2);border-radius:10px;padding:8px;">
+                        <div style="font-size:1em;font-weight:800;color:#FFD700;">🪙${r.entryFee}</div>
+                        <div style="font-size:0.6em;color:var(--muted);">ENTRY</div>
+                    </div>
+                    <div style="text-align:center;background:rgba(0,0,0,0.2);border-radius:10px;padding:8px;">
+                        <div style="font-size:1em;font-weight:800;color:#2ECC71;">🪙${pool}</div>
+                        <div style="font-size:0.6em;color:var(--muted);">POOL</div>
+                    </div>
+                    <div style="text-align:center;background:rgba(0,0,0,0.2);border-radius:10px;padding:8px;">
+                        <div style="font-size:1em;font-weight:800;color:#0A84FF;">${spotsLeft}</div>
+                        <div style="font-size:0.6em;color:var(--muted);">SPOTS</div>
+                    </div>
+                </div>
+                <div style="font-size:0.72em;color:var(--muted);margin-bottom:10px;">⏰ Ends: ${endTime}</div>
+                ${r.prizeAmounts ? `<div style="background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);border-radius:10px;padding:10px;margin-bottom:12px;font-size:0.78em;">
+                    🏆 <strong style="color:#FFD700;">🪙${r.prizeAmounts[0]||0}</strong> &nbsp;
+                    🥈 <strong style="color:#C0C0C0;">🪙${r.prizeAmounts[1]||0}</strong> &nbsp;
+                    🥉 <strong style="color:#CD7F32;">🪙${r.prizeAmounts[2]||0}</strong>
+                </div>` : ''}
+                ${spotsLeft <= 0 ?
+                    `<button disabled style="width:100%;padding:12px;border-radius:12px;border:none;background:rgba(100,100,100,0.2);color:var(--muted);font-weight:700;">🔒 Full</button>` :
+                    `<button onclick="joinLuckyDraw('${d.id}',${r.entryFee},'${escapeHtml(r.title)}')" style="width:100%;padding:12px;border-radius:12px;border:none;background:linear-gradient(135deg,#8E2DE2,#0A84FF);color:#fff;font-weight:700;font-size:0.9em;cursor:pointer;font-family:'Poppins',sans-serif;">🎲 Join — 🪙${r.entryFee}</button>`
+                }
+            </div>`;
+        }).join('');
+    } catch(e) {
+        container.innerHTML = `<div class="empty-state"><p style="color:var(--muted);">${getFriendlyError(e)}</p></div>`;
+    }
+}
+
+async function joinLuckyDraw(drawId, fee, title) {
+    if (!currentUser) { showPage('login-page'); return; }
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px);';
+    overlay.innerHTML = `
+        <div style="background:#1C122C;border-radius:24px;padding:24px;width:100%;max-width:320px;border:1px solid rgba(142,45,226,0.4);text-align:center;">
+            <div style="font-size:3em;margin-bottom:12px;">🎲</div>
+            <div style="font-weight:800;font-size:1.2em;color:#fff;margin-bottom:6px;">Join Lucky Draw?</div>
+            <div style="font-size:0.85em;color:#FFD700;font-weight:700;margin-bottom:16px;">${escapeHtml(title)}</div>
+            <div style="background:rgba(0,0,0,0.3);border-radius:12px;padding:12px;margin-bottom:16px;text-align:left;">
+                <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+                    <span style="font-size:0.8em;color:rgba(255,255,255,0.6);">Entry Fee</span>
+                    <span style="font-weight:700;color:#FFD700;">🪙 ${fee}</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;">
+                    <span style="font-size:0.8em;color:rgba(255,255,255,0.6);">Multiple entries</span>
+                    <span style="color:#2ECC71;font-size:0.85em;">✓ Allowed</span>
+                </div>
+            </div>
+            <div style="font-size:0.75em;color:rgba(255,255,255,0.5);margin-bottom:16px;">More entries = More chances to win! 🏆</div>
+            <div style="display:flex;gap:10px;">
+                <button id="ldCancelBtn" style="flex:1;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:rgba(255,255,255,0.6);font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;">Cancel</button>
+                <button id="ldConfirmBtn" style="flex:2;padding:12px;border-radius:12px;border:none;background:linear-gradient(135deg,#8E2DE2,#0A84FF);color:#fff;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;">✅ Yes, Join!</button>
+            </div>
+        </div>`;
+    document.body.appendChild(overlay);
+    const confirmed = await new Promise(resolve => {
+        document.getElementById('ldCancelBtn').onclick = () => { document.body.removeChild(overlay); resolve(false); };
+        document.getElementById('ldConfirmBtn').onclick = () => { document.body.removeChild(overlay); resolve(true); };
+    });
+    if (!confirmed) return;
+    try {
+        const userRef = db.collection('users').doc(currentUser.uid);
+        const drawRef = db.collection('luckyDraws').doc(drawId);
+        await db.runTransaction(async t => {
+            const uDoc = await t.get(userRef);
+            const dDoc = await t.get(drawRef);
+            if (!uDoc.exists) throw new Error('User not found');
+            if (!dDoc.exists) throw new Error('Draw not found');
+            const bal = uDoc.data().walletBalance || 0;
+            const participants = dDoc.data().participants || [];
+            if (bal < fee) throw new Error('Insufficient coins! Please add more.');
+            if (participants.length >= dDoc.data().maxParticipants) throw new Error('Draw is full!');
+            t.update(userRef, { walletBalance: bal - fee });
+            t.update(drawRef, {
+                participants: firebase.firestore.FieldValue.arrayUnion({
+                    uid: currentUser.uid,
+                    name: uDoc.data().username || uDoc.data().firstName || 'Player'
+                })
+            });
+            t.set(db.collection('transactions').doc(), {
+                userId: currentUser.uid, type: `Lucky Draw Entry — ${title}`,
+                amount: -fee, status: 'completed',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        });
+        wzToast('🎲 Joined! Good luck! 🍀', 'success');
+        loadLuckyDraws();
+    } catch(e) { wzAlert('❌ Error', e.message); }
 }
 
 // ================================================================
@@ -1921,7 +2101,7 @@ async function loadLeaderboard(tab = 'wins') {
 
     const fieldMap = { wins:'matchesWon', earnings:'amountWon', matches:'totalMatches' };
     const labelMap = { wins:'Wins', earnings:'Earned', matches:'Matches' };
-    const unitMap  = { wins:'', earnings:'₹', matches:'' };
+    const unitMap  = { wins:'', earnings:'🪙', matches:'' };
     const field    = fieldMap[tab];
     const label    = labelMap[tab];
     const unit     = unitMap[tab];
@@ -1988,7 +2168,7 @@ async function loadLeaderboard(tab = 'wins') {
                         ${escapeHtml(p.username||p.firstName||'Player')}
                         ${isMe?'<span style="font-size:0.7em;color:var(--primary);"> (You)</span>':''}
                     </div>
-                    ${(p.paid||0) > 0 ? `<div style="font-size:0.7em;color:#2ECC71;font-weight:600;">₹${p.paid} paid</div>` : ''}${p.totalMatches||0} matches played</div>
+                    ${(p.paid||0) > 0 ? `<div style="font-size:0.7em;color:#2ECC71;font-weight:600;">🪙${p.paid} paid</div>` : ''}${p.totalMatches||0} matches played</div>
                 </div>
                 <div style="text-align:right;">
                     <div style="font-size:1em;font-weight:700;color:var(--gold);">${unit}${val}</div>
@@ -2076,11 +2256,11 @@ async function loadPlayerStats() {
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
             <div style="background:var(--card-bg);border-radius:16px;padding:16px;text-align:center;">
                 <div style="font-size:0.65em;color:var(--muted);margin-bottom:6px;font-weight:600;letter-spacing:1px;">TOTAL EARNED</div>
-                <div style="font-size:1.5em;font-weight:800;color:#FFD700;">₹${amountWon}</div>
+                <div style="font-size:1.5em;font-weight:800;color:#FFD700;">🪙${amountWon}</div>
             </div>
             <div style="background:var(--card-bg);border-radius:16px;padding:16px;text-align:center;">
                 <div style="font-size:0.65em;color:var(--muted);margin-bottom:6px;font-weight:600;letter-spacing:1px;">TOTAL SPENT</div>
-                <div style="font-size:1.5em;font-weight:800;color:#0A84FF;">₹${amountSpent}</div>
+                <div style="font-size:1.5em;font-weight:800;color:#0A84FF;">🪙${amountSpent}</div>
             </div>
         </div>
 
@@ -2088,7 +2268,7 @@ async function loadPlayerStats() {
         <div style="background:${(amountWon-amountSpent)>=0?'linear-gradient(135deg,rgba(46,204,113,0.15),rgba(46,204,113,0.05))':'linear-gradient(135deg,rgba(231,76,60,0.15),rgba(231,76,60,0.05))'};border-radius:16px;padding:16px;text-align:center;border:1px solid ${(amountWon-amountSpent)>=0?'rgba(46,204,113,0.3)':'rgba(231,76,60,0.3)'};">
             <div style="font-size:0.65em;color:var(--muted);margin-bottom:4px;font-weight:600;letter-spacing:1px;">NET PROFIT/LOSS</div>
             <div style="font-size:1.8em;font-weight:800;color:${(amountWon-amountSpent)>=0?'#2ECC71':'#E74C3C'};">
-                ${(amountWon-amountSpent)>=0?'+':''}₹${amountWon-amountSpent}
+                ${(amountWon-amountSpent)>=0?'+':''}🪙${amountWon-amountSpent}
             </div>
         </div>`;
 
@@ -2159,7 +2339,7 @@ async function processKillPayout(userId, tournamentId) {
             });
             t.update(killRef, { payoutCredited: true });
             t.set(db.collection('transactions').doc(), {
-                userId, type: `Kill Payout (${kills} kills × ₹${perKill})`,
+                userId, type: `Kill Payout (${kills} kills × 🪙${perKill})`,
                 amount: payout, status: 'completed',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
@@ -2217,7 +2397,7 @@ function showPage(pageId, params = {}) {
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     const navMap = {
         'home-page':'home-page','tournament-list-page':'home-page','tournament-details-page':'home-page',
-        'results-page':'home-page','wallet-page':'wallet-page','add-money-page':'wallet-page',
+        'results-page':'home-page','wallet-page':'wallet-page','lucky-draw-page':'lucky-draw-page','add-money-page':'wallet-page',
         'withdraw-page':'wallet-page','profile-page':'profile-page','edit-profile-page':'profile-page',
         'statistics-page':'profile-page','rewards-page':'profile-page','orders-page':'profile-page',
         'referral-page':'profile-page','support-page':'profile-page','settings-page':'settings-page',
@@ -2518,9 +2698,9 @@ function renderTournamentCards(tournaments, filter = 'All') {
                 <div class="tournament-name">${t.name}</div>
                 <div class="tournament-time"><i class="fas fa-clock"></i> ${t.time || 'TBA'}</div>
                 <div class="stats-row">
-                    <div class="stat-item"><div class="s-label">Prize Pool</div><div class="s-val">₹${t.prizePool || 0}</div></div>
-                    <div class="stat-item"><div class="s-label">Per Kill</div><div class="s-val">₹${t.perKill || t.perKillAmount || 0}</div></div>
-                    <div class="stat-item"><div class="s-label">Entry Fee</div><div class="s-val">₹${t.entryFee || 0}</div></div>
+                    <div class="stat-item"><div class="s-label">Prize Pool</div><div class="s-val">🪙${t.prizePool || 0}</div></div>
+                    <div class="stat-item"><div class="s-label">Per Kill</div><div class="s-val">🪙${t.perKill || t.perKillAmount || 0}</div></div>
+                    <div class="stat-item"><div class="s-label">Entry Fee</div><div class="s-val">🪙${t.entryFee || 0}</div></div>
                 </div>
                 <div class="meta-row">
                     <div class="meta-item"><div class="m-label">Type</div><div class="m-val">${t.type || (isContest?'User Contest':'-')}</div></div>
@@ -2575,7 +2755,7 @@ async function openContestChat(contestId) {
             const winnerPrize = Math.floor(newTotal * 0.80);
             const confirmed = await wzConfirm(
                 `🎮 Join "${cData.name}"?`,
-                `💰 Entry Fee: ₹${fee}\n👥 Players: ${participants.length + 1}/${spots}\n🏆 Prize Pool: ₹${winnerPrize}\n\n₹${fee} will be deducted from your wallet.`
+                `💰 Entry Fee: 🪙${fee}\n👥 Players: ${participants.length + 1}/${spots}\n🏆 Prize Pool: 🪙${winnerPrize}\n\n🪙${fee} will be deducted from your wallet.`
             );
             if (!confirmed) return;
             const uDoc = await db.collection('users').doc(currentUser.uid).get();
@@ -2585,7 +2765,7 @@ async function openContestChat(contestId) {
                 const freshUser = await t.get(userRef);
                 if (!freshUser.exists) throw new Error('User not found!');
                 const bal = freshUser.data().walletBalance || 0;
-                if (bal < fee) throw new Error(`Insufficient balance! Need ₹${fee}, you have ₹${bal}.`);
+                if (bal < fee) throw new Error(`Insufficient balance! Need 🪙${fee}, you have 🪙${bal}.`);
                 t.update(userRef, { walletBalance: bal - fee });
                 const newP = [...participants, { uid: currentUser.uid, name: uName, paid: fee, joinedAt: new Date().toISOString() }];
                 const updTotal = fee * newP.length;
@@ -2691,7 +2871,7 @@ async function endContest(contestId) {
 
         if (participants.length < 2) {
             wzConfirm('Contest End Karo?',
-                `Sirf ${participants.length} player hai.\nEntry fee ₹${cData.entryFee} refund karein aur end karein?`,
+                `Sirf ${participants.length} player hai.\nEntry fee 🪙${cData.entryFee} refund karein aur end karein?`,
                 async () => {
                     try {
                         if (cData.entryFee > 0 && cData.creatorId) {
@@ -2736,7 +2916,7 @@ async function endContest(contestId) {
                     </div>
                     <div style="flex:1;">
                         <div style="font-weight:700;font-size:0.95em;color:#fff;">${escapeHtml(p.name||'Player')}</div>
-                        <div style="font-size:0.72em;color:#BBB;">Entry: ₹${p.paid||0}</div>
+                        <div style="font-size:0.72em;color:#BBB;">Entry: 🪙${p.paid||0}</div>
                     </div>
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
@@ -2760,15 +2940,15 @@ async function endContest(contestId) {
                 </div>
                 <div style="background:#1C122C;border-radius:12px;padding:12px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;">
                     <div>
-                        <div style="font-size:1em;font-weight:700;color:#fff;">₹${totalPool}</div>
+                        <div style="font-size:1em;font-weight:700;color:#fff;">🪙${totalPool}</div>
                         <div style="font-size:0.65em;color:#BBB;">Total Pool</div>
                     </div>
                     <div>
-                        <div style="font-size:1em;font-weight:700;color:#FFD700;">₹${winnerPrize}</div>
+                        <div style="font-size:1em;font-weight:700;color:#FFD700;">🪙${winnerPrize}</div>
                         <div style="font-size:0.65em;color:#BBB;">Winner (80%)</div>
                     </div>
                     <div>
-                        <div style="font-size:1em;font-weight:700;color:#F39C12;">₹${platformCut}</div>
+                        <div style="font-size:1em;font-weight:700;color:#F39C12;">🪙${platformCut}</div>
                         <div style="font-size:0.65em;color:#BBB;">Platform (20%)</div>
                     </div>
                 </div>
@@ -2839,7 +3019,7 @@ async function endContest(contestId) {
             delete window.selectResult;
 
             wzConfirm('Result Confirm Karo ✅',
-                `🏆 Winner: ${selectedWinner.name}\n💰 ₹${winnerPrize} unke wallet mein jayega\n📊 Platform: ₹${platformCut}\n\nConfirm karein?`,
+                `🏆 Winner: ${selectedWinner.name}\n💰 🪙${winnerPrize} unke wallet mein jayega\n📊 Platform: 🪙${platformCut}\n\nConfirm karein?`,
                 async () => {
                     try {
                         await db.runTransaction(async t => {
@@ -2867,7 +3047,7 @@ async function endContest(contestId) {
                         await sendInAppNotification(
                             selectedWinner.uid,
                             '🏆 Tu Jeet Gaya!',
-                            `"${cData.name}" mein tune jeet liya! ₹${winnerPrize} tera wallet mein add ho gaya.`
+                            `"${cData.name}" mein tune jeet liya! 🪙${winnerPrize} tera wallet mein add ho gaya.`
                         );
 
                         const msgsSnap = await db.collection('userContests').doc(contestId).collection('messages').get();
@@ -2888,7 +3068,7 @@ async function endContest(contestId) {
                         });
 
                         if (chatUnsub) { chatUnsub(); chatUnsub = null; }
-                        wzToast(`🎉 ${selectedWinner.name} winner! ₹${winnerPrize} credited!`, 'success', 4000);
+                        wzToast(`🎉 ${selectedWinner.name} winner! 🪙${winnerPrize} credited!`, 'success', 4000);
                         showPage('create-contest-page');
                     } catch(e) { wzToast(getFriendlyError(e), 'error'); }
                 }
@@ -2964,7 +3144,7 @@ const pageInits = {
                     profilePictureUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(fn+' '+ln)}&background=0A84FF&color=fff&size=150`,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
-                // If referred, credit referrer ₹20
+                // If referred, credit referrer 🪙20
                 if (ref) {
                     try {
                         const refSnap = await db.collection('users').where('referralCode','==',ref).limit(1).get();
@@ -3080,7 +3260,7 @@ const pageInits = {
                     const date = tx.timestamp ? new Date(tx.timestamp.toDate()).toLocaleString('en-IN') : 'N/A';
                     const cls = tx.amount >= 0 ? 'positive' : 'negative';
                     const sign = tx.amount >= 0 ? '+' : '';
-                    return `<div class="transaction-item"><div class="details"><h4>${tx.type}</h4><span>${date}</span></div><div class="amount ${cls}">${sign}₹${Math.abs(tx.amount).toLocaleString('en-IN',{minimumFractionDigits:2})}</div></div>`;
+                    return `<div class="transaction-item"><div class="details"><h4>${tx.type}</h4><span>${date}</span></div><div class="amount ${cls}">${sign}🪙${Math.abs(tx.amount).toLocaleString('en-IN',{minimumFractionDigits:2})}</div></div>`;
                 }).join('');
             } catch(e) { txList.innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px;">Error loading transactions</p>'; }
         }
@@ -3104,7 +3284,7 @@ const pageInits = {
     });
     document.getElementById('proceedPayBtn').onclick = async () => {
         const amt = parseFloat(amountInput.value);
-        if (isNaN(amt) || amt < 10) { wzToast('Minimum deposit is ₹10','error'); return; }
+        if (isNaN(amt) || amt < 10) { wzToast('Minimum deposit is 🪙10','error'); return; }
         const qrAmtEl = document.getElementById('qrAmount');
         if (qrAmtEl) qrAmtEl.textContent = amt.toLocaleString('en-IN',{minimumFractionDigits:2});
         amountSection.style.display = 'none'; qrSection.style.display = 'block';
@@ -3133,7 +3313,7 @@ const pageInits = {
     document.getElementById('confirmPayBtn').onclick = async () => {
         const amt = parseFloat(amountInput.value);
         const utr = utrInput ? utrInput.value.trim() : '';
-        if (isNaN(amt) || amt < 10) { wzToast('Minimum deposit is ₹10','error'); return; }
+        if (isNaN(amt) || amt < 10) { wzToast('Minimum deposit is 🪙10','error'); return; }
         if (!validateUTR(utr)) { wzToast('UTR must be exactly 12 digits!','error'); return; }
         const btn = document.getElementById('confirmPayBtn');
         btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
@@ -3156,12 +3336,23 @@ const pageInits = {
     'withdraw-page': () => {
         if (!currentUser) { showPage('login-page'); return; }
         document.getElementById('backFromWithdraw').onclick = () => showPage('wallet-page');
+        
+        // Live coins to rupees calculation
+        const amtInput = document.getElementById('withdrawAmount');
+        if(amtInput) amtInput.oninput = (e) => {
+            const coins = parseFloat(e.target.value) || 0;
+            const el = document.getElementById('redeemRupees');
+            if(el) el.textContent = '🪙' + coins;
+        };
+
         const btn = document.getElementById('processWithdrawBtn');
         btn.onclick = async () => {
             const amt = parseFloat(document.getElementById('withdrawAmount').value);
             const upi = document.getElementById('withdrawUpiId').value.trim();
-            if (isNaN(amt) || amt < 30) { alert('Minimum withdrawal is ₹30'); return; }
-            if (!upi || !upi.includes('@')) { alert('Please enter a valid UPI ID (e.g. name@upi)'); return; }
+            if (isNaN(amt) || amt < 30) { wzToast('Minimum 🪙30 coins redeem kar sakte hain!','error'); return; }
+            if (!upi || !upi.includes('@')) { wzToast('Valid UPI ID daalo (e.g. name@upi)','error'); return; }
+            const confirmed = await wzConfirm('🪙 Redeem Coins?', `🪙 ${amt} Coins = 🪙${amt}\n\nUPI: ${upi}\n\nAmount 24 hours mein transfer hoga.`);
+            if(!confirmed) return;
             btn.disabled = true; btn.textContent = 'Processing...';
             try {
                 await db.runTransaction(async t => {
@@ -3169,7 +3360,7 @@ const pageInits = {
                     const uDoc = await t.get(uRef);
                     if (!uDoc.exists) throw new Error('User not found');
                     const bal = uDoc.data().walletBalance || 0;
-                    if (bal < amt) throw new Error('Insufficient balance');
+                    if (bal < amt) throw new Error(`Insufficient coins! You have 🪙${bal}`);
                     t.update(uRef, { walletBalance: bal - amt });
                     t.set(db.collection('withdrawalRequests').doc(), {
                         userId: currentUser.uid, userName: currentUser.displayName || 'Unknown',
@@ -3177,15 +3368,15 @@ const pageInits = {
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     });
                     t.set(db.collection('transactions').doc(), {
-                        userId: currentUser.uid, type: 'Withdrawal Request (UPI)',
+                        userId: currentUser.uid, type: 'Coins Redeem (UPI)',
                         amount: -amt, status: 'pending',
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     });
                 });
-                alert(`Withdrawal request of ₹${amt} submitted! Processed within 24 hours.`);
+                wzToast(`✅ 🪙${amt} coins redeem request submitted!`, 'success');
                 showPage('wallet-page');
-            } catch(e) { alert('Error: ' + e.message); }
-            finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Request Withdrawal'; }
+            } catch(e) { wzAlert('❌ Error', e.message); }
+            finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Redeem Coins → UPI'; }
         };
     },
 
@@ -3226,8 +3417,8 @@ const pageInits = {
             const t = { id: snap.id, ...snap.data() };
             document.getElementById('detailName').textContent = t.name;
             document.getElementById('detailTime').textContent = t.time;
-            document.getElementById('detailEntry').textContent = t.entryFee === 0 ? 'FREE' : `₹${t.entryFee}`;
-            document.getElementById('detailPrize').textContent = `₹${(t.prizePool||0).toLocaleString('en-IN')}`;
+            document.getElementById('detailEntry').textContent = t.entryFee === 0 ? 'FREE' : `🪙${t.entryFee}`;
+            document.getElementById('detailPrize').textContent = `🪙${(t.prizePool||0).toLocaleString('en-IN')}`;
             document.getElementById('detailType').textContent = t.type || '-';
             document.getElementById('detailMap').textContent = t.map || '-';
             const total = t.totalSpots || 0, filled = t.filledSpots || 0;
@@ -3245,7 +3436,7 @@ const pageInits = {
             <div style="font-weight:600;font-size:0.85em;color:#fff;">${escapeHtml(p.inGameName||p.name||'Player')}</div>
             <div style="font-size:0.7em;color:var(--muted);">UID: ${escapeHtml(p.gameUid||'N/A')}</div>
         </div>
-        <div style="font-size:0.7em;color:var(--muted);">₹${p.paid||0} paid</div>
+        <div style="font-size:0.7em;color:var(--muted);">🪙${p.paid||0} paid</div>
     </div>`).join('') : '<p style="color:var(--muted);font-size:0.85em;padding:10px 0;">No participants yet. Be the first!</p>';
                 document.getElementById('participantCount').textContent = ps.length;
             }
@@ -3317,7 +3508,7 @@ joinBtn.style.color = '#fff';
                                 <span style="font-size:0.78em;color:var(--muted);">${date}</span>
                                 <span style="font-size:0.78em;font-weight:600;color:${statusColor};text-transform:capitalize;">${m.status}</span>
                             </div>
-                            <div style="margin-top:6px;font-size:0.82em;color:${m.entryFee>0?'var(--danger)':'var(--success)'};">Entry: ${m.entryFee>0?'- ₹'+m.entryFee:'Free'}</div>
+                            <div style="margin-top:6px;font-size:0.82em;color:${m.entryFee>0?'var(--danger)':'var(--success)'};">Entry: ${m.entryFee>0?'- 🪙'+m.entryFee:'Free'}</div>
                         </div>
                     </div>`;
                 }).join('');
@@ -3350,8 +3541,8 @@ joinBtn.style.color = '#fff';
             if (snap.empty) { container.innerHTML = '<div class="empty-state"><i class="fas fa-trophy"></i><p>No results published yet</p></div>'; return; }
             container.innerHTML = snap.docs.map(d => {
                 const r = d.data();
-                const winners = (r.winners||[]).map((w,i)=>`<div class="winner-row"><div class="w-rank">${i+1}</div><div class="w-name">${w.name||'Player'}</div><div class="w-prize">₹${(w.prize||0).toLocaleString('en-IN')}</div></div>`).join('');
-                return `<div class="result-card fade-in"><div class="r-header"><i class="fas fa-trophy"></i><h4>${r.tournamentName||'Tournament'}</h4></div><p style="font-size:0.82em;color:var(--muted);margin-bottom:10px;">Prize Pool: ₹${(r.prizePool||0).toLocaleString('en-IN')}</p>${winners}</div>`;
+                const winners = (r.winners||[]).map((w,i)=>`<div class="winner-row"><div class="w-rank">${i+1}</div><div class="w-name">${w.name||'Player'}</div><div class="w-prize">🪙${(w.prize||0).toLocaleString('en-IN')}</div></div>`).join('');
+                return `<div class="result-card fade-in"><div class="r-header"><i class="fas fa-trophy"></i><h4>${r.tournamentName||'Tournament'}</h4></div><p style="font-size:0.82em;color:var(--muted);margin-bottom:10px;">Prize Pool: 🪙${(r.prizePool||0).toLocaleString('en-IN')}</p>${winners}</div>`;
             }).join('');
         } catch(e) { container.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>Error loading results</p></div>'; }
     },
@@ -3472,7 +3663,7 @@ joinBtn.style.color = '#fff';
                     const m=d.data();
                     return `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--input-border);">
                         <span style="font-size:0.85em;">${m.tournamentName||'Tournament'}</span>
-                        <span style="font-size:0.82em;color:${m.entryFee>0?'var(--danger)':'var(--success)'};">₹${m.entryFee||0}</span>
+                        <span style="font-size:0.82em;color:${m.entryFee>0?'var(--danger)':'var(--success)'};">🪙${m.entryFee||0}</span>
                     </div>`;
                 }).join('');
             }
@@ -3494,7 +3685,7 @@ joinBtn.style.color = '#fff';
                 const iconKey = Object.keys(iconMap).find(k=>tx.type&&tx.type.includes(k));
                 const icon = iconMap[iconKey] || '💰';
                 const date = tx.timestamp ? new Date(tx.timestamp.toDate()).toLocaleDateString('en-IN') : '';
-                return `<div class="reward-item"><div class="reward-icon" style="background:rgba(10,132,255,0.15);">${icon}</div><div class="reward-info"><div class="r-title">${tx.type}</div><div class="r-desc">${date}</div></div><div class="reward-val">+₹${(tx.amount||0).toLocaleString('en-IN')}</div></div>`;
+                return `<div class="reward-item"><div class="reward-icon" style="background:rgba(10,132,255,0.15);">${icon}</div><div class="reward-info"><div class="r-title">${tx.type}</div><div class="r-desc">${date}</div></div><div class="reward-val">+🪙${(tx.amount||0).toLocaleString('en-IN')}</div></div>`;
             }).join('');
             const totalEl = document.getElementById('totalRewards');
             if (totalEl) totalEl.textContent = total.toLocaleString('en-IN',{minimumFractionDigits:2});
@@ -3510,7 +3701,7 @@ joinBtn.style.color = '#fff';
             if (snap.empty) { container.innerHTML = '<div class="empty-state"><i class="fas fa-shopping-cart"></i><p>No orders yet</p></div>'; return; }
             container.innerHTML = snap.docs.map(d=>{
                 const o=d.data(); const date=o.createdAt?new Date(o.createdAt.toDate()).toLocaleDateString('en-IN'):'';
-                return `<div class="order-item"><div class="order-icon">🛒</div><div style="flex:1;"><div style="font-size:0.9em;font-weight:600;">${o.name||'Order'}</div><div style="font-size:0.78em;color:var(--muted);">${date}</div></div><div style="font-size:0.9em;font-weight:700;color:var(--primary);">₹${(o.amount||0).toLocaleString('en-IN')}</div></div>`;
+                return `<div class="order-item"><div class="order-icon">🛒</div><div style="flex:1;"><div style="font-size:0.9em;font-weight:600;">${o.name||'Order'}</div><div style="font-size:0.78em;color:var(--muted);">${date}</div></div><div style="font-size:0.9em;font-weight:700;color:var(--primary);">🪙${(o.amount||0).toLocaleString('en-IN')}</div></div>`;
             }).join('');
         } catch(e) { container.innerHTML = '<div class="empty-state"><i class="fas fa-shopping-cart"></i><p>No orders yet</p></div>'; }
     },
@@ -3639,7 +3830,11 @@ joinBtn.style.color = '#fff';
             }).join('');
         } catch(e) { container.innerHTML = '<div class="empty-state"><i class="fas fa-bell"></i><p>No notifications yet</p></div>'; }
     },
-
+    
+    'lucky-draw-page': () => {
+    document.getElementById('backFromLuckyDraw').onclick = () => showPage('home-page');
+    loadLuckyDraws();
+},
     'live-score-page': async () => {
         if (!currentUser) { showPage('login-page'); return; }
         document.getElementById('backFromLiveScore').onclick = () => showPage('settings-page');
@@ -3670,7 +3865,7 @@ joinBtn.style.color = '#fff';
                     <div class="score-row">
                         <div class="score-item"><div class="sc-val">${ps}</div><div class="sc-lbl">Players</div></div>
                         <div class="score-item"><div class="sc-val">${t.totalSpots||0}</div><div class="sc-lbl">Total Spots</div></div>
-                        <div class="score-item"><div class="sc-val">₹${t.prizePool||0}</div><div class="sc-lbl">Prize Pool</div></div>
+                        <div class="score-item"><div class="sc-val">🪙${t.prizePool||0}</div><div class="sc-lbl">Prize Pool</div></div>
                     </div>
                     <div style="margin-top:10px;font-size:0.78em;color:var(--muted);">${t.gameMode||''} • ${t.map||'Bermuda'} • ${t.type||'Solo'}</div>
                 </div>`;
@@ -3685,7 +3880,7 @@ joinBtn.style.color = '#fff';
                     <div class="score-row">
                         <div class="score-item"><div class="sc-val">${members}</div><div class="sc-lbl">Players</div></div>
                         <div class="score-item"><div class="sc-val">${c.totalSpots||10}</div><div class="sc-lbl">Total Spots</div></div>
-                        <div class="score-item"><div class="sc-val">₹${c.entryFee||0}</div><div class="sc-lbl">Entry Fee</div></div>
+                        <div class="score-item"><div class="sc-val">🪙${c.entryFee||0}</div><div class="sc-lbl">Entry Fee</div></div>
                     </div>
                     <button class="btn" style="margin-top:10px;font-size:0.82em;padding:8px;" onclick="openContestChat('${d.id}')"><i class="fas fa-comments"></i> Join Chat</button>
                 </div>`;
@@ -3723,7 +3918,7 @@ joinBtn.style.color = '#fff';
                     return `<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--input-border);">
                         <div class="p-avatar">${(f.username||f.firstName||'?').charAt(0).toUpperCase()}</div>
                         <div style="flex:1;"><div style="font-size:0.88em;font-weight:600;">${f.username||f.firstName||'Player'}</div><div style="font-size:0.75em;color:var(--muted);">Joined ${date}</div></div>
-                        <div style="color:var(--success);font-weight:700;font-size:0.88em;">+₹20</div>
+                        <div style="color:var(--success);font-weight:700;font-size:0.88em;">+🪙20</div>
                     </div>`;
                 }).join('');
             }
@@ -3737,7 +3932,7 @@ joinBtn.style.color = '#fff';
                     const tx=d.data(); const date=tx.timestamp?new Date(tx.timestamp.toDate()).toLocaleDateString('en-IN'):'';
                     return `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--input-border);font-size:0.85em;">
                         <div><div style="font-weight:600;">Referral Bonus</div><div style="font-size:0.78em;color:var(--muted);">${date}</div></div>
-                        <div style="color:var(--success);font-weight:700;">+₹${tx.amount||20}</div>
+                        <div style="color:var(--success);font-weight:700;">+🪙${tx.amount||20}</div>
                     </div>`;
                 }).join('');
             }
@@ -3753,9 +3948,9 @@ joinBtn.style.color = '#fff';
         const faqs = [
             { q: 'How do I join a tournament?', a: 'Go to Tournament List, select any tournament and tap JOIN. Entry fee will be deducted from your wallet. Room ID & Password will appear before match time.' },
             { q: 'When will my deposit be approved?', a: 'Deposits are approved within 1 hour after admin verification. Make sure you enter the correct 12-digit UTR.' },
-            { q: 'How do I withdraw my winnings?', a: 'Wallet → Withdraw. Enter UPI ID and amount. Minimum ₹30. Processed within 24 hours.' },
+            { q: 'How do I withdraw my winnings?', a: 'Wallet → Withdraw. Enter UPI ID and amount. Minimum 🪙30. Processed within 24 hours.' },
             { q: 'How does Kill Reward work?', a: 'Each kill earns a set amount (shown as "Per Kill" on the tournament card). Auto-credited after match.' },
-            { q: 'What is the referral system?', a: 'Share your code. When friends sign up using it, you earn ₹20! Find code in Profile → Referral Tracker.' },
+            { q: 'What is the referral system?', a: 'Share your code. When friends sign up using it, you earn 🪙20! Find code in Profile → Referral Tracker.' },
             { q: 'What happens if I face a technical issue?', a: 'Profile → Help & Support → submit a ticket. Resolved within 24 hours.' },
             { q: 'Can I create my own tournament?', a: 'Yes! Profile → Create Contest or use the "Create Contest" button on Home. Set fee, spots, and invite friends.' },
             { q: 'How does Live Match Status work?', a: 'Settings → Live Match Status shows tournaments currently in progress plus active user contests.' },
@@ -3788,7 +3983,7 @@ joinBtn.style.color = '#fff';
             if (fee >= 10 && spots >= 2) {
                 const total = fee * spots;
                 const winner = Math.floor(total * 0.80);
-                el.innerHTML = `Total Pool: <strong style="color:var(--white-text);">₹${total}</strong> | 🏆 Winner: <strong style="color:var(--gold);">₹${winner}</strong> | Platform: <strong style="color:var(--accent);">₹${total-winner}</strong>`;
+                el.innerHTML = `Total Pool: <strong style="color:var(--white-text);">🪙${total}</strong> | 🏆 Winner: <strong style="color:var(--gold);">🪙${winner}</strong> | Platform: <strong style="color:var(--accent);">🪙${total-winner}</strong>`;
             } else { el.textContent = 'Fill entry fee & spots to see prize breakdown'; }
         };
         document.getElementById('contestFee').oninput = updatePrize;
@@ -3809,7 +4004,7 @@ joinBtn.style.color = '#fff';
                             <div>
                                 <div style="font-weight:600;font-size:0.92em;">${c.name}</div>
                                 <div style="font-size:0.75em;color:var(--muted);">${c.gameMode} • ${c.time||'TBA'}</div>
-                                <div style="font-size:0.78em;margin-top:4px;">👥 ${members}/${c.totalSpots||10} joined • ₹${c.entryFee||0} entry</div>
+                                <div style="font-size:0.78em;margin-top:4px;">👥 ${members}/${c.totalSpots||10} joined • 🪙${c.entryFee||0} entry</div>
                             </div>
                             <span style="font-size:0.7em;padding:3px 10px;border-radius:20px;background:rgba(46,204,113,0.2);color:var(--success);">Active</span>
                         </div>
@@ -3835,7 +4030,7 @@ joinBtn.style.color = '#fff';
                     return `<div class="history-card">
                         <div class="h-name">${h.contestName}</div>
                         <div class="h-detail">${h.gameMode} • ${(h.participants||[]).length} players • ${date}</div>
-                        <div class="h-winner">🏆 Winner: ${h.winnerName||'-'} • Prize: ₹${h.winnerPrize||0}</div>
+                        <div class="h-winner">🏆 Winner: ${h.winnerName||'-'} • Prize: 🪙${h.winnerPrize||0}</div>
                         <div style="font-size:0.72em;color:var(--muted);margin-top:2px;">💬 ${h.totalMessages||0} messages</div>
                     </div>`;
                 }).join('');
@@ -3852,12 +4047,12 @@ joinBtn.style.color = '#fff';
             const map = document.getElementById('contestMap').value.trim();
             if (!name) { wzToast('⚠️ Please enter a contest name!','error'); return; }
             if (spots < 2 || spots > 100) { wzToast('⚠️ Spots must be between 2 and 100!','error'); return; }
-            if (fee < 10) { wzToast('⚠️ Minimum entry fee is ₹10!','error'); return; }
+            if (fee < 10) { wzToast('⚠️ Minimum entry fee is 🪙10!','error'); return; }
             const totalPool = fee * spots;
             const winnerPrize = Math.floor(totalPool * 0.80);
             const platformFee = totalPool - winnerPrize;
             const confirmed = await wzConfirm('🎮 Create Contest?',
-                `📛 Name: ${name}\n🎯 Mode: ${mode}\n💰 Entry Fee: ₹${fee} per player\n👥 Total Spots: ${spots}\n💵 Total Pool: ₹${totalPool}\n🏆 Winner Prize: ₹${winnerPrize} (80%)\n\n₹${fee} will be deducted from your wallet now.`);
+                `📛 Name: ${name}\n🎯 Mode: ${mode}\n💰 Entry Fee: 🪙${fee} per player\n👥 Total Spots: ${spots}\n💵 Total Pool: 🪙${totalPool}\n🏆 Winner Prize: 🪙${winnerPrize} (80%)\n\n🪙${fee} will be deducted from your wallet now.`);
             if (!confirmed) return;
             const btn = document.getElementById('createContestBtn');
             btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
@@ -3867,7 +4062,7 @@ joinBtn.style.color = '#fff';
                     const uDoc = await t.get(userRef);
                     if (!uDoc.exists) throw new Error('User not found!');
                     const bal = uDoc.data().walletBalance || 0;
-                    if (bal < fee) throw new Error(`Insufficient balance! Need ₹${fee}, you have ₹${bal}.`);
+                    if (bal < fee) throw new Error(`Insufficient balance! Need 🪙${fee}, you have 🪙${bal}.`);
                     t.update(userRef, { walletBalance: bal - fee });
                     t.set(db.collection('transactions').doc(), { userId: currentUser.uid, type: 'Contest Entry Fee (Creator)', amount: -fee, status: 'completed', timestamp: firebase.firestore.FieldValue.serverTimestamp() });
                 });
@@ -3907,7 +4102,7 @@ joinBtn.style.color = '#fff';
         const isParticipant = (cData.participants||[]).some(p => p.uid === currentUser.uid);
         // Header update
         document.getElementById('contestChatTitle').textContent = cData.name;
-        document.getElementById('contestChatSubtitle').textContent = `${(cData.participants||[]).length}/${cData.totalSpots} players • ₹${cData.prizePool||0} prize`;
+        document.getElementById('contestChatSubtitle').textContent = `${(cData.participants||[]).length}/${cData.totalSpots} players • 🪙${cData.prizePool||0} prize`;
         // End button
         const endBtn = document.getElementById('contestEndBtn');
         if (isCreator && cData.status === 'active') {
@@ -4099,6 +4294,7 @@ auth.onAuthStateChanged(async user => {
 // DOMContentLoaded INIT
 // ================================================================
 document.addEventListener('DOMContentLoaded', () => {
+    initAgeGate();
     // Apply saved theme immediately
     if (localStorage.getItem('wz_theme') === 'light') document.body.classList.add('light-mode');
 
@@ -4113,10 +4309,61 @@ document.addEventListener('DOMContentLoaded', () => {
                 else showPage('home-page');
             }, 300);
         }
-       initOfflineDetection();
-    handleGoogleRedirect();
- }, 6000); // 6 seconds max splash
+        initOfflineDetection();
+        handleGoogleRedirect();
+    }, 6000);
 });
+
+// ================================================================
+// AGE GATE
+// ================================================================
+function initAgeGate() {
+    const confirmed = localStorage.getItem('ageConfirmed');
+    if (!confirmed) {
+        document.getElementById('ageGate').style.display = 'flex';
+    }
+}
+function confirmAge(isAdult) {
+    if (isAdult) {
+        localStorage.setItem('ageConfirmed', 'true');
+        document.getElementById('ageGate').style.display = 'none';
+    } else {
+        document.getElementById('ageGate').innerHTML = `
+            <div style="text-align:center;padding:30px;">
+                <div style="font-size:3em;margin-bottom:16px;">🚫</div>
+                <div style="font-weight:700;font-size:1.2em;color:#FF4444;margin-bottom:8px;">Access Denied</div>
+                <div style="color:#aaa;font-size:0.85em;">You must be 18+ to use WarZone India.</div>
+            </div>`;
+    }
+}
 </script>
+
+<!-- AGE GATE -->
+<div id="ageGate" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);backdrop-filter:blur(20px);z-index:99999;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;">
+    <div style="background:linear-gradient(135deg,#1A0A2E,#0D0821);border:1px solid rgba(142,45,226,0.4);border-radius:28px;padding:30px 24px;width:100%;max-width:340px;box-shadow:0 20px 60px rgba(142,45,226,0.3);">
+        <div style="width:80px;height:80px;background:linear-gradient(135deg,#8E2DE2,#0A84FF);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:2.5em;margin:0 auto 16px;">🎮</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:1.8em;font-weight:700;color:#FFD700;letter-spacing:2px;margin-bottom:4px;">WarZone India</div>
+        <div style="font-size:0.75em;color:rgba(255,255,255,0.5);margin-bottom:20px;">Esports Tournament Platform</div>
+        <div style="background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.25);border-radius:14px;padding:16px;margin-bottom:20px;">
+            <div style="font-size:1.8em;margin-bottom:6px;">⚠️</div>
+            <div style="font-weight:700;color:#FF4444;font-size:1em;margin-bottom:6px;">18+ Only</div>
+            <div style="font-size:0.78em;color:rgba(255,255,255,0.5);line-height:1.6;">This app involves real money tournaments. You must be 18 years or older to participate.</div>
+        </div>
+        <button onclick="confirmAge(true)" style="width:100%;padding:14px;background:linear-gradient(135deg,#8E2DE2,#0A84FF);border:none;border-radius:14px;color:#fff;font-size:0.95em;font-weight:700;cursor:pointer;margin-bottom:10px;font-family:'Poppins',sans-serif;box-shadow:0 8px 20px rgba(142,45,226,0.4);">✅ I am 18 or older — Enter</button>
+        <button onclick="confirmAge(false)" style="width:100%;padding:12px;background:transparent;border:1px solid rgba(255,255,255,0.1);border-radius:14px;color:rgba(255,255,255,0.4);font-size:0.85em;cursor:pointer;font-family:'Poppins',sans-serif;">❌ I am under 18</button>
+        <div style="font-size:0.65em;color:rgba(255,255,255,0.25);margin-top:16px;">By continuing you agree to our Terms & Privacy Policy</div>
+    </div>z-index:99999;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center;">
+    <div style="font-size:3em;margin-bottom:16px;">🎮</div>
+    <div style="font-family:'Rajdhani',sans-serif;font-size:2em;font-weight:700;color:#FFD700;letter-spacing:2px;">WarZone India</div>
+    <div style="font-size:0.85em;color:#aaa;margin-top:6px;margin-bottom:30px;">Esports Tournament Platform</div>
+    <div style="background:rgba(255,68,68,0.1);border:1px solid rgba(255,68,68,0.3);border-radius:16px;padding:20px;margin-bottom:24px;max-width:300px;">
+        <div style="font-size:1.5em;margin-bottom:8px;">⚠️</div>
+        <div style="font-weight:700;color:#FF4444;margin-bottom:6px;">18+ Only</div>
+        <div style="font-size:0.8em;color:#aaa;line-height:1.5;">This app involves real money tournaments. You must be 18 years or older to participate.</div>
+    </div>
+    <button onclick="confirmAge(true)" style="width:100%;max-width:280px;padding:14px;background:linear-gradient(135deg,#8E2DE2,#0A84FF);border:none;border-radius:14px;color:#fff;font-size:1em;font-weight:700;cursor:pointer;margin-bottom:10px;font-family:'Poppins',sans-serif;">✅ I am 18 or older</button>
+    <button onclick="confirmAge(false)" style="width:100%;max-width:280px;padding:14px;background:transparent;border:1px solid #333;border-radius:14px;color:#aaa;font-size:0.9em;cursor:pointer;font-family:'Poppins',sans-serif;">❌ I am under 18</button>
+    <div style="font-size:0.7em;color:#555;margin-top:20px;">By continuing you agree to our Terms & Privacy Policy</div>
+</div>
 </body>
 </html>
