@@ -13,18 +13,31 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(payload => {
-    const title = payload.notification?.title || 'WarZone India';
-    const body = payload.notification?.body || '';
+    const title = payload.notification?.title || '⚔️ WarZone India';
+    const body = payload.notification?.body || 'You have a new notification!';
     self.registration.showNotification(title, {
         body: body,
-        icon: '/icon-192.png',
-        badge: '/icon-192.png',
+        icon: 'https://stellar-crepe-b7a99f.netlify.app/battle_royal.jpg',
+        badge: 'https://stellar-crepe-b7a99f.netlify.app/battle_royal.jpg',
         vibrate: [200, 100, 200],
+        tag: 'warzone-notification',
+        renotify: true,
         data: payload.data || {}
     });
 });
 
 self.addEventListener('notificationclick', event => {
     event.notification.close();
-    event.waitUntil(clients.openWindow('/'));
+    event.waitUntil(
+        clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
+            // Agar app already open hai toh focus karo
+            for(const client of clientList){
+                if(client.url.includes('warzone') && 'focus' in client){
+                    return client.focus();
+                }
+            }
+            // Nahi toh naya tab open karo
+            return clients.openWindow('/');
+        })
+    );
 });
