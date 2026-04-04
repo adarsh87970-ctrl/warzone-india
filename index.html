@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="theme-color" content="#120A1F">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="WarZone India">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" href="/manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WarZone India</title>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
@@ -43,6 +43,10 @@
             --muted: #666666;
         }
         body.light-mode .bottom-nav { background: #FFFFFF; border-top: 1px solid #EEE; }
+body.light-mode .nav-btn .nav-icon-wrap { color: rgba(0,0,0,0.45); }
+body.light-mode .nav-btn span { color: rgba(0,0,0,0.45); }
+body.light-mode .nav-btn.active .nav-icon-wrap { color: #0A84FF; background: rgba(10,132,255,0.1); }
+body.light-mode .nav-btn.active span { color: #0A84FF; }
         body.light-mode .header { background: #FFFFFF; }
         body.light-mode .nav-btn { color: #555; }
         body.light-mode .nav-btn.active { color: var(--primary); }
@@ -638,7 +642,7 @@
             <div class="balance-card">
                 <div class="label">Total Coins</div>
                 <div class="amount">🪙 <span id="walletBalance">0.00</span></div>
-                <div class="sub">1 Coin = 🪙1 • Available for tournaments</div>
+                <div class="sub">🪙1 Coin = ₹1 • Available for tournaments</div>
             </div>
             <div class="wallet-actions">
                 <button class="btn success" id="addMoneyBtn"><i class="fas fa-plus-circle"></i> Add Coins</button>
@@ -1163,28 +1167,7 @@
         </div>
     </div>
 
-    <!-- LEADERBOARD PAGE -->
-    <div id="leaderboard-page" class="page">
-        <div class="header">
-            <div class="left-section"><button class="icon-btn" id="backFromLeaderboard"><i class="fas fa-arrow-left"></i></button></div>
-            <h2>🏆 Leaderboard</h2>
-            <div class="right-section"></div>
-        </div>
-        <div class="content-wrapper" style="padding-top:8px;">
-            <!-- Tab filters -->
-            <div style="display:flex;gap:8px;margin-bottom:16px;background:var(--card-bg);border-radius:14px;padding:4px;">
-                <button id="lbTabWins" style="flex:1;padding:10px;border-radius:10px;border:none;background:linear-gradient(135deg,#8E2DE2,#0A84FF);color:#fff;font-weight:700;font-size:0.82em;cursor:pointer;font-family:'Poppins',sans-serif;">🏆 Most Wins</button>
-                <button id="lbTabEarnings" style="flex:1;padding:10px;border-radius:10px;border:none;background:transparent;color:var(--muted);font-weight:600;font-size:0.82em;cursor:pointer;font-family:'Poppins',sans-serif;">💰 Top Earners</button>
-                <button id="lbTabMatches" style="flex:1;padding:10px;border-radius:10px;border:none;background:transparent;color:var(--muted);font-weight:600;font-size:0.82em;cursor:pointer;font-family:'Poppins',sans-serif;">⚔️ Most Played</button>
-            </div>
-            <!-- Top 3 podium -->
-            <div id="lbPodium" style="display:flex;align-items:flex-end;justify-content:center;gap:10px;margin-bottom:20px;min-height:130px;">
-                <div class="loading"><div class="spinner"></div></div>
-            </div>
-            <!-- Rest of list -->
-            <div id="lbList"></div>
-        </div>
-    </div>
+   
 
     <!-- PLAYER STATS PAGE -->
     <div id="player-stats-page" class="page">
@@ -1590,7 +1573,7 @@ function wzToast(message,type='success',duration=3000){
 // CUSTOM MODAL — wzAlert / wzConfirm
 // ================================================================
 function _wzModal({title,message,type,confirmText,cancelText,onConfirm,onCancel}){
-    document.getElementById('wz-modal-overlay')?.remove();
+    const _wmo = document.getElementById('wz-modal-overlay'); if(_wmo) _wmo.remove();
     const overlay=document.createElement('div');
     overlay.id='wz-modal-overlay';
     overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:99998;display:flex;align-items:center;justify-content:center;padding:20px;animation:wzFadeIn 0.2s ease;';
@@ -1603,7 +1586,7 @@ function _wzModal({title,message,type,confirmText,cancelText,onConfirm,onCancel}
         </div></div>`;
     document.body.appendChild(overlay);
     document.getElementById('wzMK').onclick=()=>{overlay.remove();onConfirm();};
-    document.getElementById('wzMC')?.addEventListener('click',()=>{overlay.remove();if(onCancel)onCancel();});
+    const _wzMC = document.getElementById('wzMC'); _wzMC && _wzMC.addEventListener('click',()=>{overlay.remove();if(onCancel)onCancel();});
     overlay.onclick=e=>{if(e.target===overlay){overlay.remove();if(onCancel)onCancel();}};
 }
 function wzAlert(title,message,onOk){_wzModal({title,message,type:'alert',confirmText:'OK',onConfirm:onOk||(()=>{})});}
@@ -1745,16 +1728,39 @@ async function sendInAppNotification(userId,title,message){
 const FCM_VAPID_KEY='BAQizMJcVcufVHc0u7YafDSu0_SQakn9CRIrLm2IQ02sNWyKX9rpFkxE2QNEtD4IWyeyO_iPR95xfP8GDPS1QD0';
 async function initFCM(){
     try{
-        if(!('serviceWorker'in navigator)||!('Notification'in window))return;
-        if(Notification.permission==='denied')return;
-        const reg=await navigator.serviceWorker.register('/firebase-messaging-sw.js');
-        const messaging=firebase.messaging();
+        if(!('serviceWorker' in navigator) || !('Notification' in window)) return;
+        if(Notification.permission === 'denied') return;
+
+        const reg = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+        await navigator.serviceWorker.ready;
+
+        const messaging = firebase.messaging();
         messaging.useServiceWorker(reg);
-        if(Notification.permission!=='granted'){const p=await Notification.requestPermission();if(p!=='granted')return;}
-        const token=await messaging.getToken({vapidKey:FCM_VAPID_KEY});
-        if(token&&currentUser){await db.collection('users').doc(currentUser.uid).update({fcmToken:token,notificationsEnabled:true,notifPlatform:'fcm-web',tokenUpdatedAt:firebase.firestore.FieldValue.serverTimestamp()});}
-        messaging.onMessage(payload=>{wzToast(`🔔 ${payload.notification?.title||''}: ${payload.notification?.body||''}`,'info',5000);});
-    }catch(e){console.log('FCM:',e.message);}
+
+        if(Notification.permission !== 'granted'){
+            const p = await Notification.requestPermission();
+            if(p !== 'granted') return;
+        }
+
+        const token = await messaging.getToken({ vapidKey: FCM_VAPID_KEY });
+        if(!token){ console.log('FCM: No token'); return; }
+
+        if(token && currentUser){
+            await db.collection('users').doc(currentUser.uid).update({
+                fcmToken: token,
+                notificationsEnabled: true,
+                notifPlatform: 'fcm-web',
+                tokenUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        }
+
+        messaging.onMessage(payload => {
+            const title = payload.notification?.title || 'WarZone India';
+            const body = payload.notification?.body || '';
+            wzToast(`🔔 ${title}: ${body}`, 'info', 5000);
+        });
+
+    } catch(e){ console.log('FCM Error:', e.message); }
 }
 
 // ================================================================
@@ -2353,9 +2359,14 @@ async function processKillPayout(userId, tournamentId) {
 // ================================================================
 // UTR VALIDATION
 // ================================================================
-function validateUTR(utr) { return /^\d{12}$/.test(utr); }
+function validateUTR(utr) {
+    if (!utr || utr.length !== 12) return false;
+    if (!/^\d{12}$/.test(utr)) return false;
+    if (/^(.)\1+$/.test(utr)) return false; // 000000000000 ya 111111111111 reject
+    return true;
+}
 async function isUTRDuplicate(utr) {
-    const snap = await db.collection('depositRequests').where('upiTransactionId','==',utr).get();
+    const snap = await db.collection('payment_orders').where('utr','==',utr).get();
     return !snap.empty;
 }
 
@@ -2446,19 +2457,25 @@ function setupPwdToggle(inputId, btnId) {
 // ================================================================
 // LOGOUT
 // ================================================================
-async function doLogout() {
-    if (!confirm('Are you sure you want to logout?')) return;
-    try {
-        if (walletUnsub) walletUnsub();
-        if (tournamentUnsub) tournamentUnsub();
-        if (tournamentListUnsub) tournamentListUnsub();
-        if (userMatchesUnsub) userMatchesUnsub();
-        if (chatUnsub) chatUnsub();
-        if (countdownTimer) clearInterval(countdownTimer);
-        currentUser = null;
-        await auth.signOut();
-        showPage('login-page');
-    } catch(e) { alert('Logout failed: ' + e.message); }
+function doLogout() {
+    wzConfirm(
+        '👋 Logout?',
+        'Are you sure you want to logout?',
+        async () => {
+            try {
+                if (walletUnsub) walletUnsub();
+                if (tournamentUnsub) tournamentUnsub();
+                if (tournamentListUnsub) tournamentListUnsub();
+                if (userMatchesUnsub) userMatchesUnsub();
+                if (chatUnsub) { chatUnsub(); chatUnsub = null; }
+                if (countdownTimer) clearInterval(countdownTimer);
+                currentUser = null;
+                await auth.signOut();
+                showPage('login-page');
+                wzToast('Logged out successfully! 👋', 'success');
+            } catch(e) { wzAlert('❌ Logout Failed', e.message); }
+        }
+    );
 }
 
 // ================================================================
@@ -2658,6 +2675,46 @@ function isTournamentExpired(t) {
     return false;
 }
 
+// Countdown timer function
+function getCountdownText(timeStr) {
+    try {
+        const parsed = new Date((timeStr||'').replace(' at ',' '));
+        if (isNaN(parsed.getTime())) return null;
+        const now = Date.now();
+        const diff = parsed.getTime() - now;
+        if (diff <= 0) return null;
+        const days = Math.floor(diff / (1000*60*60*24));
+        const hrs = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+        const mins = Math.floor((diff % (1000*60*60)) / (1000*60));
+        const secs = Math.floor((diff % (1000*60)) / 1000);
+        if (days > 0) return `⏰ ${days}d ${hrs}h ${mins}m`;
+        if (hrs > 0) return `⏰ ${hrs}h ${mins}m ${secs}s`;
+        if (mins > 0) return `🔥 ${mins}m ${secs}s`;
+        return `🚨 ${secs}s`;
+    } catch(e) { return null; }
+}
+
+// Start live countdown timers on cards
+function startCountdownTimers() {
+    clearInterval(window._countdownInterval);
+    window._countdownInterval = setInterval(() => {
+        document.querySelectorAll('[data-countdown]').forEach(el => {
+            const timeStr = el.dataset.countdown;
+            const text = getCountdownText(timeStr);
+            if (text) {
+                el.textContent = text;
+                // Urgent — less than 5 mins
+                const parsed = new Date(timeStr.replace(' at ',' '));
+                const diff = parsed.getTime() - Date.now();
+                el.style.color = diff < 5*60*1000 ? '#E74C3C' : diff < 30*60*1000 ? '#F39C12' : '#2ECC71';
+            } else {
+                el.textContent = '🎮 Starting...';
+                el.style.color = '#E74C3C';
+            }
+        });
+    }, 1000);
+}
+
 let activeTourTab = 'active';
 
 function renderTournamentCards(tournaments, filter = 'All') {
@@ -2700,6 +2757,8 @@ function renderTournamentCards(tournaments, filter = 'All') {
             <div class="tournament-info">
                 <div class="tournament-name">${t.name}</div>
                 <div class="tournament-time"><i class="fas fa-clock"></i> ${t.time || 'TBA'}</div>
+${!isTournamentExpired(t) && t.time ? `<div data-countdown="${t.time}" style="font-size:0.78em;font-weight:700;color:#2ECC71;margin-bottom:6px;padding:4px 10px;background:rgba(46,204,113,0.1);border-radius:20px;display:inline-block;">${getCountdownText(t.time) || '🎮 Starting soon...'}</div>` : ''}
+${!isCompleted && t.time ? `<div data-countdown="${t.time}" style="font-size:0.78em;font-weight:700;color:#2ECC71;margin-bottom:6px;padding:4px 10px;background:rgba(46,204,113,0.1);border-radius:20px;display:inline-block;">${getCountdownText(t.time) || '🎮 Starting soon...'}</div>` : ''}
                 <div class="stats-row">
                     <div class="stat-item"><div class="s-label">Prize Pool</div><div class="s-val">🪙${t.prizePool || 0}</div></div>
                     <div class="stat-item"><div class="s-label">Per Kill</div><div class="s-val">🪙${t.perKill || t.perKillAmount || 0}</div></div>
@@ -2719,12 +2778,23 @@ function renderTournamentCards(tournaments, filter = 'All') {
                         ? `<button class="btn small" style="background:rgba(46,204,113,0.2);color:var(--success);" data-id="${t.id}" data-action="result">📊 View Result</button>`
                         : isContest
                             ? `<button class="btn small join-btn" data-id="${t.id}" data-action="chat">💬 Join & Chat</button>`
-                            : `<button class="btn join-btn small" data-id="${t.id}" data-action="join">JOIN</button>`
+                            : (() => {
+    const isFull = (t.filledSpots||0) >= (t.totalSpots||0) && (t.totalSpots||0) > 0;
+    const isJoined = (t.participants||[]).some(p => p.uid === currentUser?.uid);
+    const isFree = !t.entryFee || t.entryFee === 0;
+    if (isJoined) return `<button class="btn small" style="background:linear-gradient(135deg,#2ECC71,#27AE60);color:#fff;" data-id="${t.id}" data-action="join">✅ Joined</button>`;
+    if (isFull) return `<button class="btn small" style="background:rgba(231,76,60,0.3);color:#E74C3C;cursor:not-allowed;" disabled>🔒 Full</button>`;
+    if (isFree) return `<button class="btn small join-btn" data-id="${t.id}" data-action="join" style="background:linear-gradient(135deg,#2ECC71,#27AE60);">🆓 FREE</button>`;
+    return `<button class="btn join-btn small" data-id="${t.id}" data-action="join">JOIN — 🪙${t.entryFee}</button>`;
+    })()
                     }
                 </div>
             </div>
         </div>`;
     }).join('');
+
+     // Start live countdown
+    startCountdownTimers();
 
     // Attach click handlers
     container.querySelectorAll('[data-action]').forEach(btn => {
@@ -2756,11 +2826,10 @@ async function openContestChat(contestId) {
             if (participants.length >= spots) { wzToast('🚫 Contest is full!', 'error'); return; }
             const newTotal = fee * (participants.length + 1);
             const winnerPrize = Math.floor(newTotal * 0.80);
-            const confirmed = await wzConfirm(
+            wzConfirm(
                 `🎮 Join "${cData.name}"?`,
-                `💰 Entry Fee: 🪙${fee}\n👥 Players: ${participants.length + 1}/${spots}\n🏆 Prize Pool: 🪙${winnerPrize}\n\n🪙${fee} will be deducted from your wallet.`
-            );
-            if (!confirmed) return;
+                `💰 Entry Fee: 🪙${fee}\n👥 Players: ${participants.length + 1}/${spots}\n🏆 Prize Pool: 🪙${winnerPrize}\n\n🪙${fee} will be deducted from your wallet.`,
+                async () => {
             const uDoc = await db.collection('users').doc(currentUser.uid).get();
             const uName = uDoc.exists ? (uDoc.data().username || uDoc.data().firstName || 'Player') : 'Player';
             await db.runTransaction(async t => {
@@ -2798,6 +2867,8 @@ async function openContestChat(contestId) {
                 } catch(e) {}
             }
             wzToast(`🎉 Joined "${cData.name}" successfully!`, 'success');
+                } // wzConfirm end
+            ); // wzConfirm close
         }
         prevPage = 'create-contest-page';
         showPage('contest-chat-page', { contestId });
@@ -2810,10 +2881,9 @@ async function openContestChat(contestId) {
 // DISPUTE SYSTEM
 // ================================================================
 async function raiseDispute(contestId, cData) {
-    const confirmed = await wzConfirm('🚨 Raise Dispute?',
-        `Contest: ${cData.name}\n\nDispute raise karne ke baad admin review karega aur final decision lega.\n\nKya aap confirm karte hain?`);
-    if (!confirmed) return;
-
+    wzConfirm('🚨 Raise Dispute?',
+        `Contest: ${cData.name}\n\nAdmin will review and give final decision.\n\nAre you sure?`,
+        async () => {
     try {
         // Check already raised
         const existing = await db.collection('disputes')
@@ -2860,6 +2930,7 @@ async function raiseDispute(contestId, cData) {
     } catch(e) {
         wzAlert('❌ Error', getFriendlyError(e));
     }
+        }); // wzConfirm end
 }
 
 // ================================================================
@@ -3102,18 +3173,18 @@ const pageInits = {
             finally { loginBtn.disabled = false; loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> LOGIN'; }
         };
         document.getElementById('googleLoginBtn').onclick = async () => {
-            try {
-                const r = await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-                await saveGoogleUser(r.user);
-                showPage('home-page');
-            } catch(e) { alert(e.message); }
-        };
+    const user = await signInWithGoogle();
+    if(user) {
+        await saveGoogleUser(user);
+        showPage('home-page');
+    }
+};
         document.getElementById('forgotLink').onclick = async e => {
             e.preventDefault();
             const email = document.getElementById('loginEmail').value.trim();
-            if (!email.includes('@')) { alert('Enter your email first'); return; }
+            if (!email.includes('@')) { wzAlert('Email Required ✉️', 'Please enter your email first!'); return; }
             await auth.sendPasswordResetEmail(email);
-            alert('Password reset email sent!');
+            wzToast('Password reset email sent! 📧 Please check your inbox.', 'success');
         };
         document.getElementById('goSignup').onclick = e => { e.preventDefault(); showPage('signup-page'); };
     },
@@ -3131,6 +3202,7 @@ const pageInits = {
             const ref = document.getElementById('signupReferral').value.trim().toUpperCase();
             if (!fn||!ln||!un||!mob||!email||!pwd) { wzToast('Sabhi fields bharo!', 'warning'); return; }
             if (mob.length !== 10 || !/^\d+$/.test(mob)) { wzToast('Valid 10-digit mobile number enter karo.', 'warning'); return; }
+if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { wzToast('Valid email address enter karo!', 'warning'); return; }
             if (pwd.length < 6) { wzToast('Password kam se kam 6 characters ka hona chahiye.', 'warning'); return; }
             signupBtn.disabled = true; signupBtn.textContent = 'Creating account...';
             try {
@@ -3147,27 +3219,92 @@ const pageInits = {
                     profilePictureUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(fn+' '+ln)}&background=0A84FF&color=fff&size=150`,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
-                // If referred, credit referrer 🪙20
-                if (ref) {
-                    try {
-                        const refSnap = await db.collection('users').where('referralCode','==',ref).limit(1).get();
-                        if (!refSnap.empty) {
-                            const referrerId = refSnap.docs[0].id;
-                            await db.runTransaction(async t => {
-                                const rRef = db.collection('users').doc(referrerId);
-                                const rDoc = await t.get(rRef);
-                                t.update(rRef, { walletBalance: (rDoc.data().walletBalance||0) + 20 });
-                                t.set(db.collection('transactions').doc(), {
-                                    userId: referrerId, type: 'Referral Bonus',
-                                    amount: 20, status: 'completed',
-                                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                                });
-                            });
-                        }
-                    } catch(re) { console.log('Referral credit error:', re); }
-                }
+                // Referral system — both users get bonus
+if (ref) {
+    try {
+        const refSnap = await db.collection('users').where('referralCode','==',ref).limit(1).get();
+        if (!refSnap.empty) {
+            const referrerId = refSnap.docs[0].id;
+            const newUserId = cred.user.uid;
+
+            await db.runTransaction(async t => {
+                const rRef = db.collection('users').doc(referrerId);
+                const newRef = db.collection('users').doc(newUserId);
+                const [rDoc, newDoc] = await Promise.all([t.get(rRef), t.get(newRef)]);
+
+                // Random bonus 5-10 ke beech
+const referrerBonus = Math.floor(Math.random() * 6) + 5; // 5 to 10
+const welcomeBonus = Math.floor(Math.random() * 6) + 5;  // 5 to 10
+
+// Referrer ko random bonus
+t.update(rRef, {
+    walletBalance: (rDoc.data().walletBalance||0) + referrerBonus,
+    referralCount: firebase.firestore.FieldValue.increment(1),
+    referralEarnings: firebase.firestore.FieldValue.increment(referrerBonus)
+});
+
+// New user ko random welcome bonus
+t.update(newRef, {
+    walletBalance: (newDoc.data().walletBalance||0) + welcomeBonus
+});
+
+// Referrer transaction
+t.set(db.collection('transactions').doc(), {
+    userId: referrerId,
+    type: 'Referral Bonus',
+    amount: referrerBonus,
+    status: 'completed',
+    note: `${un} joined using your code`,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+});
+
+// New user transaction
+t.set(db.collection('transactions').doc(), {
+    userId: newUserId,
+    type: 'Welcome Bonus',
+    amount: welcomeBonus,
+    status: 'completed',
+    note: 'Joined via referral code',
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+});
+
+// Referral record
+t.set(db.collection('referrals').doc(), {
+    referrerId,
+    referredUserId: newUserId,
+    referredUsername: un,
+    bonusPaid: referrerBonus,
+    welcomeBonus: welcomeBonus,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+});
+            });
+
+            // Referrer ko notification
+            await db.collection('notifications').add({
+                userId: referrerId,
+                title: '🎉 Referral Bonus!',
+                message: `${fn} joined using your referral code! 🪙${referrerBonus} credited to your wallet! 🎉`,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                read: false
+            });
+
+            // New user ko welcome notification
+            await db.collection('notifications').add({
+                userId: cred.user.uid,
+                title: '🎁 Welcome Bonus!',
+                message: `You joined via referral code! 🪙${welcomeBonus} welcome bonus credited to your wallet! 🎉`,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                read: false
+            });
+
+            wzToast(`🎁 Welcome bonus 🪙${welcomeBonus} credited!`, 'success');
+        } else {
+            wzToast('⚠️ Invalid referral code — ignored!', 'warning');
+        }
+    } catch(re) { console.log('Referral credit error:', re); }
+}
                 showPage('home-page');
-            } catch(e) { alert(e.message); }
+            } catch(e) { wzAlert('❌ Signup Failed', getFriendlyError(e)); }
             finally { signupBtn.disabled = false; signupBtn.innerHTML = '<i class="fas fa-user-plus"></i> SIGN UP'; }
         };
         document.getElementById('googleSignupBtn').onclick = async () => {
@@ -3175,7 +3312,7 @@ const pageInits = {
                 const r = await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
                 await saveGoogleUser(r.user);
                 showPage('home-page');
-            } catch(e) { alert(e.message); }
+            } catch(e) { wzAlert('❌ Google Signup Failed', getFriendlyError(e)); }
         };
         document.getElementById('goLogin').onclick = e => { e.preventDefault(); showPage('login-page'); };
     },
@@ -3278,6 +3415,34 @@ const pageInits = {
     const utrInput = document.getElementById('utrInput');
     amountSection.style.display = 'block'; qrSection.style.display = 'none';
     amountInput.value = '100'; if(utrInput) utrInput.value = '';
+
+    // Active order tracking
+    let currentOrderId = null;
+    let payTimerInterval = null;
+
+    function stopPayTimer() {
+        if (payTimerInterval) { clearInterval(payTimerInterval); payTimerInterval = null; }
+    }
+
+    function startPayTimer(expiresAt) {
+        stopPayTimer();
+        const timerEl = document.getElementById('payTimer');
+        payTimerInterval = setInterval(() => {
+            const remaining = Math.max(0, expiresAt - Date.now());
+            const mins = Math.floor(remaining / 60000);
+            const secs = Math.floor((remaining % 60000) / 1000);
+            if (timerEl) timerEl.textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
+            if (remaining <= 0) {
+                stopPayTimer();
+                wzAlert('⏰ Order Expired!', 'Your payment order has expired. Please create a new order.');
+                amountSection.style.display = 'block';
+                qrSection.style.display = 'none';
+                currentOrderId = null;
+                if(utrInput) utrInput.value = '';
+            }
+        }, 1000);
+    }
+
     document.querySelectorAll('.chip').forEach(chip => {
         chip.onclick = () => {
             amountInput.value = chip.dataset.amount;
@@ -3285,54 +3450,114 @@ const pageInits = {
             chip.classList.add('active');
         };
     });
+
     document.getElementById('proceedPayBtn').onclick = async () => {
         const amt = parseFloat(amountInput.value);
-        if (isNaN(amt) || amt < 10) { wzToast('Minimum deposit is 🪙10','error'); return; }
-        const qrAmtEl = document.getElementById('qrAmount');
-        if (qrAmtEl) qrAmtEl.textContent = amt.toLocaleString('en-IN',{minimumFractionDigits:2});
-        amountSection.style.display = 'none'; qrSection.style.display = 'block';
+        if (isNaN(amt) || amt < 10) { wzToast('Minimum deposit is 🪙10', 'error'); return; }
+        const btn = document.getElementById('proceedPayBtn');
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Order...';
         try {
-            const doc = await db.collection('settings').doc('payment').get();
-            const data = doc.exists ? doc.data() : {};
-            const upiId = data.upiId && data.upiId.trim() ? data.upiId.trim() : 'warzoneindia@upi';
-            const upiName = data.upiName && data.upiName.trim() ? data.upiName.trim() : 'WarZone India';
-            const upiDisplay = document.getElementById('adminUpiDisplay');
-            if(upiDisplay) upiDisplay.textContent = upiId;
-            const qrImg = document.getElementById('qrImage');
-            if(qrImg){
-                if(data.qrUrl && data.qrUrl.startsWith('http')){
-                    qrImg.src = data.qrUrl;
-                } else {
-                    const qrData = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(upiName)}&am=${amt}&cu=INR`;
-                    qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrData)}&bgcolor=ffffff&color=000000&margin=10`;
-                }
+            // Generate unique Order ID
+            const orderId = 'ORDER_' + Math.random().toString(36).substr(2,5).toUpperCase() + Date.now().toString().slice(-4);
+            const now = Date.now();
+            const expiresAt = now + 10 * 60 * 1000; // 10 minutes
+
+            let uname = currentUser.displayName;
+            if (!uname) {
+                const d = await db.collection('users').doc(currentUser.uid).get();
+                if(d.exists) uname = d.data().username || 'Unknown';
             }
+
+            // Save order in Firestore
+            await db.collection('payment_orders').doc(orderId).set({
+                orderId,
+                userId: currentUser.uid,
+                userName: uname,
+                amount: amt,
+                utr: '',
+                status: 'pending',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                expiresAt: firebase.firestore.Timestamp.fromMillis(expiresAt)
+            });
+
+            currentOrderId = orderId;
+
+            // Show QR
+            const qrAmtEl = document.getElementById('qrAmount');
+            if(qrAmtEl) qrAmtEl.textContent = amt.toLocaleString('en-IN', {minimumFractionDigits:2});
+            amountSection.style.display = 'none';
+            qrSection.style.display = 'block';
+
+            // Load UPI & QR
+            try {
+                const payDoc = await db.collection('settings').doc('payment').get();
+                const data = payDoc.exists ? payDoc.data() : {};
+                const upiId = data.upiId && data.upiId.trim() ? data.upiId.trim() : 'warzoneindia@upi';
+                const upiName = data.upiName && data.upiName.trim() ? data.upiName.trim() : 'WarZone India';
+                const upiDisplay = document.getElementById('adminUpiDisplay');
+                if(upiDisplay) upiDisplay.textContent = upiId;
+                const qrImg = document.getElementById('qrImage');
+                if(qrImg){
+                    if(data.qrUrl && data.qrUrl.startsWith('http')){
+                        qrImg.src = data.qrUrl;
+                    } else {
+                        const qrData = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(upiName)}&am=${amt}&cu=INR`;
+                        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrData)}&bgcolor=ffffff&color=000000&margin=10`;
+                    }
+                }
+            } catch(e) { console.error('QR error:',e); }
+
+            // Start countdown timer
+            startPayTimer(expiresAt);
+
         } catch(e) {
-            console.error('QR error:',e);
-            const upiDisplay = document.getElementById('adminUpiDisplay');
-            if(upiDisplay) upiDisplay.textContent = '8797578747@ybl';
+            wzAlert('❌ Order Failed', getFriendlyError(e));
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-lock"></i> Proceed to Pay Securely';
         }
     };
+
     document.getElementById('confirmPayBtn').onclick = async () => {
-        const amt = parseFloat(amountInput.value);
         const utr = utrInput ? utrInput.value.trim() : '';
-        if (isNaN(amt) || amt < 10) { wzToast('Minimum deposit is 🪙10','error'); return; }
-        if (!validateUTR(utr)) { wzToast('UTR must be exactly 12 digits!','error'); return; }
+        if (!validateUTR(utr)) { wzToast('UTR must be exactly 12 digits!', 'error'); return; }
+        if (!currentOrderId) { wzToast('No active order found! Please start again.', 'error'); return; }
+
         const btn = document.getElementById('confirmPayBtn');
-        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+
         try {
-            if (await isUTRDuplicate(utr)) { wzToast('This UTR already exists!','error'); return; }
-            let uname = currentUser.displayName;
-            if (!uname) { const d = await db.collection('users').doc(currentUser.uid).get(); if(d.exists) uname = d.data().username || 'Unknown'; }
-            await db.collection('depositRequests').add({
-                userId: currentUser.uid, userName: uname, amount: amt,
-                upiTransactionId: utr, status: 'Pending',
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            const orderRef = db.collection('payment_orders').doc(currentOrderId);
+            const orderDoc = await orderRef.get();
+
+            // Validations
+            if (!orderDoc.exists) throw new Error('Order not found! Please create a new order.');
+            const order = orderDoc.data();
+            if (order.status !== 'pending') throw new Error('This order is no longer active.');
+            if (order.expiresAt.toMillis() < Date.now()) throw new Error('Order expired! Please create a new order.');
+
+            // Check duplicate UTR
+            const utrCheck = await db.collection('payment_orders').where('utr','==',utr).get();
+            if (!utrCheck.empty) throw new Error('This UTR has already been used!');
+
+            // Submit UTR
+            await orderRef.update({
+                utr,
+                status: 'submitted',
+                submittedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
-            wzToast('✅ Deposit request submitted!','success');
-            setTimeout(() => showPage('wallet-page'), 1500);
-        } catch(e) { wzToast('Error: ' + e.message,'error'); }
-        finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check-circle"></i> I Have Paid'; }
+
+            stopPayTimer();
+            currentOrderId = null;
+            wzToast('✅ Payment submitted! Admin will verify & add coins shortly.', 'success');
+            setTimeout(() => showPage('wallet-page'), 2000);
+
+        } catch(e) {
+            wzAlert('❌ Submission Failed', e.message);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-check-circle"></i> I Have Paid';
+        }
     };
 },
 
@@ -3354,8 +3579,8 @@ const pageInits = {
             const upi = document.getElementById('withdrawUpiId').value.trim();
             if (isNaN(amt) || amt < 30) { wzToast('Minimum 🪙30 coins redeem kar sakte hain!','error'); return; }
             if (!upi || !upi.includes('@')) { wzToast('Valid UPI ID daalo (e.g. name@upi)','error'); return; }
-            const confirmed = await wzConfirm('🪙 Redeem Coins?', `🪙 ${amt} Coins = 🪙${amt}\n\nUPI: ${upi}\n\nAmount 24 hours mein transfer hoga.`);
-            if(!confirmed) return;
+            wzConfirm('🪙 Redeem Coins?', `🪙${amt} Coins\nUPI: ${upi}\n\nAmount processed within 24 hours.`,
+async () => {
             btn.disabled = true; btn.textContent = 'Processing...';
             try {
                 await db.runTransaction(async t => {
@@ -3376,10 +3601,11 @@ const pageInits = {
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     });
                 });
-                wzToast(`✅ 🪙${amt} coins redeem request submitted!`, 'success');
+                wzToast(`✅ Withdrawal request of 🪙${amt} submitted! Processed within 24 hours.`, 'success');
                 showPage('wallet-page');
             } catch(e) { wzAlert('❌ Error', e.message); }
             finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Redeem Coins → UPI'; }
+        }); // wzConfirm end
         };
     },
 
@@ -3416,7 +3642,7 @@ const pageInits = {
         if (!tournamentId) { showPage('tournament-list-page'); return; }
         if (tournamentUnsub) tournamentUnsub();
         tournamentUnsub = db.collection('tournaments').doc(tournamentId).onSnapshot(async snap => {
-            if (!snap.exists) { alert('Tournament not found'); showPage('tournament-list-page'); return; }
+            if (!snap.exists) { wzToast('Tournament not found!', 'error'); showPage('tournament-list-page'); return; }
             const t = { id: snap.id, ...snap.data() };
             document.getElementById('detailName').textContent = t.name;
             document.getElementById('detailTime').textContent = t.time;
@@ -3447,32 +3673,44 @@ const pageInits = {
             processKillPayout(currentUser.uid, tournamentId).catch(() => {});
             const joinBtn = document.getElementById('joinTournamentBtn');
             const alreadyJoined = (t.participants || []).some(p => p.uid === currentUser.uid);
+            const isFull = (t.filledSpots || 0) >= (t.totalSpots || 0) && (t.totalSpots || 0) > 0;
+            const isFree = !t.entryFee || t.entryFee === 0;
+
             if (alreadyJoined) {
-                joinBtn.innerHTML = '✅ Joined!';
-joinBtn.disabled = true;
-joinBtn.style.background = 'linear-gradient(135deg,#2ECC71,#27AE60)';
-joinBtn.style.color = '#fff';
-            } else if (isTournamentExpired(t)) {
-                joinBtn.textContent = '⏹ Match Ended';
+                joinBtn.innerHTML = '✅ Already Joined';
                 joinBtn.disabled = true;
+                joinBtn.style.cssText = 'background:linear-gradient(135deg,#2ECC71,#27AE60);color:#fff;border:none;opacity:1;';
+            } else if (isTournamentExpired(t)) {
+                joinBtn.innerHTML = '⏹ Match Ended';
+                joinBtn.disabled = true;
+                joinBtn.style.cssText = 'background:rgba(100,100,100,0.3);color:#aaa;border:none;';
+            } else if (isFull) {
+                joinBtn.innerHTML = '🔒 Slots Full';
+                joinBtn.disabled = true;
+                joinBtn.style.cssText = 'background:linear-gradient(135deg,#E74C3C,#C0392B);color:#fff;border:none;opacity:0.7;';
             } else {
                 joinBtn.disabled = false;
-                joinBtn.innerHTML = '<i class="fas fa-gamepad"></i> Join Tournament';
+                joinBtn.style.cssText = '';
+                joinBtn.innerHTML = isFree
+                    ? '<i class="fas fa-gamepad"></i> Join FREE'
+                    : `<i class="fas fa-gamepad"></i> Join — 🪙${t.entryFee}`;
                 joinBtn.onclick = async () => {
                     if (joinBtn.dataset.joining === 'true') return;
                     joinBtn.dataset.joining = 'true';
                     joinBtn.disabled = true; joinBtn.textContent = 'Joining...';
                     try {
                         await joinTournament(tournamentId);
-                        alert('🎉 Tournament Joined Successfully!');
+
+                        wzToast(`🎉 Joined ${t.name}! Good luck! 🍀`, 'success', 4000);
+
                     } catch(e) {
-                        alert(e.message);
+                        wzAlert('❌ Join Failed', getFriendlyError(e));
                         joinBtn.disabled = false;
-                        joinBtn.innerHTML = '<i class="fas fa-gamepad"></i> Join Tournament';
+                        joinBtn.innerHTML = isFree ? '<i class="fas fa-gamepad"></i> Join FREE' : `<i class="fas fa-gamepad"></i> Join — 🪙${t.entryFee}`;
                     } finally { joinBtn.dataset.joining = 'false'; }
                 };
             }
-        }, () => { alert('Error loading tournament'); showPage('tournament-list-page'); });
+        }, () => { wzToast('Error loading tournament!', 'error'); showPage('tournament-list-page'); });
     },
 
     'my-matches-page': () => {
@@ -3628,16 +3866,16 @@ joinBtn.style.color = '#fff';
             const gid = document.getElementById('editGameId').value.trim();
             const mob = document.getElementById('editMobile').value.trim();
             const pic = document.getElementById('editPicUrl').value.trim();
-            if (!fn||!un) { alert('First name and username are required'); return; }
+            if (!fn||!un) { wzToast('First name and username are required!', 'warning'); return; }
             try {
                 await db.collection('users').doc(currentUser.uid).update({
                     firstName: fn, lastName: ln, username: un, gameId: gid||un,
                     mobile: mob, profilePictureUrl: pic||`https://ui-avatars.com/api/?name=${encodeURIComponent(fn+' '+ln)}&background=0A84FF&color=fff&size=150`,
                     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
-                alert('Profile updated! ✅');
+                wzToast('Profile updated successfully! ✅', 'success');
                 showPage('profile-page');
-            } catch(e) { alert('Error: ' + e.message); }
+            } catch(e) { wzAlert('❌ Update Failed', getFriendlyError(e)); }
         };
     },
 
@@ -3753,7 +3991,7 @@ joinBtn.style.color = '#fff';
             const type = document.getElementById('issueType').value;
             const subject = document.getElementById('ticketSubject').value.trim();
             const desc = document.getElementById('ticketDescription').value.trim();
-            if (!type||!subject||!desc) { alert('Please fill all fields'); return; }
+            if (!type||!subject||!desc) { wzToast('Please fill all fields!', 'warning'); return; }
             submitBtn.disabled = true; submitBtn.textContent = 'Submitting...';
             try {
                 let uname = currentUser.displayName;
@@ -3762,10 +4000,10 @@ joinBtn.style.color = '#fff';
                     userId: currentUser.uid, userName: uname, issueType: type, subject, description: desc,
                     status: 'Open', createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
-                alert('Ticket submitted! We will respond within 24 hours. ✅');
+                wzToast('Ticket submitted! We will respond within 24 hours. ✅', 'success');
                 document.getElementById('issueType').value=''; document.getElementById('ticketSubject').value=''; document.getElementById('ticketDescription').value='';
                 loadTickets();
-            } catch(e) { alert('Error: '+e.message); }
+            } catch(e) { wzAlert('❌ Submission Failed', getFriendlyError(e)); }
             finally { submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Ticket'; }
         };
         async function loadTickets() {
@@ -3903,7 +4141,7 @@ joinBtn.style.color = '#fff';
             // BUG FIX: use renamed 'refCodeTracker'
             const codeEl = document.getElementById('refCodeTracker'); if(codeEl) codeEl.textContent = myCode;
             const totalEl = document.getElementById('refTotalEarned');
-            document.getElementById('refCopyBtn').onclick = () => navigator.clipboard.writeText(myCode).then(()=>alert('Code copied!')).catch(()=>alert('Code: '+myCode));
+            document.getElementById('refCopyBtn').onclick = () => navigator.clipboard.writeText(myCode).then(()=>wzToast('Referral code copied! 📋', 'success')).catch(()=>wzToast('Your code: '+myCode, 'info'));
             document.getElementById('refShareBtn').onclick = () => {
                 const msg = encodeURIComponent(`🎮 Join WarZone India!\nCode: ${myCode}\nGet bonus on signup!`);
                 window.open(`whatsapp://send?text=${msg}`, '_blank');
@@ -4054,10 +4292,10 @@ joinBtn.style.color = '#fff';
             const totalPool = fee * spots;
             const winnerPrize = Math.floor(totalPool * 0.80);
             const platformFee = totalPool - winnerPrize;
-            const confirmed = await wzConfirm('🎮 Create Contest?',
-                `📛 Name: ${name}\n🎯 Mode: ${mode}\n💰 Entry Fee: 🪙${fee} per player\n👥 Total Spots: ${spots}\n💵 Total Pool: 🪙${totalPool}\n🏆 Winner Prize: 🪙${winnerPrize} (80%)\n\n🪙${fee} will be deducted from your wallet now.`);
-            if (!confirmed) return;
             const btn = document.getElementById('createContestBtn');
+            wzConfirm('🎮 Create Contest?',
+                `📛 Name: ${name}\n🎯 Mode: ${mode}\n💰 Entry Fee: 🪙${fee} per player\n👥 Total Spots: ${spots}\n💵 Total Pool: 🪙${totalPool}\n🏆 Winner Prize: 🪙${winnerPrize} (80%)\n\n🪙${fee} will be deducted from your wallet now.`,
+                async () => {
             btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
             try {
                 const userRef = db.collection('users').doc(currentUser.uid);
@@ -4089,6 +4327,7 @@ joinBtn.style.color = '#fff';
                 pageInits['create-contest-page']();
             } catch(e) { wzAlert('❌ Something went wrong!', e.message); }
             finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-gamepad"></i> Create Contest'; }
+                }); // wzConfirm end
         };
     },
 
@@ -4342,31 +4581,49 @@ function confirmAge(isAdult) {
 </script>
 
 <!-- AGE GATE -->
-<div id="ageGate" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);backdrop-filter:blur(20px);z-index:99999;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;">
-    <div style="background:linear-gradient(135deg,#1A0A2E,#0D0821);border:1px solid rgba(142,45,226,0.4);border-radius:28px;padding:30px 24px;width:100%;max-width:340px;box-shadow:0 20px 60px rgba(142,45,226,0.3);">
-        <div style="width:80px;height:80px;background:linear-gradient(135deg,#8E2DE2,#0A84FF);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:2.5em;margin:0 auto 16px;">🎮</div>
-        <div style="font-family:'Rajdhani',sans-serif;font-size:1.8em;font-weight:700;color:#FFD700;letter-spacing:2px;margin-bottom:4px;">WarZone India</div>
-        <div style="font-size:0.75em;color:rgba(255,255,255,0.5);margin-bottom:20px;">Esports Tournament Platform</div>
-        <div style="background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.25);border-radius:14px;padding:16px;margin-bottom:20px;">
-            <div style="font-size:1.8em;margin-bottom:6px;">⚠️</div>
-            <div style="font-weight:700;color:#FF4444;font-size:1em;margin-bottom:6px;">18+ Only</div>
-            <div style="font-size:0.78em;color:rgba(255,255,255,0.5);line-height:1.6;">This app involves real money tournaments. You must be 18 years or older to participate.</div>
+<div id="ageGate" style="display:none;position:fixed;inset:0;z-index:99999;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow-y:auto;">
+
+    <!-- Blurred background -->
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0D0821,#120A1F,#1A0530);"></div>
+    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(142,45,226,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(142,45,226,0.05) 1px,transparent 1px);background-size:30px 30px;"></div>
+
+    <!-- Card -->
+    <div style="position:relative;z-index:2;background:linear-gradient(135deg,#1C1030,#0F0A1E);border:1px solid rgba(142,45,226,0.35);border-radius:28px;padding:28px 22px;width:100%;max-width:360px;box-shadow:0 30px 80px rgba(142,45,226,0.25);text-align:center;">
+
+        <!-- Logo -->
+        <div style="width:90px;height:90px;background:linear-gradient(135deg,#8E2DE2,#0A84FF);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:2.8em;margin:0 auto 16px;box-shadow:0 0 40px rgba(142,45,226,0.5);">🎮</div>
+
+        <!-- Title -->
+        <div style="font-size:1.9em;font-weight:800;letter-spacing:3px;background:linear-gradient(135deg,#fff,#0A84FF,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:2px;">WARZONE</div>
+        <div style="font-size:0.9em;font-weight:700;letter-spacing:6px;color:rgba(255,255,255,0.4);margin-bottom:6px;">INDIA</div>
+        <div style="width:50px;height:2px;background:linear-gradient(90deg,transparent,#8E2DE2,#0A84FF,transparent);margin:10px auto 16px;border-radius:2px;"></div>
+        <div style="font-size:0.72em;color:rgba(255,255,255,0.35);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;">India's #1 Esports Platform</div>
+
+        <!-- Why WarZone India box -->
+        <div style="background:linear-gradient(135deg,rgba(142,45,226,0.12),rgba(10,132,255,0.08));border:1px solid rgba(142,45,226,0.25);border-radius:18px;padding:18px;margin-bottom:18px;text-align:left;">
+            <div style="font-weight:800;font-size:0.95em;color:#FFD700;text-align:center;margin-bottom:14px;">⚡ WHY WARZONE INDIA?</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+                <div style="display:flex;align-items:center;gap:10px;font-size:0.82em;color:rgba(255,255,255,0.8);"><span style="width:24px;height:24px;background:linear-gradient(135deg,#2ECC71,#27AE60);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.85em;flex-shrink:0;">✓</span> Real Cash Tournaments Daily</div>
+                <div style="display:flex;align-items:center;gap:10px;font-size:0.82em;color:rgba(255,255,255,0.8);"><span style="width:24px;height:24px;background:linear-gradient(135deg,#2ECC71,#27AE60);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.85em;flex-shrink:0;">✓</span> Instant UPI Withdrawal</div>
+                <div style="display:flex;align-items:center;gap:10px;font-size:0.82em;color:rgba(255,255,255,0.8);"><span style="width:24px;height:24px;background:linear-gradient(135deg,#2ECC71,#27AE60);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.85em;flex-shrink:0;">✓</span> 10,000+ Active Players</div>
+                <div style="display:flex;align-items:center;gap:10px;font-size:0.82em;color:rgba(255,255,255,0.8);"><span style="width:24px;height:24px;background:linear-gradient(135deg,#2ECC71,#27AE60);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.85em;flex-shrink:0;">✓</span> Referral Bonus 🪙20 Per Friend</div>
+                <div style="display:flex;align-items:center;gap:10px;font-size:0.82em;color:rgba(255,255,255,0.8);"><span style="width:24px;height:24px;background:linear-gradient(135deg,#2ECC71,#27AE60);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.85em;flex-shrink:0;">✓</span> Lucky Draw & Mega Events</div>
+                <div style="display:flex;align-items:center;gap:10px;font-size:0.82em;color:rgba(255,255,255,0.8);"><span style="width:24px;height:24px;background:linear-gradient(135deg,#2ECC71,#27AE60);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.85em;flex-shrink:0;">✓</span> 24/7 Customer Support</div>
+            </div>
         </div>
-        <button onclick="confirmAge(true)" style="width:100%;padding:14px;background:linear-gradient(135deg,#8E2DE2,#0A84FF);border:none;border-radius:14px;color:#fff;font-size:0.95em;font-weight:700;cursor:pointer;margin-bottom:10px;font-family:'Poppins',sans-serif;box-shadow:0 8px 20px rgba(142,45,226,0.4);">✅ I am 18 or older — Enter</button>
-        <button onclick="confirmAge(false)" style="width:100%;padding:12px;background:transparent;border:1px solid rgba(255,255,255,0.1);border-radius:14px;color:rgba(255,255,255,0.4);font-size:0.85em;cursor:pointer;font-family:'Poppins',sans-serif;">❌ I am under 18</button>
-        <div style="font-size:0.65em;color:rgba(255,255,255,0.25);margin-top:16px;">By continuing you agree to our Terms & Privacy Policy</div>
-    </div>z-index:99999;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center;">
-    <div style="font-size:3em;margin-bottom:16px;">🎮</div>
-    <div style="font-family:'Rajdhani',sans-serif;font-size:2em;font-weight:700;color:#FFD700;letter-spacing:2px;">WarZone India</div>
-    <div style="font-size:0.85em;color:#aaa;margin-top:6px;margin-bottom:30px;">Esports Tournament Platform</div>
-    <div style="background:rgba(255,68,68,0.1);border:1px solid rgba(255,68,68,0.3);border-radius:16px;padding:20px;margin-bottom:24px;max-width:300px;">
-        <div style="font-size:1.5em;margin-bottom:8px;">⚠️</div>
-        <div style="font-weight:700;color:#FF4444;margin-bottom:6px;">18+ Only</div>
-        <div style="font-size:0.8em;color:#aaa;line-height:1.5;">This app involves real money tournaments. You must be 18 years or older to participate.</div>
+
+        <!-- 18+ Warning -->
+        <div style="background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.2);border-radius:14px;padding:14px;margin-bottom:20px;">
+            <div style="font-size:1.4em;margin-bottom:4px;">⚠️</div>
+            <div style="font-weight:700;color:#FF4444;font-size:0.92em;margin-bottom:4px;">18+ Only</div>
+            <div style="font-size:0.74em;color:rgba(255,255,255,0.45);line-height:1.6;">This platform involves real money tournaments. You must be 18 years or older to participate.</div>
+        </div>
+
+        <!-- Buttons -->
+        <button onclick="confirmAge(true)" style="width:100%;padding:15px;background:linear-gradient(135deg,#8E2DE2,#0A84FF);border:none;border-radius:14px;color:#fff;font-size:0.95em;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;box-shadow:0 8px 25px rgba(142,45,226,0.4);letter-spacing:0.5px;">✅ Confirm & Enter</button>
+
+        <div style="font-size:0.62em;color:rgba(255,255,255,0.2);margin-top:16px;line-height:1.6;">By continuing you agree to our<br>Terms & Conditions and Privacy Policy</div>
     </div>
-    <button onclick="confirmAge(true)" style="width:100%;max-width:280px;padding:14px;background:linear-gradient(135deg,#8E2DE2,#0A84FF);border:none;border-radius:14px;color:#fff;font-size:1em;font-weight:700;cursor:pointer;margin-bottom:10px;font-family:'Poppins',sans-serif;">✅ I am 18 or older</button>
-    <button onclick="confirmAge(false)" style="width:100%;max-width:280px;padding:14px;background:transparent;border:1px solid #333;border-radius:14px;color:#aaa;font-size:0.9em;cursor:pointer;font-family:'Poppins',sans-serif;">❌ I am under 18</button>
-    <div style="font-size:0.7em;color:#555;margin-top:20px;">By continuing you agree to our Terms & Privacy Policy</div>
 </div>
 </body>
 </html>
